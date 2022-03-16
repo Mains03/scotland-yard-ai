@@ -11,7 +11,7 @@ import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 
 public class MyAi implements Ai {
-	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman"; }
+	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
 
 	@Nonnull @Override public Move pickMove(
 			@Nonnull Board board,
