@@ -29,7 +29,7 @@ public class MyAi implements Ai {
 	}
 
 	private Move pickMrXMove(Board board) {
-		return new GameState.MrXMoveGameState(board).pickMove();
+		return new MrXMoveGameState(board).pickMove();
 	}
 
 	private Move pickDetectiveMove(Board board) {
