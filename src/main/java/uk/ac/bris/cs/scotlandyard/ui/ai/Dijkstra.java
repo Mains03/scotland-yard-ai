@@ -14,9 +14,9 @@ public class Dijkstra {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final VisitedLocations visitedLocations;
 
-    public Dijkstra(final Board board) {
-        Objects.requireNonNull(board);
-        this.graph = board.getSetup().graph;
+    public Dijkstra(final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+        Objects.requireNonNull(graph);
+        this.graph = graph;
         visitedLocations = new VisitedLocations();
     }
 
