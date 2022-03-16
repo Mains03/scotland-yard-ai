@@ -1,10 +1,11 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Player;
+import com.google.common.collect.ImmutableMap;
+import uk.ac.bris.cs.scotlandyard.model.*;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public interface GameState {
@@ -22,8 +23,38 @@ public interface GameState {
             move = createBestMove();
         }
 
-        private Player createMrX(Board board) {
-            return null;
+        private Player createMrX(final Board board) {
+            return new Player(
+                    createMrXPiece(),
+                    createMrXTickets(board),
+                    createMrXLocation(board)
+            );
+        }
+
+        private Piece createMrXPiece() {
+            return Piece.MrX.MRX;
+        }
+
+        private ImmutableMap<ScotlandYard.Ticket, Integer> createMrXTickets(final Board board) {
+            Board.TicketBoard ticketBoard = board.getPlayerTickets(Piece.MrX.MRX).get();
+            Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
+            ScotlandYard.Ticket ticketsEnumeration[] = new ScotlandYard.Ticket[] {
+                    ScotlandYard.Ticket.BUS,
+                    ScotlandYard.Ticket.DOUBLE,
+                    ScotlandYard.Ticket.SECRET,
+                    ScotlandYard.Ticket.TAXI,
+                    ScotlandYard.Ticket.UNDERGROUND
+            };
+            for (ScotlandYard.Ticket ticket : ticketsEnumeration) {
+                tickets.put(ticket, ticketBoard.getCount(ticket));
+            }
+            return ImmutableMap.copyOf(tickets);
+        }
+
+        private int createMrXLocation(final Board board) {
+            return board.getAvailableMoves().stream()
+                    .map(Move::source)
+                    .findAny().get();
         }
 
         private Collection<Player> createDetectives() {
