@@ -3,6 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
@@ -10,18 +11,17 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import java.util.*;
 
 public class Dijkstra {
-    private final Board board;
+    private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final VisitedLocations visitedLocations;
 
     public Dijkstra(final Board board) {
         Objects.requireNonNull(board);
-        this.board = board;
+        this.graph = board.getSetup().graph;
         visitedLocations = new VisitedLocations();
     }
 
     public Optional<Integer> minimumRouteLength(Player player, int destination) {
-        Optional<List<Integer>> path = shortestPath(player, destination);
-        return path.map(List::size);
+        return shortestPath(player, destination).map(List::size);
     }
 
     public Optional<List<Integer>> shortestPath(Player player, int destination) {
@@ -34,9 +34,9 @@ public class Dijkstra {
                     return Optional.of(priorityQueueNode.getPath());
                 }
                 visitedLocations.markVisited(priorityQueueNode.getLocation());
-                for (int adjacent : board.getSetup().graph.adjacentNodes(priorityQueueNode.getLocation())) {
+                for (int adjacent : graph.adjacentNodes(priorityQueueNode.getLocation())) {
                     Optional<ImmutableSet<ScotlandYard.Transport>> allTransport =
-                            board.getSetup().graph.edgeValue(priorityQueueNode.getLocation(), adjacent);
+                            graph.edgeValue(priorityQueueNode.getLocation(), adjacent);
                     if (allTransport.isPresent()) {
                         for (ScotlandYard.Transport transport : allTransport.get()) {
                             PriorityQueueNode newPriorityQueueNode = priorityQueueNode.move(adjacent, transport.requiredTicket());
