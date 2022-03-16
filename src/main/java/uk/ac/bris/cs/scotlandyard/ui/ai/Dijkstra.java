@@ -2,19 +2,17 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
-import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.*;
 
 public class Dijkstra {
-    private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
+    private final ImmutableValueGraph<Integer, ImmutableList<ScotlandYard.Transport>> graph;
     private final VisitedLocations visitedLocations;
 
-    public Dijkstra(final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+    public Dijkstra(final ImmutableValueGraph<Integer, ImmutableList<ScotlandYard.Transport>> graph) {
         Objects.requireNonNull(graph);
         this.graph = graph;
         visitedLocations = new VisitedLocations();
@@ -35,7 +33,7 @@ public class Dijkstra {
                 }
                 visitedLocations.markVisited(priorityQueueNode.getLocation());
                 for (int adjacent : graph.adjacentNodes(priorityQueueNode.getLocation())) {
-                    Optional<ImmutableSet<ScotlandYard.Transport>> allTransport =
+                    Optional<ImmutableList<ScotlandYard.Transport>> allTransport =
                             graph.edgeValue(priorityQueueNode.getLocation(), adjacent);
                     if (allTransport.isPresent()) {
                         for (ScotlandYard.Transport transport : allTransport.get()) {
