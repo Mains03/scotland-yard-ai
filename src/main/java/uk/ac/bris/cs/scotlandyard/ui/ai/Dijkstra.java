@@ -11,16 +11,14 @@ import java.util.*;
 
 public class Dijkstra {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
-    private final VisitedLocations visitedLocations;
 
     public Dijkstra(final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         Objects.requireNonNull(graph);
         this.graph = graph;
-        visitedLocations = new VisitedLocations();
     }
 
     public Optional<Integer> minimumRouteLength(Player player, int destination) {
-        return shortestPath(player, destination).map(List::size);
+        return shortestPath(player, destination).map(List::size).map(x -> x-1);
     }
 
     public Optional<List<Integer>> shortestPath(Player player, int destination) {
@@ -29,6 +27,7 @@ public class Dijkstra {
                 Comparator.comparingInt(node -> node.getPath().size())
         );
         priorityQueue.add(new PriorityQueueNode(player.location()));
+        VisitedLocations visitedLocations = new VisitedLocations();
         while (!priorityQueue.isEmpty()) {
             PriorityQueueNode priorityQueueNode = priorityQueue.poll();
             if (!visitedLocations.haveVisited(priorityQueueNode.getLocation())) {
@@ -75,7 +74,7 @@ class PriorityQueueNode {
 
     private PriorityQueueNode(PriorityQueueNode previous, int destination, ScotlandYard.Ticket ticket) {
         location = destination;
-        path = new ArrayList<>();
+        path = new ArrayList<>(previous.path);
         path.add(destination);
         requiredTickets = new HashMap<>();
         for (ScotlandYard.Ticket requiredTicket : previous.requiredTickets.keySet()) {
