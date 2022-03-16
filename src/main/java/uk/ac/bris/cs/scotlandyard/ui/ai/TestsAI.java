@@ -11,13 +11,13 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 public class TestsAI {
     TestsAI(ImmutableValueGraph<Integer, ImmutableList<ScotlandYard.Transport>> graph, Player mrX, ImmutableList<Player> detectives) {
-        Integer source = mrX.location();
+        /*Integer source = mrX.location();
         Dijkstra dijkstra = new Dijkstra(graph);
 
         Integer destination = graph.adjacentNodes(source).stream()
                 .max(node -> (detectives.stream()
                                         .min(detective -> dijkstra.shortest(source, node, detective))));
-        System.out.println("Best node is: " + destination);
+        System.out.println("Best node is: " + destination);*/
 
     }
 }

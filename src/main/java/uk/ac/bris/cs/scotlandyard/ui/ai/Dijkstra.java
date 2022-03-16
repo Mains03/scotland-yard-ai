@@ -25,7 +25,9 @@ public class Dijkstra {
 
     public Optional<List<Integer>> shortestPath(Player player, int destination) {
         Objects.requireNonNull(player);
-        PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<>();
+        PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<PriorityQueueNode>(
+                Comparator.comparingInt(node -> node.getPath().size())
+        );
         priorityQueue.add(new PriorityQueueNode(player.location()));
         while (!priorityQueue.isEmpty()) {
             PriorityQueueNode priorityQueueNode = priorityQueue.poll();
@@ -77,7 +79,7 @@ class PriorityQueueNode {
         path.add(destination);
         requiredTickets = new HashMap<>();
         for (ScotlandYard.Ticket requiredTicket : previous.requiredTickets.keySet()) {
-            requireTickets(ticket, previous.requiredTickets.get(ticket));
+            requireTickets(requiredTicket, previous.requiredTickets.get(requiredTicket));
         }
         requireTicket(ticket);
     }

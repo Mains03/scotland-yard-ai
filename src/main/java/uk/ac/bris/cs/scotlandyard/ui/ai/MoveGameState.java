@@ -4,18 +4,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class MoveGameState {
     protected final ImmutableList<Player> detectives;
 
+    private final Dijkstra dijkstra;
+
     public MoveGameState(final Board board) {
         Objects.requireNonNull(board);
         detectives = createDetectives(board);
+        dijkstra = new Dijkstra(board.getSetup().graph);
     }
 
     private ImmutableList<Player> createDetectives(final Board board) {
@@ -54,4 +54,26 @@ public abstract class MoveGameState {
     }
 
     public abstract Move pickMove();
+
+    // helper functions
+
+    protected Optional<Integer> minimumDistanceToDestination(final Player player, int destination) {
+        return dijkstra.minimumRouteLength(player, destination);
+    }
+
+    protected int moveDestination(final Move move) {
+        Move.Visitor<Integer> moveDestinationVisitor = new Move.Visitor<Integer>() {
+            @Override
+            public Integer visit(Move.SingleMove move) {
+                return move.destination;
+            }
+
+            @Override
+            public Integer visit(Move.DoubleMove move) {
+                return move.destination2;
+            }
+        };
+
+        return move.accept(moveDestinationVisitor);
+    }
 }
