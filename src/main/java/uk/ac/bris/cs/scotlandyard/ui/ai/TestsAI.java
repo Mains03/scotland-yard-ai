@@ -17,6 +17,7 @@ public class TestsAI {
         Integer destination = graph.adjacentNodes(source).stream()
                 .max(node -> (detectives.stream()
                                         .min(detective -> dijkstra.shortest(source, node, detective))));
+        System.out.println("Best node is: " + destination);
 
     }
 }
