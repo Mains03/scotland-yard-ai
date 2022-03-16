@@ -39,7 +39,10 @@ public class Dijkstra {
                             board.getSetup().graph.edgeValue(priorityQueueNode.getLocation(), adjacent);
                     if (allTransport.isPresent()) {
                         for (ScotlandYard.Transport transport : allTransport.get()) {
-                            priorityQueue.add(priorityQueueNode.move(adjacent, transport.requiredTicket()));
+                            PriorityQueueNode newPriorityQueueNode = priorityQueueNode.move(adjacent, transport.requiredTicket());
+                            if (playerHasRequiredTickets(player, newPriorityQueueNode.getRequiredTickets())) {
+                                priorityQueue.add(priorityQueueNode.move(adjacent, transport.requiredTicket()));
+                            }
                         }
                     }
                 }
@@ -48,7 +51,12 @@ public class Dijkstra {
         return Optional.empty();
     }
 
-
+    private boolean playerHasRequiredTickets(Player player, Map<ScotlandYard.Ticket, Integer> requiredTickets) {
+        for (ScotlandYard.Ticket ticket : requiredTickets.keySet()) {
+            if (!player.hasAtLeast(ticket, requiredTickets.get(ticket))) return false;
+        }
+        return true;
+    }
 }
 
 class PriorityQueueNode {

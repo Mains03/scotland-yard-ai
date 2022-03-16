@@ -2,10 +2,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
-
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Ai;
