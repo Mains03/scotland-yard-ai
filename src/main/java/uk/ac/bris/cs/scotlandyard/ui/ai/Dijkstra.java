@@ -24,6 +24,7 @@ public class Dijkstra {
     }
 
     public Optional<List<Integer>> shortestPath(Player player, int destination) {
+        Objects.requireNonNull(player);
         PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<>();
         priorityQueue.add(new PriorityQueueNode(player.location()));
         while (!priorityQueue.isEmpty()) {
