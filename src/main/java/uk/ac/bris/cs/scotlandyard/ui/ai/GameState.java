@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public interface GameState {
     Move pickMove();
@@ -16,10 +17,10 @@ public interface GameState {
         private final Collection<Player> detectives;
         private final Move move;
 
-        public MrXMoveGameState(Board board) {
+        public MrXMoveGameState(final Board board) {
             Objects.requireNonNull(board);
             mrX = createMrX(board);
-            detectives = createDetectives();
+            detectives = createDetectives(board);
             move = createBestMove();
         }
 
@@ -36,7 +37,37 @@ public interface GameState {
         }
 
         private ImmutableMap<ScotlandYard.Ticket, Integer> createMrXTickets(final Board board) {
-            Board.TicketBoard ticketBoard = board.getPlayerTickets(Piece.MrX.MRX).get();
+            return createPlayerTickets(board, Piece.MrX.MRX);
+        }
+
+        private int createMrXLocation(final Board board) {
+            return board.getAvailableMoves().stream()
+                    .map(Move::source)
+                    .findAny().get();
+        }
+
+        private Collection<Player> createDetectives(final Board board) {
+            Collection<Piece> detectivePieces = board.getPlayers().stream()
+                    .filter(Piece::isDetective)
+                    .collect(Collectors.toList());
+            Collection<Player> detectives = detectivePieces.stream()
+                    .map(piece -> new Player(
+                            piece,
+                            createPlayerTickets(board, piece),
+                            getDetectiveLocation(board, piece)
+                    ))
+                    .collect(Collectors.toList());
+            return detectives;
+        }
+
+        private int getDetectiveLocation(final Board board, final Piece piece) {
+            if (!piece.isDetective()) throw new IllegalArgumentException();
+            Piece.Detective detectivePiece = (Piece.Detective) piece;
+            return board.getDetectiveLocation(detectivePiece).get();
+        }
+
+        private ImmutableMap<ScotlandYard.Ticket, Integer> createPlayerTickets(final Board board, final Piece piece) {
+            Board.TicketBoard ticketBoard = board.getPlayerTickets(piece).get();
             Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
             ScotlandYard.Ticket ticketsEnumeration[] = new ScotlandYard.Ticket[] {
                     ScotlandYard.Ticket.BUS,
@@ -49,16 +80,6 @@ public interface GameState {
                 tickets.put(ticket, ticketBoard.getCount(ticket));
             }
             return ImmutableMap.copyOf(tickets);
-        }
-
-        private int createMrXLocation(final Board board) {
-            return board.getAvailableMoves().stream()
-                    .map(Move::source)
-                    .findAny().get();
-        }
-
-        private Collection<Player> createDetectives() {
-            return null;
         }
 
         private Move createBestMove() {
