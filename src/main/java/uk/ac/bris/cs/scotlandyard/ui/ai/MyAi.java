@@ -33,8 +33,6 @@ public class MyAi implements Ai {
 	}
 
 	private Move pickDetectiveMove(Board board) {
-		// returns a random move, replace with your own implementation
-		var moves = board.getAvailableMoves().asList();
-		return moves.get(new Random().nextInt(moves.size()));
+		return new DetectiveMoveGameState(board).pickMove();
 	}
 }
