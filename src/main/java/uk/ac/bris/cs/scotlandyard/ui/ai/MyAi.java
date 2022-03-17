@@ -1,5 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
@@ -29,10 +31,12 @@ public class MyAi implements Ai {
 	}
 
 	private Move pickMrXMove(Board board) {
-		return new MrXMoveGameState(board).pickMove();
+		return new MrXMove(board).pickMove();
 	}
 
 	private Move pickDetectiveMove(Board board) {
-		return new DetectiveMoveGameState(board).pickMove();
+		// returns a random move, replace with your own implementation
+		var moves = board.getAvailableMoves().asList();
+		return moves.get(new Random().nextInt(moves.size()));
 	}
 }
