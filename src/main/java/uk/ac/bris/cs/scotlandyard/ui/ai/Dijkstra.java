@@ -1,6 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
@@ -18,34 +17,27 @@ public class Dijkstra {
     }
 
     public Optional<Integer> minimumRouteLength(Player player, int destination) {
-        return shortestPath(player, destination).map(List::size).map(x -> x-1);
-    }
-
-    public Optional<List<Integer>> shortestPath(Player player, int destination) {
         Objects.requireNonNull(player);
-        PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<PriorityQueueNode>(
-                Comparator.comparingInt(node -> node.getPath().size())
+        PriorityQueue<PriorityQueueNode> pq = new PriorityQueue<>(
+                Comparator.comparingInt(node -> node.getPathLength())
         );
-        priorityQueue.add(new PriorityQueueNode(player.location()));
-        VisitedLocations visitedLocations = new VisitedLocations();
-        while (!priorityQueue.isEmpty()) {
-            PriorityQueueNode priorityQueueNode = priorityQueue.poll();
-            if (!visitedLocations.haveVisited(priorityQueueNode.getLocation())) {
-                if (priorityQueueNode.getLocation() == destination) {
-                    return Optional.of(priorityQueueNode.getPath());
-                }
-                visitedLocations.markVisited(priorityQueueNode.getLocation());
-                for (int adjacent : graph.adjacentNodes(priorityQueueNode.getLocation())) {
-                    Optional<ImmutableSet<ScotlandYard.Transport>> allTransport =
-                            graph.edgeValue(priorityQueueNode.getLocation(), adjacent);
-                    if (allTransport.isPresent()) {
-                        for (ScotlandYard.Transport transport : allTransport.get()) {
-                            PriorityQueueNode newPriorityQueueNode = priorityQueueNode.move(adjacent, transport.requiredTicket());
-                            if (playerHasRequiredTickets(player, newPriorityQueueNode.getRequiredTickets())) {
-                                priorityQueue.add(priorityQueueNode.move(adjacent, transport.requiredTicket()));
+        pq.add(new PriorityQueueNode(player.location()));
+        Set<Integer> visited = new HashSet<>();
+        while (!pq.isEmpty()) {
+            PriorityQueueNode node = pq.poll();
+            if (!visited.contains(node.getLocation())) {
+                if (node.getLocation() == destination)
+                    return Optional.of(node.getPathLength());
+                visited.add(node.getLocation());
+                for (int adjacent : graph.adjacentNodes(node.getLocation())) {
+                    graph.edgeValue(node.getLocation(), adjacent).ifPresent(allTransport -> {
+                        for (ScotlandYard.Transport transport : allTransport) {
+                            PriorityQueueNode newNode = node.move(adjacent, transport.requiredTicket());
+                            if (playerHasRequiredTickets(player, newNode.getRequiredTickets())) {
+                                pq.add(newNode);
                             }
                         }
-                    }
+                    });
                 }
             }
         }
@@ -62,20 +54,18 @@ public class Dijkstra {
 
 class PriorityQueueNode {
     private final int location;
-    private final List<Integer> path;
+    private final int pathLength;
     private final Map<ScotlandYard.Ticket, Integer> requiredTickets;
 
     public PriorityQueueNode(int location) {
         this.location = location;
-        path = new ArrayList<>();
-        path.add(location);
+        pathLength = 0;
         requiredTickets = new HashMap<>();
     }
 
     private PriorityQueueNode(PriorityQueueNode previous, int destination, ScotlandYard.Ticket ticket) {
         location = destination;
-        path = new ArrayList<>(previous.path);
-        path.add(destination);
+        pathLength = previous.pathLength + 1;
         requiredTickets = new HashMap<>();
         for (ScotlandYard.Ticket requiredTicket : previous.requiredTickets.keySet()) {
             requireTickets(requiredTicket, previous.requiredTickets.get(requiredTicket));
@@ -87,16 +77,19 @@ class PriorityQueueNode {
         requireTickets(ticket, 1);
     }
 
-    private void requireTickets(ScotlandYard.Ticket ticket, int amount) {
+    private void requireTickets(ScotlandYard.Ticket ticket, int count) {
         if (requiredTickets.containsKey(ticket)) {
-            requiredTickets.put(ticket, requiredTickets.get(ticket)+amount);
+            requiredTickets.put(ticket, requiredTickets.get(ticket) + count);
         } else {
-            requiredTickets.put(ticket, amount);
+            requiredTickets.put(ticket, count);
         }
     }
 
     public int getLocation() { return location; }
-    public ImmutableList<Integer> getPath() { return ImmutableList.copyOf(path); }
+
+    public int getPathLength() {
+        return pathLength;
+    }
 
     public ImmutableMap<ScotlandYard.Ticket, Integer> getRequiredTickets() {
         return ImmutableMap.copyOf(requiredTickets);
@@ -105,15 +98,4 @@ class PriorityQueueNode {
     public PriorityQueueNode move(int destination, ScotlandYard.Ticket ticket) {
         return new PriorityQueueNode(this, destination, ticket);
     }
-}
-
-class VisitedLocations {
-    private Set<Integer> visited;
-
-    public VisitedLocations() {
-        visited = new HashSet<>();
-    }
-
-    public void markVisited(int location) { visited.add(location); }
-    public boolean haveVisited(int location) { return visited.contains(location); }
 }
