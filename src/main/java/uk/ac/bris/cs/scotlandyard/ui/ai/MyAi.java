@@ -1,6 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
@@ -15,7 +14,8 @@ public class MyAi implements Ai {
 
 	@Nonnull @Override public Move pickMove(
 			@Nonnull Board board,
-			Pair<Long, TimeUnit> timeoutPair) {
+			Pair<Long, TimeUnit> timeoutPair
+	) {
 		if (mrXToMove(board)) {
 			return pickMrXMove(board);
 		} else {
