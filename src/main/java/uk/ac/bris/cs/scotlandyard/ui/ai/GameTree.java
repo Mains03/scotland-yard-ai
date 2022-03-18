@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public final class GameTree {
     private final Board.GameState gameState;
 
-    private GameTree(final Board.GameState gameState) {
+    public GameTree(final Board.GameState gameState) {
         Objects.requireNonNull(gameState);
         this.gameState = gameState;
     }
@@ -20,9 +20,10 @@ public final class GameTree {
     }
 
     private Stream<GameTree> generate(GameTree node) {
+        Collection<GameTree> children = createChildren();
         return Stream.concat(
                 Stream.of(node),
-                createChildren().stream().flatMap(this::generate)
+                children.stream().flatMap(this::generate)
         );
     }
 
