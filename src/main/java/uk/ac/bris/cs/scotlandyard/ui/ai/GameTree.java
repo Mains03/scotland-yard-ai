@@ -1,37 +1,56 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
+import uk.ac.bris.cs.scotlandyard.model.Move;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class GameTree {
     private final Board.GameState gameState;
+    private final Optional<Move> moveMade;
 
-    public GameTree(final Board.GameState gameState) {
+    private List<GameTree> children;
+    private Optional<Move> evaluation;
+
+    public GameTree(final Board.GameState gameState, final Optional<Move> moveMade) {
         Objects.requireNonNull(gameState);
         this.gameState = gameState;
+        this.moveMade = moveMade;
+        children = new ArrayList<>();
     }
 
-    public Stream<GameTree> generate() {
-        return generate(this);
+    public Stream<GameTree> generateTree() {
+        return generateTree(this);
     }
 
-    private Stream<GameTree> generate(GameTree node) {
-        Collection<GameTree> children = createChildren();
-        return Stream.concat(
-                Stream.of(node),
-                children.stream().flatMap(this::generate)
-        );
+    private Stream<GameTree> generateTree(GameTree node) {
+        createChildren();
+        return children.stream()
+                .flatMap(this::generateTree);
     }
 
-    private Collection<GameTree> createChildren() {
-        return gameState.getAvailableMoves().stream()
+    private void createChildren() {
+        children = gameState.getAvailableMoves().stream()
                 .map(move -> new GameTree(gameState.advance(move)))
                 .collect(Collectors.toList());
     }
 
-    public Board.GameState getGameState() { return gameState; }
+    public Move evaluate(ToIntFunction<Board.GameState> staticEvaluationStrategy) {
+        if (evaluation.isPresent()) return evaluation.get();
+        else {
+            evaluation = children.stream()
+                    .map(child -> evaluate(staticEvaluationStrategy))
+                    .max(Integer::compareTo);
+            if (evaluation.isPresent()) {
+                // contains best value for children
+                return evaluation.get();
+            } else {
+                // no children
+                return staticEvaluationStrategy.applyAsInt(gameState);
+            }
+        }
+    }
 }
