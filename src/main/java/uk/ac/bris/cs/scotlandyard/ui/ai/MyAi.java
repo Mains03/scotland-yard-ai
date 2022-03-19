@@ -19,6 +19,7 @@ public class MyAi implements Ai {
 			Pair<Long, TimeUnit> timeoutPair
 	) {
 		Dijkstra.createInstance(board.getSetup().graph);
+		AllSingleMoves.createInstance(board.getSetup().graph);
 		if (mrXToMove(board)) {
 			return pickMrXMove(board);
 		} else {

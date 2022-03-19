@@ -6,6 +6,7 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class GameTree {
     private static final int POSITIVE_INFINITY = 10000000;
@@ -217,38 +218,28 @@ final class GameData {
     }
 
     private Collection<Move> allMoves(final Player player) {
-        Collection<Move> moves = new ArrayList<>();
-        for (int adjacent : gameSetup.graph.adjacentNodes(player.location())) {
-            gameSetup.graph.edgeValue(player.location(), adjacent).ifPresent(allTransport -> {
-                for (ScotlandYard.Transport transport : allTransport) {
-                    moves.add(new Move.SingleMove(
-                            player.piece(), player.location(), transport.requiredTicket(), adjacent
-                    ));
-                    for (int adjacent2 : gameSetup.graph.adjacentNodes(adjacent)) {
-                        gameSetup.graph.edgeValue(adjacent, adjacent2).ifPresent(allTransport2 -> {
-                            for (ScotlandYard.Transport transport2 : allTransport2) {
-                                moves.add(new Move.DoubleMove(
-                                        player.piece(), player.location(), transport.requiredTicket(), adjacent, transport2.requiredTicket(), adjacent2
-                                ));
-                                moves.add(new Move.DoubleMove(
-                                        player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent, transport2.requiredTicket(), adjacent2
-                                ));
-                            }
-                            moves.add(new Move.DoubleMove(
-                                    player.piece(), player.location(), transport.requiredTicket(), adjacent, ScotlandYard.Ticket.SECRET, adjacent2
-                            ));
-                        });
-                        moves.add(new Move.DoubleMove(
-                                player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent, ScotlandYard.Ticket.SECRET, adjacent2
-                        ));
-                    }
-                }
-                moves.add(new Move.SingleMove(
-                        player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent
-                ));
-            });
+        Collection<Move.SingleMove> singleMoves = AllSingleMoves.getInstance().getSingleMoves(player.location()).stream()
+                .map(move -> new Move.SingleMove(
+                        player.piece(), move.source(), move.ticket, move.destination
+                )).collect(Collectors.toList());
+        Collection<Move> doubleMoves = new ArrayList<>();
+        if (player.isMrX()) {
+            doubleMoves = singleMoves.stream()
+                    .map(this::createDoubleMoves)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
         }
-        return moves;
+        return Stream.concat(
+                singleMoves.stream(),
+                doubleMoves.stream()
+        ).collect(Collectors.toList());
+    }
+
+    private Collection<Move> createDoubleMoves(Move.SingleMove move) {
+        return AllSingleMoves.getInstance().getSingleMoves(move.destination).stream()
+                .map(move2 -> new Move.DoubleMove(
+                        Piece.MrX.MRX, move.source(), move.ticket, move.destination, move2.ticket, move2.destination
+                )).collect(Collectors.toList());
     }
 
     private boolean movePossible(final Player player, final Move move) {
