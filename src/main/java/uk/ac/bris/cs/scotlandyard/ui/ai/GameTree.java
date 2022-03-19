@@ -222,24 +222,13 @@ final class GameData {
                 .map(move -> new Move.SingleMove(
                         player.piece(), move.source(), move.ticket, move.destination
                 )).collect(Collectors.toList());
-        Collection<Move> doubleMoves = new ArrayList<>();
-        if (player.isMrX()) {
-            doubleMoves = singleMoves.stream()
-                    .map(this::createDoubleMoves)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
-        }
+        Set<Move.DoubleMove> doubleMoves = new HashSet<>();
+        if (player.isMrX())
+            doubleMoves = AllDoubleMoves.getInstance().getDoubleMoves(player.location());
         return Stream.concat(
                 singleMoves.stream(),
                 doubleMoves.stream()
         ).collect(Collectors.toList());
-    }
-
-    private Collection<Move> createDoubleMoves(Move.SingleMove move) {
-        return AllSingleMoves.getInstance().getSingleMoves(move.destination).stream()
-                .map(move2 -> new Move.DoubleMove(
-                        Piece.MrX.MRX, move.source(), move.ticket, move.destination, move2.ticket, move2.destination
-                )).collect(Collectors.toList());
     }
 
     private boolean movePossible(final Player player, final Move move) {
