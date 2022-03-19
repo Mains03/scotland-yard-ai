@@ -1,9 +1,13 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class MrXMove {
@@ -14,78 +18,58 @@ public final class MrXMove {
     }
 
     private Move createBestMove(final Board board) {
-        // choose the move which maximises the distance between MrX and the detectives
-        return board.getAvailableMoves().stream()
-                .max(Comparator.comparingInt(
-                        move -> findMinDistanceToDetectives(board, getMoveDestination(move))
-                ))
-                .get();
+        return new GameTree(board, createGameState(board), determineMrXLocation(board))
+                .determineBestMove();
     }
 
-    private int getMoveDestination(Move move) {
-        return move.accept(new Move.Visitor<Integer>() {
-            @Override
-            public Integer visit(Move.SingleMove move) {
-                return move.destination;
-            }
-
-            @Override
-            public Integer visit(Move.DoubleMove move) {
-                return move.destination2;
-            }
-        });
-    }
-
-    private int findMinDistanceToDetectives(final Board board, int mrXLocation) {
-        Collection<Player> detectives = createDetectives(board);
-        Dijkstra dijkstra = new Dijkstra(board.getSetup().graph);
-        Optional<Integer> minDist = detectives.stream()
-                .map(detective -> dijkstra.minimumRouteLength(detective, mrXLocation))
-                .flatMap(Optional::stream)
-                .min(Integer::compareTo);
-        if (minDist.isPresent()) {
-            return minDist.get();
-        } else {
-            return 1000000;
-        }
-    }
-
-    private Collection<Player> createDetectives(final Board board) {
-        return board.getPlayers().stream()
-                .filter(Piece::isDetective)
-                .map(piece -> createDetective(board, piece))
-                .collect(Collectors.toList());
-    }
-
-    private Player createDetective(final Board board, Piece piece) {
-        return new Player(
-                piece,
-                getPlayerTickets(board, piece),
-                getPlayerLocation(board, piece)
+    private Board.GameState createGameState(final Board board) {
+        return new MyGameStateFactory().build(
+                board.getSetup(),
+                createMrXPlayer(board),
+                createDetectives(board)
         );
     }
 
-    private ImmutableMap<ScotlandYard.Ticket, Integer> getPlayerTickets(final Board board, Piece piece) {
-        Optional<Board.TicketBoard> ticketBoard = board.getPlayerTickets(piece);
-        if (ticketBoard.isPresent()) {
-            Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
-            for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values()) {
-                tickets.put(ticket, ticketBoard.get().getCount(ticket));
-            }
-            return ImmutableMap.copyOf(tickets);
-        } else {
-            return ImmutableMap.of();
-        }
+    private Player createMrXPlayer(final Board board) {
+        return new Player(
+                Piece.MrX.MRX,
+                createPlayerTickets(board, Piece.MrX.MRX),
+                determineMrXLocation(board)
+        );
     }
 
-    private int getPlayerLocation(final Board board, Piece piece) {
-        if (piece.isMrX()) throw new IllegalArgumentException();
-        Optional<Integer> location = board.getDetectiveLocation((Piece.Detective) piece);
-        if (location.isPresent()) {
-            return location.get();
-        } else {
-            return -1;
+    private int determineMrXLocation(final Board board) {
+        return board.getAvailableMoves().stream()
+                .findAny()
+                .get()
+                .source();
+    }
+
+
+
+    private ImmutableList<Player> createDetectives(final Board board) {
+        Collection<Piece> detectives = board.getPlayers().stream()
+                .filter(Piece::isDetective)
+                .collect(Collectors.toList());
+        return ImmutableList.copyOf(
+                detectives.stream()
+                        .map(piece -> new Player(
+                                piece,
+                                createPlayerTickets(board, piece),
+                                board.getDetectiveLocation((Piece.Detective) piece).get()
+                                )
+                        ).collect(Collectors.toList())
+        );
+    }
+
+    private ImmutableMap<ScotlandYard.Ticket, Integer> createPlayerTickets(final Board board, final Piece piece) {
+        Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
+        Optional<Board.TicketBoard> ticketBoard = board.getPlayerTickets(piece);
+        if (ticketBoard.isPresent()) {
+            for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values())
+                tickets.put(ticket, ticketBoard.get().getCount(ticket));
         }
+        return ImmutableMap.copyOf(tickets);
     }
 
     public Move pickMove() {
