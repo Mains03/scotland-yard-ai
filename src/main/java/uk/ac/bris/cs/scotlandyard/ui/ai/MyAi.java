@@ -1,15 +1,15 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import io.atlassian.fugue.Pair;
-import uk.ac.bris.cs.scotlandyard.model.Ai;
-import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.model.*;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -18,6 +18,7 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
+		Dijkstra.createInstance(board.getSetup().graph);
 		if (mrXToMove(board)) {
 			return pickMrXMove(board);
 		} else {
@@ -25,13 +26,59 @@ public class MyAi implements Ai {
 		}
 	}
 
-	private boolean mrXToMove(Board board) {
+	private boolean mrXToMove(final Board board) {
 		return board.getAvailableMoves().stream()
 				.anyMatch(move -> move.commencedBy().isMrX());
 	}
 
-	private Move pickMrXMove(Board board) {
-		return new MrXMove(board).pickMove();
+	private Move pickMrXMove(final Board board) {
+		GameTree gameTree = new GameTree(
+				board.getSetup(),
+				createMrX(board),
+				createDetectives(board),
+				createRemaining(),
+				1
+		);
+		return gameTree.determineBestMove();
+	}
+
+	private Player createMrX(final Board board) {
+		return new Player(
+				Piece.MrX.MRX,
+				createPlayerTickets(board, Piece.MrX.MRX),
+				getMrXLocation(board));
+	}
+
+	private ImmutableMap<ScotlandYard.Ticket, Integer> createPlayerTickets(final Board board, final Piece piece) {
+		Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
+		board.getPlayerTickets(piece).ifPresent(ticketBoard -> {
+			for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values())
+				tickets.put(ticket, ticketBoard.getCount(ticket));
+		});
+		return ImmutableMap.copyOf(tickets);
+	}
+
+	private int getMrXLocation(final Board board) {
+		return board.getAvailableMoves().stream()
+				.findAny()
+				.get()
+				.source();
+	}
+
+	private ImmutableList<Player> createDetectives(final Board board) {
+		return ImmutableList.copyOf(
+				board.getPlayers().stream()
+						.filter(Piece::isDetective)
+						.map(piece -> new Player(
+								piece,
+								createPlayerTickets(board, piece),
+								board.getDetectiveLocation((Piece.Detective) piece).get())
+						).collect(Collectors.toList())
+		);
+	}
+
+	private ImmutableList<Piece> createRemaining() {
+		return ImmutableList.of(Piece.MrX.MRX);
 	}
 
 	private Move pickDetectiveMove(Board board) {

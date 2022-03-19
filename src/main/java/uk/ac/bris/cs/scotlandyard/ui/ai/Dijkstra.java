@@ -9,9 +9,21 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import java.util.*;
 
 public class Dijkstra {
+    private static Dijkstra dijkstra;
+
+    public static void createInstance(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+        Objects.requireNonNull(graph);
+        dijkstra = new Dijkstra(graph);
+    }
+
+    public static Dijkstra getInstance() {
+        Objects.requireNonNull(dijkstra);
+        return dijkstra;
+    }
+
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 
-    public Dijkstra(final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+    private Dijkstra(final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         Objects.requireNonNull(graph);
         this.graph = graph;
     }

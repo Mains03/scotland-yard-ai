@@ -1,5 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
 
@@ -7,126 +8,264 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public final class GameTree {
-    private static final int MAX_DEPTH = 3;
-    private static final int NEGATIVE_INFINITY = -10000000;
     private static final int POSITIVE_INFINITY = 10000000;
 
-    private final Board board;
-    private final Board.GameState gameState;
-    private final int mrXLocation;
+    private final Move move;
+    private final ImmutableList<GameTree> children;
+    private final boolean maximise;
 
-    public GameTree(final Board board, final Board.GameState gameState, int mrXLocation) {
-        Objects.requireNonNull(board);
-        Objects.requireNonNull(gameState);
-        this.board = board;
-        this.gameState = gameState;
-        this.mrXLocation = mrXLocation;
+    private final GameData gameData;
+
+    public GameTree(
+            final GameSetup gameSetup,
+            final Player mrX,
+            final ImmutableList<Player> detectives,
+            final ImmutableList<Piece> remaining,
+            final int depth
+    ) {
+        this(
+                new GameData(gameSetup, mrX, detectives, remaining),
+                null,
+                true,
+                depth
+        );
     }
 
-    private int depth;
-    private boolean maximise;
-
-    private GameTree(final Board board, final Board.GameState gameState, final int mrXLocation, final int depth, boolean maximise) {
-        this.board = board;
-        this.gameState = gameState;
-        this.mrXLocation = mrXLocation;
-        this.depth = depth;
+    private GameTree(final GameData gameData, final Move move, final boolean maximise, final int depth) {
+        this.move = move;
+        this.gameData = gameData;
         this.maximise = maximise;
+        if (depth > 0) {
+            children = createChildren(gameData, depth);
+        } else
+            children = ImmutableList.of();
+    }
+
+    private ImmutableList<GameTree> createChildren(final GameData gameData, final int depth) {
+        List<GameTree> children = new ArrayList<>();
+        for (Move move : gameData.getAvailableMoves()) {
+            children.add(
+                    new GameTree(gameData.advance(move), move, !maximise, depth-1)
+            );
+        }
+        return ImmutableList.copyOf(children);
     }
 
     public Move determineBestMove() {
-        Move bestMove = null;
-        int bestMoveEvaluation = NEGATIVE_INFINITY;
-        for (Move move : gameState.getAvailableMoves()) {
-            int newMrXLocation = getMoveDestination(move);
-            GameTree child = new GameTree(board, gameState.advance(move), newMrXLocation, MAX_DEPTH-1, false);
-            int childEvaluation = child.getEvaluation();
-            // maximise the evaluation
-            if (childEvaluation > bestMoveEvaluation) {
-                bestMove = move;
-                bestMoveEvaluation = childEvaluation;
-            }
+        if (maximise) {
+            return children.stream()
+                    .max(Comparator.comparingInt(GameTree::evaluate))
+                    .get()
+                    .move;
+        } else {
+            return children.stream()
+                    .min(Comparator.comparingInt(GameTree::evaluate))
+                    .get()
+                    .move;
         }
-        return bestMove;
     }
 
-    private int getMoveDestination(final Move move) {
-        return move.accept(new Move.Visitor<Integer>() {
+    private int evaluate() {
+        if (children.size() > 0) {
+            return children.stream()
+                    .map(GameTree::evaluate)
+                    .max(Integer::compareTo)
+                    .get();
+        } else
+            return staticEvaluation();
+    }
+
+    private int staticEvaluation() {
+        Dijkstra dijkstra = Dijkstra.getInstance();
+        Optional<Integer> minDist = gameData.getDetectives().stream()
+                .map(detective -> dijkstra.minimumRouteLength(detective, gameData.getMrXLocation()))
+                .flatMap(Optional::stream)
+                .max(Integer::compareTo);
+        if (minDist.isPresent())
+            return minDist.get();
+        else
+            return POSITIVE_INFINITY;
+    }
+}
+
+final class GameData {
+    private final GameSetup gameSetup;
+    private final Player mrX;
+    private final ImmutableList<Player> detectives;
+    private final ImmutableList<Piece> remaining;
+
+    GameData(
+            final GameSetup gameSetup,
+            final Player mrX,
+            final ImmutableList<Player> detectives,
+            final ImmutableList<Piece> remaining
+    ) {
+        this.gameSetup = gameSetup;
+        this.mrX = mrX;
+        this.detectives = detectives;
+        this.remaining = remaining;
+    }
+
+    private GameData(final GameData oldGameData, final Move move) {
+        gameSetup = oldGameData.gameSetup;
+        mrX = newMrX(oldGameData, move);
+        detectives = newDetectives(oldGameData, move);
+        remaining = newRemaining(oldGameData, move);
+    }
+
+    private Player newMrX(final GameData oldGameData, final Move move) {
+        if (move.commencedBy().isDetective())
+            return oldGameData.mrX.give(move.tickets());
+        else {
+            Player newMrX = oldGameData.mrX.use(move.tickets());
+            return move.accept(new Move.Visitor<Player>() {
+                @Override
+                public Player visit(Move.SingleMove move) {
+                    return newMrX.at(move.destination);
+                }
+
+                @Override
+                public Player visit(Move.DoubleMove move) {
+                    return newMrX.at(move.destination2);
+                }
+            });
+        }
+    }
+
+    private ImmutableList<Player> newDetectives(final GameData oldGameData, final Move move) {
+        return ImmutableList.copyOf(
+                oldGameData.detectives.stream()
+                        .map(detective -> newDetective(move, detective))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private Player newDetective(final Move move, final Player player) {
+        if (move.commencedBy().webColour().equals(player.piece().webColour())) {
+            return move.accept(new Move.Visitor<Player>() {
+                @Override
+                public Player visit(Move.SingleMove move) {
+                    return player.use(move.ticket).at(move.destination);
+                }
+
+                @Override
+                public Player visit(Move.DoubleMove move) {
+                    return player.use(move.tickets()).at(move.destination2);
+                }
+            });
+        } else
+            return player;
+    }
+
+    private ImmutableList<Piece> newRemaining(final GameData oldGameData, final Move move) {
+        Collection<Piece> updatedRemaining = oldGameData.remaining.stream()
+                .filter(piece -> move.commencedBy().webColour().equals(piece.webColour()))
+                .collect(Collectors.toList());
+        if (updatedRemaining.size() == 0) {
+            if (move.commencedBy().isMrX()) {
+                return ImmutableList.copyOf(
+                        oldGameData.detectives.stream()
+                                .map(Player::piece)
+                                .collect(Collectors.toList())
+                );
+            } else
+                return ImmutableList.of(Piece.MrX.MRX);
+        } else
+            return ImmutableList.copyOf(updatedRemaining);
+    }
+
+    int getMrXLocation() { return mrX.location(); }
+
+    Collection<Player> getDetectives() {
+        return detectives.stream()
+                .map(detective -> new Player(
+                        detective.piece(),
+                        ImmutableMap.copyOf(detective.tickets()),
+                        detective.location()
+                )).collect(Collectors.toList());
+    }
+
+    Collection<Move> getAvailableMoves() {
+        return remaining.stream()
+                .map(piece ->  getPlayerByPiece(piece))
+                .map(player -> getAvailableMoves(player))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private Player getPlayerByPiece(final Piece piece) {
+        if (piece.isMrX()) return mrX;
+        else {
+            return detectives.stream()
+                    .filter(detective -> detective.piece().webColour().equals(piece.webColour()))
+                    .findFirst()
+                    .get();
+        }
+    }
+
+    private Collection<Move> getAvailableMoves(final Player player) {
+        return allMoves(player).stream()
+                .filter(move -> movePossible(player, move))
+                .collect(Collectors.toList());
+    }
+
+    private Collection<Move> allMoves(final Player player) {
+        Collection<Move> moves = new ArrayList<>();
+        for (int adjacent : gameSetup.graph.adjacentNodes(player.location())) {
+            gameSetup.graph.edgeValue(player.location(), adjacent).ifPresent(allTransport -> {
+                for (ScotlandYard.Transport transport : allTransport) {
+                    moves.add(new Move.SingleMove(
+                            player.piece(), player.location(), transport.requiredTicket(), adjacent
+                    ));
+                    for (int adjacent2 : gameSetup.graph.adjacentNodes(adjacent)) {
+                        gameSetup.graph.edgeValue(adjacent, adjacent2).ifPresent(allTransport2 -> {
+                            for (ScotlandYard.Transport transport2 : allTransport2) {
+                                moves.add(new Move.DoubleMove(
+                                        player.piece(), player.location(), transport.requiredTicket(), adjacent, transport2.requiredTicket(), adjacent2
+                                ));
+                                moves.add(new Move.DoubleMove(
+                                        player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent, transport2.requiredTicket(), adjacent2
+                                ));
+                            }
+                            moves.add(new Move.DoubleMove(
+                                    player.piece(), player.location(), transport.requiredTicket(), adjacent, ScotlandYard.Ticket.SECRET, adjacent2
+                            ));
+                        });
+                        moves.add(new Move.DoubleMove(
+                                player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent, ScotlandYard.Ticket.SECRET, adjacent2
+                        ));
+                    }
+                }
+                moves.add(new Move.SingleMove(
+                        player.piece(), player.location(), ScotlandYard.Ticket.SECRET, adjacent
+                ));
+            });
+        }
+        return moves;
+    }
+
+    private boolean movePossible(final Player player, final Move move) {
+        return move.accept(new Move.Visitor<Boolean>() {
             @Override
-            public Integer visit(Move.SingleMove move) {
-                return move.destination;
+            public Boolean visit(Move.SingleMove move) {
+                return player.has(move.ticket);
             }
 
             @Override
-            public Integer visit(Move.DoubleMove move) {
-                return move.destination2;
+            public Boolean visit(Move.DoubleMove move) {
+                if (player.isDetective()) return false;
+                if (!player.has(ScotlandYard.Ticket.DOUBLE)) return false;
+                if (move.ticket1 == move.ticket2)
+                    return player.hasAtLeast(move.ticket1, 2);
+                else {
+                    return player.has(move.ticket1)
+                            && player.has(move.ticket2);
+                }
             }
         });
     }
 
-    private int getEvaluation() {
-        if (depth <= 0) return staticEvaluation();
-        else {
-            int evaluation = maximise ? NEGATIVE_INFINITY : POSITIVE_INFINITY;
-
-            for (Move move : gameState.getAvailableMoves()) {
-                int newMrXLocation = mrXLocation;
-                if (move.commencedBy().isMrX()) newMrXLocation = getMoveDestination(move);
-                GameTree child = new GameTree(board, gameState.advance(move), newMrXLocation, MAX_DEPTH-1, !maximise);
-                int childEvaluation = child.getEvaluation();
-
-                boolean newBestMove = maximise ? childEvaluation > evaluation : childEvaluation < evaluation;
-
-                if (newBestMove) evaluation = childEvaluation;
-            }
-            return evaluation;
-        }
-    }
-
-    private int staticEvaluation() {
-        Dijkstra dijkstra = new Dijkstra(board.getSetup().graph);
-        Optional<Integer> minDistance = createDetectives(board).stream()
-                .map(detective -> dijkstra.minimumRouteLength(detective, mrXLocation))
-                .flatMap(Optional::stream)
-                .min(Integer::compareTo);
-        return 0;
-    }
-
-    private Collection<Player> createDetectives(final Board board) {
-        return board.getPlayers().stream()
-                .filter(Piece::isDetective)
-                .map(piece -> createDetective(board, piece))
-                .collect(Collectors.toList());
-    }
-
-    private Player createDetective(final Board board, Piece piece) {
-        return new Player(
-                piece,
-                getPlayerTickets(board, piece),
-                getPlayerLocation(board, piece)
-        );
-    }
-
-    private ImmutableMap<ScotlandYard.Ticket, Integer> getPlayerTickets(final Board board, Piece piece) {
-        Optional<Board.TicketBoard> ticketBoard = board.getPlayerTickets(piece);
-        if (ticketBoard.isPresent()) {
-            Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
-            for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values()) {
-                tickets.put(ticket, ticketBoard.get().getCount(ticket));
-            }
-            return ImmutableMap.copyOf(tickets);
-        } else {
-            return ImmutableMap.of();
-        }
-    }
-
-    private int getPlayerLocation(final Board board, Piece piece) {
-        if (piece.isMrX()) throw new IllegalArgumentException();
-        Optional<Integer> location = board.getDetectiveLocation((Piece.Detective) piece);
-        if (location.isPresent()) {
-            return location.get();
-        } else {
-            return -1;
-        }
+    GameData advance(final Move move) {
+        return new GameData(this, move);
     }
 }
