@@ -67,10 +67,17 @@ public final class GameTree {
 
     private int evaluate() {
         if (children.size() > 0) {
-            return children.stream()
-                    .map(GameTree::evaluate)
-                    .max(Integer::compareTo)
-                    .get();
+            if (maximise) {
+                return children.stream()
+                        .map(GameTree::evaluate)
+                        .max(Integer::compareTo)
+                        .get();
+            } else {
+                return children.stream()
+                        .map(GameTree::evaluate)
+                        .min(Integer::compareTo)
+                        .get();
+            }
         } else
             return staticEvaluation();
     }
@@ -80,7 +87,7 @@ public final class GameTree {
         Optional<Integer> minDist = gameData.getDetectives().stream()
                 .map(detective -> dijkstra.minimumRouteLength(detective, gameData.getMrXLocation()))
                 .flatMap(Optional::stream)
-                .max(Integer::compareTo);
+                .min(Integer::compareTo);
         if (minDist.isPresent())
             return minDist.get();
         else
