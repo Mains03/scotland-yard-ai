@@ -85,6 +85,8 @@ public class MinimumDistance {
                 distances.get(i).add(INFINITY);
                 if (graph.edgeValue(i+1, j+1).isPresent())
                     distances.get(i).set(j, 1);
+                else if (i == j)
+                    distances.get(i).set(j, 0);
             }
         }
         return distances;
