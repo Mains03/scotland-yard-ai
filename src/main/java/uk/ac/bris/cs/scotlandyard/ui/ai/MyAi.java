@@ -18,7 +18,6 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		Dijkstra.createInstance(board.getSetup().graph);
 		MinimumDistance.createInstance(board.getSetup().graph);
 		AllMoves.createInstance(board.getSetup().graph);
 		if (mrXToMove(board)) {
