@@ -18,7 +18,7 @@ public class AllMoves {
 
     public static void createInstance(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         Objects.requireNonNull(graph);
-        if (allMoves != null)
+        if (allMoves == null)
             allMoves = new AllMoves(graph);
     }
 
