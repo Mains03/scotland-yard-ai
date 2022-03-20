@@ -84,10 +84,9 @@ public final class GameTree {
     }
 
     private int staticEvaluation() {
-        Dijkstra dijkstra = Dijkstra.getInstance();
         Optional<Integer> minDist = gameData.getDetectives().stream()
-                .map(detective -> dijkstra.minimumRouteLength(detective, gameData.getMrXLocation()))
-                .flatMap(Optional::stream)
+                .map(detective -> MinimumDistance.getInstance()
+                        .getMinimumDistance(detective.location(), gameData.getMrXLocation()))
                 .min(Integer::compareTo);
         if (minDist.isPresent())
             return minDist.get();

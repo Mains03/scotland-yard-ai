@@ -1,7 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import io.atlassian.fugue.Pair;
@@ -81,7 +80,7 @@ public class MinimumDistance {
     ) {
         List<List<Integer>> distances = new ArrayList<>();
         for (int i=0; i<numNodes; ++i) {
-            distances.set(i, new ArrayList<>());
+            distances.add(new ArrayList<>());
             for (int j=0; j<numNodes; ++j) {
                 distances.get(i).add(INFINITY);
                 if (graph.edgeValue(i+1, j+1).isPresent())
