@@ -6,7 +6,6 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class GameTree {
     private static final int POSITIVE_INFINITY = 10000000;
@@ -217,17 +216,7 @@ final class GameData {
     }
 
     private Collection<Move> allMoves(final Player player) {
-        Collection<Move.SingleMove> singleMoves = AllSingleMoves.getInstance().getSingleMoves(player.location()).stream()
-                .map(move -> new Move.SingleMove(
-                        player.piece(), move.source(), move.ticket, move.destination
-                )).collect(Collectors.toList());
-        Set<Move.DoubleMove> doubleMoves = new HashSet<>();
-        if (player.isMrX())
-            doubleMoves = AllDoubleMoves.getInstance().getDoubleMoves(player.location());
-        return Stream.concat(
-                singleMoves.stream(),
-                doubleMoves.stream()
-        ).collect(Collectors.toList());
+        return AllMoves.getInstance().getAvailableMoves(player.piece(), player.location());
     }
 
     private boolean movePossible(final Player player, final Move move) {
