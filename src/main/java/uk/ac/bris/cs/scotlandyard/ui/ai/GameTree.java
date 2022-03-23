@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public final class GameTree {
     private static final int POSITIVE_INFINITY = 10000000;
-    private static final int NEGATIVE_INFINITY = -10000000;
 
     private final Move move;
     private final ImmutableList<GameTree> children;
@@ -33,12 +32,7 @@ public final class GameTree {
         );
     }
 
-    private GameTree(
-            final GameData gameData,
-            final Move move,
-            final boolean maximise,
-            final int depth
-    ) {
+    private GameTree(final GameData gameData, final Move move, final boolean maximise, final int depth) {
         this.move = move;
         this.gameData = gameData;
         this.maximise = maximise;
@@ -59,61 +53,32 @@ public final class GameTree {
     }
 
     public Move determineBestMove() {
-        int eval;
-        Move bestMove = null;
-        int alpha = NEGATIVE_INFINITY;
-        int beta = POSITIVE_INFINITY;
         if (maximise) {
-            eval = NEGATIVE_INFINITY;
-            for (GameTree child : children) {
-                int childEval = child.evaluate(alpha, beta);
-                if (childEval > eval) {
-                    eval = childEval;
-                    bestMove = child.move;
-                }
-                alpha = Math.max(alpha, childEval);
-                if (beta <= alpha)
-                    break;
-            }
+            return children.stream()
+                    .max(Comparator.comparingInt(GameTree::evaluate))
+                    .get()
+                    .move;
         } else {
-            eval = POSITIVE_INFINITY;
-            for (GameTree child : children) {
-                int childEval = child.evaluate(alpha, beta);
-                if (eval < childEval) {
-                    eval = childEval;
-                    bestMove = child.move;
-                }
-                beta = Math.min(beta, childEval);
-                if (beta <= alpha)
-                    break;
-            }
+            return children.stream()
+                    .min(Comparator.comparingInt(GameTree::evaluate))
+                    .get()
+                    .move;
         }
-        return bestMove;
     }
 
-    private int evaluate(int alpha, int beta) {
+    private int evaluate() {
         if (children.size() > 0) {
-            int eval;
             if (maximise) {
-                eval = NEGATIVE_INFINITY;
-                for (GameTree child : children) {
-                    int childEval = child.evaluate(alpha, beta);
-                    eval = Math.max(eval, childEval);
-                    alpha = Math.max(alpha, childEval);
-                    if (beta <= alpha)
-                        break;
-                }
+                return children.stream()
+                        .map(GameTree::evaluate)
+                        .max(Integer::compareTo)
+                        .get();
             } else {
-                eval = POSITIVE_INFINITY;
-                for (GameTree child : children) {
-                    int childEval = child.evaluate(alpha, beta);
-                    eval = Math.min(eval, childEval);
-                    beta = Math.min(beta, childEval);
-                    if (beta <= alpha)
-                        break;
-                }
+                return children.stream()
+                        .map(GameTree::evaluate)
+                        .min(Integer::compareTo)
+                        .get();
             }
-            return eval;
         } else
             return staticEvaluation();
     }
