@@ -8,6 +8,9 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Objects;
 
+/**
+ * Abstract collection of moves.
+ */
 public abstract class MoveCollection {
     // Generate moves common to both MrX and the detectives
     protected ImmutableSet<Move> generateMoves(

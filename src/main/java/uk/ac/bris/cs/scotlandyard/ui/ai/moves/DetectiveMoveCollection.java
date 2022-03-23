@@ -7,6 +7,9 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Objects;
 
+/**
+ * All moves available to a detective at the specified location.
+ */
 class DetectiveMoveCollection extends MoveCollection {
     public DetectiveMoveCollection(
             ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
