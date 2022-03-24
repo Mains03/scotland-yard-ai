@@ -6,6 +6,7 @@ import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * All moves available to a detective at the specified location.
@@ -19,5 +20,8 @@ class DetectiveMoveCollection extends MoveCollection {
         Objects.requireNonNull(graph);
         Objects.requireNonNull(piece);
         if (piece.isMrX()) throw new IllegalArgumentException();
+
+        ImmutableSet<Integer> moves = graph.adjacentNodes(location).stream().collect(Collectors.toImmutableSet());
+
     }
 }

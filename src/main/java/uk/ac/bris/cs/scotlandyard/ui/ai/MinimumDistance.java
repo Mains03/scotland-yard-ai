@@ -6,11 +6,10 @@ import com.google.common.graph.ImmutableValueGraph;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 
 public class MinimumDistance {
     private static final int INFINITY = 10000000;
@@ -90,6 +89,31 @@ public class MinimumDistance {
             }
         }
         return distances;
+    }
+
+    // Creates an adjacency matrix
+    private Array2DRowRealMatrix createAdjacencyMatrix(
+            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph
+    ) {
+        // Size of graph is size of matrix
+        int graphSize = graph.nodes().size();
+        Array2DRowRealMatrix basicMatrix = new Array2DRowRealMatrix(graphSize, graphSize);
+        // For each entry, set to number of connections
+        for (Integer i = 0; i < graphSize; i++) {
+            for (Integer j = i; j < graphSize; j++) {
+                Optional<ImmutableSet<ScotlandYard.Transport>> edge = graph.edgeValue(i, j);
+                int connections = 0;
+                if (edge.isPresent()) connections = edge.get().size();
+                basicMatrix.setEntry(i, j, connections);
+                basicMatrix.setEntry(j, i, connections);
+            }
+        }
+        return basicMatrix;
+    }
+
+    // Squaring an adjacency matrix of single connections shows all connections  of size two
+    private Array2DRowRealMatrix doubleAdjacencyMatrix(Array2DRowRealMatrix matrix) {
+        return matrix.multiply(matrix);
     }
 
     public int getMinimumDistance(int source, int destination) {
