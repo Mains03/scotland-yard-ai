@@ -3,75 +3,28 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.moves;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
+import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
- * All moves available to a player at each location.
+ * Moves available to a player at each location.
  */
-class PlayerMoves {
-    /**
-     * Moves available to the player. Moves available at index i correspond
-     * to node i+1 on the board.
-     */
-    private final ImmutableList<MoveCollection> moves;
+abstract class PlayerMoves {
+    private final Piece piece;
+    private Map<Integer, Collection<Move>> moves = new HashMap<>();
 
-    /**
-     *
-     * @param graph game board
-     * @param piece piece to generate moves for
-     */
-    public PlayerMoves(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
-            final Piece piece
-    ) {
-        moves = createMoves(graph, piece);
+    PlayerMoves(final Piece piece) {
+        this.piece = piece;
     }
 
-    /**
-     *
-     * @param graph game board
-     * @param piece piece to generate moves for
-     * @return available moves
-     */
-    private ImmutableList<MoveCollection> createMoves(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
-            final Piece piece
-    ) {
-        List<MoveCollection> moves = new ArrayList<>();
-        for (int location : graph.nodes())
-            moves.add(createMoveCollection(graph, piece, location));
-        return ImmutableList.copyOf(moves);
+    Collection<Move> getAvailableMoves(int location) {
+        if (!moves.containsKey(location))
+            moves.put(location, createMoves(piece, location));
+        return moves.get(location);
     }
 
-    /**
-     * Factory method to create a MoveCollection instance
-     * @param graph game board
-     * @param piece piece to generate moves for
-     * @param location location to generate moves at
-     * @return available moves for the piece at the specified location
-     */
-    private MoveCollection createMoveCollection(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
-            final Piece piece,
-            final int location
-    ) {
-        if (piece.isMrX())
-            return new MrXMoveCollection(graph, location);
-        else
-            return new DetectiveMoveCollection(graph, piece, location);
-    }
-
-    /**
-     *
-     * @param location node to get the available moves for
-     * @return available moves
-     */
-    public MoveCollection getMoves(int location) {
-        // the index is location - 1
-        return moves.get(location-1);
-    }
+    abstract Collection<Move> createMoves(final Piece piece, int location);
 }

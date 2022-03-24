@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTree.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moves.AllMoves;
 
 public class MyAi implements Ai {
@@ -41,7 +42,7 @@ public class MyAi implements Ai {
 				createRemaining(),
 				1
 		);
-		return gameTree.determineBestMove();
+		return gameTree.determineBestMove(1);
 	}
 
 	private Player createMrX(final Board board) {
