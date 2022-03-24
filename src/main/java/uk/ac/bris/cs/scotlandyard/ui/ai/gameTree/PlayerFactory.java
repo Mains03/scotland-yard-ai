@@ -28,6 +28,19 @@ class PlayerFactory {
         ).use(move.tickets()).at(getMoveDestination(move));
     }
 
+    Player moveMrX(final Player mrX, final Move move) {
+        if (mrX.isDetective()) throw new IllegalArgumentException();
+        return mrX.use(move.tickets()).at(getMoveDestination(move));
+    }
+
+    List<Player> moveDetectives(final List<Player> detectives, final Map<Player, Move> detectiveMoves) {
+        return detectives.stream()
+                .map(detective -> {
+                    Move move = detectiveMoves.get(detective);
+                    return detective.use(move.tickets()).at(getMoveDestination(move));
+                }).collect(Collectors.toList());
+    }
+
     private int getMoveDestination(final Move move) {
         return move.accept(new Move.Visitor<>() {
             @Override

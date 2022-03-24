@@ -1,44 +1,44 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTree;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
+import com.google.common.collect.ImmutableList;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
+import uk.ac.bris.cs.scotlandyard.ui.ai.MinimumDistance;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
-final class GameState {
-    private final Optional<Move> move;
-
+abstract class GameState {
     private final Player mrX;
     private final List<Player> detectives;
 
-    GameState(final Board board, final Move move) {
-        this.move = Optional.of(move);
-        this.mrX = createMrX(board, move);
-        this.detectives = createDetectives(board);
+    private final boolean mrXTurn;
+
+    GameState(final Player mrX, final List<Player> detectives, final boolean mrXTurn) {
+        this.mrX = mrX;
+        this.detectives = detectives;
+        this.mrXTurn = mrXTurn;
     }
 
-    private Player createMrX(final Board board, final Move move) {
-        return PlayerFactory.getInstance().createMrX(board, move);
-    }
-
-    private List<Player> createDetectives(final Board board) {
-        return PlayerFactory.getInstance().createDetectives(board);
-    }
+    Player getMrX() { return mrX; }
+    ImmutableList<Player> getDetectives() { return ImmutableList.copyOf(detectives); }
+    boolean isMrXTurn() { return mrXTurn; }
 
     Collection<GameState> nextGameStates() {
-        return null;
+        return GameStateFactory.getInstance().nextGameStates(this);
     }
 
     int minDistanceBetweenDetectivesAndMrX() {
-        return 0;
+        int mrXLocation = mrX.location();
+        Optional<Integer> minDist = detectives.stream()
+                .map(Player::location)
+                .map(location -> MinimumDistance.getInstance()
+                        .getMinimumDistance(location, mrXLocation)
+                ).min(Integer::compareTo);
+        if (minDist.isPresent())
+            return minDist.get();
+        else
+            return 10000000;
     }
 
-    Move getMove() {
-        if (move.isEmpty()) throw new NoSuchElementException();
-        return move.get();
-    }
+    abstract Move getMove();
 }

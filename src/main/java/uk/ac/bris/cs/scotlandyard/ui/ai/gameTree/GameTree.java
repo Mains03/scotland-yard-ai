@@ -20,7 +20,7 @@ public class GameTree {
         List<GameTreeNode> children = new ArrayList<>();
         for (Move move : board.getAvailableMoves()) {
             children.add(new GameTreeNode(
-                    new GameState(board, move),
+                    GameStateFactory.getInstance().createGameState(board, move),
                     MAX_DEPTH
             ));
         }
