@@ -52,7 +52,7 @@ public class AllMoves {
      * @param location location of the piece
      * @return available moves to the piece at the location
      */
-    public Collection<Move> getAvailableMoves(final Piece piece, int location) {
+    public List<Move> getAvailableMoves(final Piece piece, int location) {
         if (!moves.containsKey(piece))
             moves.put(piece, createPlayerMoves(piece));
         return moves.get(piece).getAvailableMoves(location);

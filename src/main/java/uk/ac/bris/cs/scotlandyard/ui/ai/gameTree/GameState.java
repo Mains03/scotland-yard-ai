@@ -7,6 +7,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.MinimumDistance;
 
 import java.util.*;
 
+/**
+ * A state of the game.
+ */
 abstract class GameState {
     private final Player mrX;
     private final List<Player> detectives;

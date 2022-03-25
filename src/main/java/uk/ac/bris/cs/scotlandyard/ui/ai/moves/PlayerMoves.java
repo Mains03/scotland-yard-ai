@@ -14,17 +14,17 @@ import java.util.*;
  */
 abstract class PlayerMoves {
     private final Piece piece;
-    private Map<Integer, Collection<Move>> moves = new HashMap<>();
+    private Map<Integer, List<Move>> moves = new HashMap<>();
 
     PlayerMoves(final Piece piece) {
         this.piece = piece;
     }
 
-    Collection<Move> getAvailableMoves(int location) {
+    List<Move> getAvailableMoves(int location) {
         if (!moves.containsKey(location))
             moves.put(location, createMoves(piece, location));
         return moves.get(location);
     }
 
-    abstract Collection<Move> createMoves(final Piece piece, int location);
+    abstract List<Move> createMoves(final Piece piece, int location);
 }

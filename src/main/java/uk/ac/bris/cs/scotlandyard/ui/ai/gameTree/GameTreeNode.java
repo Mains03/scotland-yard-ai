@@ -5,6 +5,9 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * A node in the game tree representing a state of the game.
+ */
 final class GameTreeNode {
     static final int NEGATIVE_INFINITY = -10000000;
     static final int POSITIVE_INFINITY = 10000000;
@@ -27,6 +30,11 @@ final class GameTreeNode {
         return children;
     }
 
+    /**
+     * Generate an integer evaluation of this state.
+     * @param maximise whether the score should be maximised
+     * @return integer evaluation
+     */
     int evaluate(boolean maximise) {
         if (children.size() == 0)
             return staticEvaluation();

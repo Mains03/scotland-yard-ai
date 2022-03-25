@@ -8,6 +8,7 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ class PlayerMovesFactory {
     private PlayerMoves createMrXPlayerMoves() {
         return new PlayerMoves(Piece.MrX.MRX) {
             @Override
-            Collection<Move> createMoves(Piece piece, int location) {
+            List<Move> createMoves(Piece piece, int location) {
                 return Stream.concat(
                         createSingleMoves(location),
                         createDoubleMoves(location)
@@ -72,7 +73,7 @@ class PlayerMovesFactory {
     private PlayerMoves createDetectivePlayerMoves(final Piece piece) {
         return new PlayerMoves(piece) {
             @Override
-            Collection<Move> createMoves(Piece piece, int location) {
+            List<Move> createMoves(Piece piece, int location) {
                 return graph.adjacentNodes(location).stream()
                         .flatMap(destination -> createSingleMoves(piece, location, destination))
                         .collect(Collectors.toList());
