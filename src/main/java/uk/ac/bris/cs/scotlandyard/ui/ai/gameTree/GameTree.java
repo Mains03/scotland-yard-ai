@@ -6,6 +6,9 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Game tree to determine the best move.
+ */
 public class GameTree {
     private static final int MAX_DEPTH = 1;
 

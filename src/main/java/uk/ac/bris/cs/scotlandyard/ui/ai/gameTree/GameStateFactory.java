@@ -75,7 +75,8 @@ class GameStateFactory {
      */
     private Collection<GameState> nextGameStatesDetectivesTurn(final GameState gameState) {
         Collection<GameState> nextGameStates = new ArrayList<>();
-        for (Map<Player, Move> detectiveMoves : MoveGenerationFactory.getInstance().generateDetectivesMoves(gameState)) {
+        List<Map<Player, Move>> allDetectiveMoves = MoveGenerationFactory.getInstance().generateDetectivesMoves(gameState);
+        for (Map<Player, Move> detectiveMoves : allDetectiveMoves) {
             Player mrX = gameState.getMrX();
             List<Player> detectives = PlayerFactory.getInstance()
                     .moveDetectives(gameState.getDetectives(), detectiveMoves);

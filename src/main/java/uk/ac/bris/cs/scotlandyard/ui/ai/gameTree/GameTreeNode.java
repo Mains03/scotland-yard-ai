@@ -4,9 +4,11 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * A node in the game tree representing a state of the game.
+ * Each state is either MrX to move or all detectives to move.
  */
 final class GameTreeNode {
     static final int NEGATIVE_INFINITY = -10000000;
@@ -15,7 +17,13 @@ final class GameTreeNode {
     private final GameState gameState;
     private final Collection<GameTreeNode> children;
 
+    /**
+     * GameTreeNode constructor
+     * @param gameState state of the game for this node
+     * @param depth remaining depth of the tree
+     */
     GameTreeNode(final GameState gameState, int depth) {
+        Objects.requireNonNull(gameState);
         this.gameState = gameState;
         if (depth > 0)
             children = createChildren(gameState, depth);

@@ -8,7 +8,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.MinimumDistance;
 import java.util.*;
 
 /**
- * A state of the game.
+ * A state of the game, either MrX to move or all detectives to move.
  */
 abstract class GameState {
     private final Player mrX;
@@ -16,7 +16,15 @@ abstract class GameState {
 
     private final boolean mrXTurn;
 
+    /**
+     * GameState constructor
+     * @param mrX MrX
+     * @param detectives detectives
+     * @param mrXTurn whether MrX is to move
+     */
     GameState(final Player mrX, final List<Player> detectives, final boolean mrXTurn) {
+        Objects.requireNonNull(mrX);
+        Objects.requireNonNull(detectives);
         this.mrX = mrX;
         this.detectives = detectives;
         this.mrXTurn = mrXTurn;
