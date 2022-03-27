@@ -32,6 +32,12 @@ final class GameTreeNode {
             children = new ArrayList<>();
     }
 
+    /**
+     * Create the children of this game tree node.
+     * @param gameState the game state
+     * @param depth the current depth remaining
+     * @return the children
+     */
     private Collection<GameTreeNode> createChildren(final GameState gameState, int depth) {
         Collection<GameTreeNode> children = new ArrayList<>();
         Collection<GameState> gameStateChildren = gameState.nextGameStates();
@@ -47,7 +53,7 @@ final class GameTreeNode {
      */
     int evaluate(boolean maximise) {
         if (children.size() == 0)
-            return staticEvaluation();
+            return gameState.staticEvaluation();
         int eval;
         if (maximise) {
             eval = NEGATIVE_INFINITY;
@@ -61,11 +67,11 @@ final class GameTreeNode {
         return eval;
     }
 
+    /**
+     * Delegates to the game state instance.
+     * @return the moves made
+     */
     List<Move> getMove() {
         return gameState.getMoves();
-    }
-
-    private int staticEvaluation() {
-        return gameState.staticEvaluation();
     }
 }

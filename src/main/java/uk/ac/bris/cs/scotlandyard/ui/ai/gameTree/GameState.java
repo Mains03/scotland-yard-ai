@@ -21,10 +21,11 @@ class GameState {
     private final List<GameState> nextGameStates;
 
     /**
-     * GameState constructor
+     * Creates a GameState instance
+     * @param graph the game board
      * @param mrX MrX
-     * @param detectives detectives
-     * @param mrXTurn whether MrX is to move
+     * @param detectives the detectives
+     * @param moves the moves made to get from the previous game state to this one
      */
     GameState(
             final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
@@ -43,15 +44,25 @@ class GameState {
         this.nextGameStates = createNextGameStates();
     }
 
+    /**
+     * Creates the possible game states after this one.
+     * @return the possible game states
+     */
     private List<GameState> createNextGameStates() {
         return null;
     }
 
-    List<Move> getMoves() {
-        return moves;
-    }
+    /**
+     *
+     * @return the moves made
+     */
+    List<Move> getMoves() { return moves; }
     List<GameState> nextGameStates() { return nextGameStates; }
 
+    /**
+     * Statically evaluates the game at this state.
+     * @return integer evaluation of the position
+     */
     int staticEvaluation() {
         // return min distance between detectives and MrX
         int mrXLocation = mrX.location();
