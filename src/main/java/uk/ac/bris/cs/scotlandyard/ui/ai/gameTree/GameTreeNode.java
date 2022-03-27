@@ -33,7 +33,8 @@ final class GameTreeNode {
 
     private Collection<GameTreeNode> createChildren(final GameState gameState, int depth) {
         Collection<GameTreeNode> children = new ArrayList<>();
-        for (GameState nextGameState : gameState.nextGameStates())
+        Collection<GameState> gameStateChildren = GameStateFactory.getInstance().nextGameStates(gameState);
+        for (GameState nextGameState : gameStateChildren)
             children.add(new GameTreeNode(nextGameState, depth-1));
         return children;
     }

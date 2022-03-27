@@ -10,11 +10,13 @@ import java.util.*;
 /**
  * A state of the game, either MrX to move or all detectives to move.
  */
-abstract class GameState {
+class GameState {
     private final Player mrX;
     private final List<Player> detectives;
 
     private final boolean mrXTurn;
+
+    private final Move move;
 
     /**
      * GameState constructor
@@ -22,21 +24,18 @@ abstract class GameState {
      * @param detectives detectives
      * @param mrXTurn whether MrX is to move
      */
-    GameState(final Player mrX, final List<Player> detectives, final boolean mrXTurn) {
+    GameState(final Player mrX, final List<Player> detectives, final boolean mrXTurn, final Move move) {
         Objects.requireNonNull(mrX);
         Objects.requireNonNull(detectives);
         this.mrX = mrX;
         this.detectives = detectives;
         this.mrXTurn = mrXTurn;
+        this.move = move;
     }
 
     Player getMrX() { return mrX; }
     ImmutableList<Player> getDetectives() { return ImmutableList.copyOf(detectives); }
     boolean isMrXTurn() { return mrXTurn; }
-
-    Collection<GameState> nextGameStates() {
-        return GameStateFactory.getInstance().nextGameStates(this);
-    }
 
     int minDistanceBetweenDetectivesAndMrX() {
         int mrXLocation = mrX.location();
@@ -51,5 +50,7 @@ abstract class GameState {
             return 10000000;
     }
 
-    abstract Move getMove();
+    Move getMove() {
+        return move;
+    }
 }

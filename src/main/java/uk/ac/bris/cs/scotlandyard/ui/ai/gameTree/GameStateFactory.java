@@ -27,12 +27,7 @@ class GameStateFactory {
     GameState createGameState(final Board board, final Move mrXMove) {
         Player mrX = PlayerFactory.getInstance().createMrX(board, mrXMove);
         List<Player> detectives = PlayerFactory.getInstance().createDetectives(board);
-        return new GameState(mrX, detectives, false) {
-            @Override
-            Move getMove() {
-                return mrXMove;
-            }
-        };
+        return new GameState(mrX, detectives, false, mrXMove);
     }
 
     /**
@@ -58,12 +53,7 @@ class GameStateFactory {
         for (Move move : MoveGenerationFactory.getInstance().generateMrXMoves(gameState)) {
             Player mrX = PlayerFactory.getInstance().moveMrX(gameState.getMrX(), move);
             List<Player> detectives = gameState.getDetectives();
-            nextGameStates.add(new GameState(mrX, detectives, false) {
-                @Override
-                Move getMove() {
-                    throw new NoSuchElementException();
-                }
-            });
+            nextGameStates.add(new GameState(mrX, detectives, false, move));
         }
         return nextGameStates;
     }
@@ -80,12 +70,7 @@ class GameStateFactory {
             Player mrX = gameState.getMrX();
             List<Player> detectives = PlayerFactory.getInstance()
                     .moveDetectives(gameState.getDetectives(), detectiveMoves);
-            nextGameStates.add(new GameState(mrX, detectives, true) {
-                @Override
-                Move getMove() {
-                    throw new NoSuchElementException();
-                }
-            });
+            nextGameStates.add(new GameState(mrX, detectives, true, null));
         }
         return nextGameStates;
     }
