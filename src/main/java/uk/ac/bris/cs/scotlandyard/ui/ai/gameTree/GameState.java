@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.MinimumDistance;
@@ -18,9 +17,8 @@ class GameState {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final Player mrX;
     private final List<Player> detectives;
-    private final boolean mrXTurn;
     private final List<Move> moves; // moves made to get to this state of the game
-    private final List<Move> availableMoves;
+    private final List<GameState> nextGameStates;
 
     /**
      * GameState constructor
@@ -32,7 +30,6 @@ class GameState {
             final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
             final Player mrX,
             final List<Player> detectives,
-            final boolean mrXTurn,
             final List<Move> moves
     ) {
         Objects.requireNonNull(graph);
@@ -42,21 +39,21 @@ class GameState {
         this.graph = graph;
         this.mrX = mrX;
         this.detectives = detectives;
-        this.mrXTurn = mrXTurn;
         this.moves = moves;
-        this.availableMoves = generateAvailableMoves();
+        this.nextGameStates = createNextGameStates();
     }
 
-    private List<Move> generateAvailableMoves() {
+    private List<GameState> createNextGameStates() {
         return null;
     }
 
-    ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph() { return graph; }
-    Player getMrX() { return mrX; }
-    ImmutableList<Player> getDetectives() { return ImmutableList.copyOf(detectives); }
-    boolean isMrXTurn() { return mrXTurn; }
+    List<Move> getMoves() {
+        return moves;
+    }
+    List<GameState> nextGameStates() { return nextGameStates; }
 
-    int minDistanceBetweenDetectivesAndMrX() {
+    int staticEvaluation() {
+        // return min distance between detectives and MrX
         int mrXLocation = mrX.location();
         Optional<Integer> minDist = detectives.stream()
                 .map(Player::location)
@@ -69,11 +66,5 @@ class GameState {
             return 10000000;
     }
 
-    List<Move> getMoves() {
-        return moves;
-    }
 
-    List<Move> getAvailableMoves() {
-        return null;
-    }
 }

@@ -4,6 +4,7 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,7 +34,7 @@ final class GameTreeNode {
 
     private Collection<GameTreeNode> createChildren(final GameState gameState, int depth) {
         Collection<GameTreeNode> children = new ArrayList<>();
-        Collection<GameState> gameStateChildren = GameStateFactory.getInstance().nextGameStates(gameState);
+        Collection<GameState> gameStateChildren = gameState.nextGameStates();
         for (GameState nextGameState : gameStateChildren)
             children.add(new GameTreeNode(nextGameState, depth-1));
         return children;
@@ -60,11 +61,11 @@ final class GameTreeNode {
         return eval;
     }
 
-    Move getMove() {
-        return gameState.getMove();
+    List<Move> getMove() {
+        return gameState.getMoves();
     }
 
     private int staticEvaluation() {
-        return gameState.minDistanceBetweenDetectivesAndMrX();
+        return gameState.staticEvaluation();
     }
 }
