@@ -15,38 +15,28 @@ public class GameTree {
     private final List<GameTreeNode> children;
 
     public GameTree(final Board board) {
-        children = createChildren(board);
-    }
-
-    /**
-     * Create children of the given board.
-     * @param board the board
-     * @return the children
-     */
-    private List<GameTreeNode> createChildren(final Board board) {
-        List<GameTreeNode> children = new ArrayList<>();
-        for (Move move : board.getAvailableMoves())
-            children.add(createGameTreeNode(board, move));
-        return children;
-    }
-
-    /**
-     * Create a game tree node from the board and a chosen move.
-     * @param board the board
-     * @param move the move
-     * @return the game tree node
-     */
-    private GameTreeNode createGameTreeNode(final Board board, final Move move) {
-        Player mrX = new Player(Piece.MrX.MRX, createPlayerTickets(board, Piece.MrX.MRX), move.source());
+        Player mrX = new Player(
+                Piece.MrX.MRX,
+                createPlayerTickets(board, Piece.MrX.MRX),
+                board.getAvailableMoves().stream()
+                        .findAny().get().source()
+        );
         List<Player> detectives = board.getPlayers().stream()
                 .filter(Piece::isDetective)
                 .map(piece -> createDetective(board, (Piece.Detective) piece))
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
-        return new GameTreeNode(
-                new GameState(board.getSetup().graph, mrX, detectives, List.of(move)),
-                MAX_DEPTH
-        );
+        children = new ArrayList<>();
+        for (Move move : board.getAvailableMoves()) {
+            GameState gameState = new GameState(
+                    board.getSetup().graph,
+                    mrX,
+                    detectives,
+                    false,
+                    List.of(move)
+            );
+            children.add(new GameTreeNode(gameState, MAX_DEPTH));
+        }
     }
 
     /**
