@@ -32,6 +32,7 @@ class GameState {
             final Player mrX,
             final List<Player> detectives,
             final boolean mrXMove,
+            final int depth,
             final List<Move> moves
     ) {
         Objects.requireNonNull(graph);
@@ -60,9 +61,12 @@ class GameState {
         this.mrX = newMrX;
         this.detectives = newDetectives;
         this.moves = moves;
-        this.nextGameStates = createNextGameStates(
-                graph, mrX, detectives, mrXMove
-        );
+        if (depth > 0) {
+            nextGameStates = createNextGameStates(
+                    graph, mrX, detectives, mrXMove, depth
+            );
+        } else
+            nextGameStates = new ArrayList<>();
     }
 
     /**
@@ -92,14 +96,15 @@ class GameState {
             final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
             final Player mrX,
             final List<Player> detectives,
-            final boolean mrXMove
+            final boolean mrXMove,
+            final int depth
     ) {
         // determine which players are to move
         List<Player> players = detectives;
         if (mrXMove) players = List.of(mrX);
         // construct the game states from the available moves
         return getAvailableMoves(graph, mrX, detectives, players).stream()
-                .map(moveList -> new GameState(graph, mrX, detectives, !mrXMove, moveList))
+                .map(moveList -> new GameState(graph, mrX, detectives, !mrXMove, depth-1, moveList))
                 .collect(Collectors.toList());
     }
 
@@ -133,7 +138,7 @@ class GameState {
      * Creates the possible moves a single player can make.
      * @param graph board graph
      * @param player player to move
-     * @param all players in the game
+     * @param players all players in the game
      * @return possible moves
      */
     private List<Move> getAvailableMoves(
@@ -175,18 +180,9 @@ class GameState {
             result.add(current);
         else {
             for (Move move : moveLists.get(index)) {
-                // ensure the location isn't now occupied
-                int destination = getMoveDestination(move);
-                boolean occupied = false;
-                for (Move otherMove : current) {
-                    if (getMoveDestination(otherMove) == destination)
-                        occupied = true;
-                }
-                if (!occupied) {
-                    List<Move> newCurrent = new ArrayList<>(current);
-                    newCurrent.add(move);
-                    generateMovePermutations(moveLists, index + 1, newCurrent, result);
-                }
+                List<Move> newCurrent = new ArrayList<>(current);
+                newCurrent.add(move);
+                generateMovePermutations(moveLists, index + 1, newCurrent, result);
             }
         }
     }

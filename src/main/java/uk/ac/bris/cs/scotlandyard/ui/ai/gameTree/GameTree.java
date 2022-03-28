@@ -33,9 +33,10 @@ public class GameTree {
                     mrX,
                     detectives,
                     false,
+                    MAX_DEPTH-1,
                     List.of(move)
             );
-            children.add(new GameTreeNode(gameState, MAX_DEPTH));
+            children.add(new GameTreeNode(gameState, MAX_DEPTH-1));
         }
     }
 
@@ -51,7 +52,6 @@ public class GameTree {
         if (ticketBoard.isPresent()) {
             for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values()) {
                 int count = ticketBoard.get().getCount(ticket);
-
                 tickets.put(ticket, count);
             }
         }

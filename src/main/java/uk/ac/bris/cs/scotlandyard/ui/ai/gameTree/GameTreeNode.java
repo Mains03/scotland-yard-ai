@@ -24,26 +24,17 @@ final class GameTreeNode {
      * @param depth remaining depth of the tree
      */
     GameTreeNode(final GameState gameState, int depth) {
+        System.out.println("depth: " + depth);
         Objects.requireNonNull(gameState);
         this.gameState = gameState;
-        if (depth > 0)
-            children = createChildren(gameState, depth);
-        else
+        if (depth > 0) {
+            // create the children
             children = new ArrayList<>();
-    }
-
-    /**
-     * Create the children of this game tree node.
-     * @param gameState the game state
-     * @param depth the current depth remaining
-     * @return the children
-     */
-    private Collection<GameTreeNode> createChildren(final GameState gameState, int depth) {
-        Collection<GameTreeNode> children = new ArrayList<>();
-        Collection<GameState> gameStateChildren = gameState.nextGameStates();
-        for (GameState nextGameState : gameStateChildren)
-            children.add(new GameTreeNode(nextGameState, depth-1));
-        return children;
+            Collection<GameState> gameStateChildren = gameState.nextGameStates();
+            for (GameState nextGameState : gameStateChildren)
+                children.add(new GameTreeNode(nextGameState, depth-1));
+        } else
+            children = new ArrayList<>();
     }
 
     /**
