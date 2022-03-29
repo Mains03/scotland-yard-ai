@@ -17,7 +17,7 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
     public MinimumDistanceStrategy(Board board) {
         Objects.requireNonNull(board);
         AiBoard aiBoard = new AiBoardAdapter(board);
-        MinimumDistance minimumDistanceStrategy = new BreadthFirstSearch(aiBoard.getGraph());
+        MinimumDistance minimumDistanceStrategy = new BreadthFirstSearchWithTicket(aiBoard.getGraph());
         Move currentBestMove = null;
         int bestMoveDist = -1;
         for (Move move : aiBoard.getAvailableMoves()) {
@@ -39,7 +39,7 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
             MinimumDistance strategy
     ) {
         Optional<Integer> minDist = detectives.stream()
-                .map(detective -> strategy.minimumDistance(mrX, detective))
+                .map(detective -> strategy.minimumDistance(detective, mrX))
                 .min(Integer::compareTo);
         return minDist.orElse(POSITIVE_INFINITY);
     }

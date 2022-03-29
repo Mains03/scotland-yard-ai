@@ -7,7 +7,7 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import java.util.*;
 
 public class BreadthFirstSearch implements MinimumDistance{
-    private static final int POSITIVE_INFINITY = 10000000;
+    protected static final int POSITIVE_INFINITY = 10000000;
 
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 

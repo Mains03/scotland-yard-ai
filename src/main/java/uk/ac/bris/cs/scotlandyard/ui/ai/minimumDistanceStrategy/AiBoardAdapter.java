@@ -32,11 +32,14 @@ public class AiBoardAdapter implements AiBoard {
                 .findAny();
         if (location.isEmpty())
             throw new NoSuchElementException("Piece not found");
-        return new AiPlayerAdapter(new Player(
-                Piece.MrX.MRX,
-                createPlayerTickets(board, Piece.MrX.MRX),
-                location.get()
-        ));
+        return new AiPlayerAdapter(
+                board.getSetup().graph,
+                new Player(
+                    Piece.MrX.MRX,
+                    createPlayerTickets(board, Piece.MrX.MRX),
+                    location.get()
+                )
+        );
     }
 
     private List<AiPlayer> createDetectives(Board board) {
@@ -46,11 +49,14 @@ public class AiBoardAdapter implements AiBoard {
                     Optional<Integer> detectiveLocation = board.getDetectiveLocation((Piece.Detective) piece);
                     if (detectiveLocation.isEmpty())
                         throw new NoSuchElementException("Piece not found");
-                    return new AiPlayerAdapter(new Player(
-                            piece,
-                            createPlayerTickets(board, piece),
-                            detectiveLocation.get()
-                    ));
+                    return new AiPlayerAdapter(
+                            board.getSetup().graph,
+                            new Player(
+                                    piece,
+                                    createPlayerTickets(board, piece),
+                                detectiveLocation.get()
+                            )
+                    );
                 }).collect(Collectors.toList());
     }
 
