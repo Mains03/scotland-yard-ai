@@ -6,8 +6,7 @@ import javax.annotation.Nonnull;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTree.GameTree;
-import uk.ac.bris.cs.scotlandyard.ui.ai.moves.AllMoves;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceStrategy;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -16,9 +15,10 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		MinimumDistance.createInstance(board.getSetup().graph);
-		AllMoves.createInstance(board.getSetup().graph);
-		// assume MrX to move
-		return new GameTree(board).determineBestMove();
+		return determineBestMove(new MinimumDistanceStrategy(board));
+	}
+
+	private Move determineBestMove(BestMoveStrategy strategy) {
+		return strategy.determineBestMove();
 	}
 }
