@@ -75,7 +75,9 @@ public class AiPlayerAdapter implements AiPlayer {
             return Stream.empty();
         else {
             return getAvailableSingleMoves().flatMap(singleMove -> {
+                // apply singleMove to the player
                 AiPlayerAdapter newPlayer = (AiPlayerAdapter) applyMove(singleMove);
+                // consider all single moves of the new player
                 return newPlayer.getAvailableSingleMoves().map(secondSingleMove -> new Move.DoubleMove(
                         player.piece(),
                         player.location(),

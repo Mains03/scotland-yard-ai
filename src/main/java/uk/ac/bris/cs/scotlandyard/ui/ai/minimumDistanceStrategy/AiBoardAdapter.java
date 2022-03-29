@@ -25,7 +25,8 @@ public class AiBoardAdapter implements AiBoard {
     }
 
     private AiPlayer createMrX(Board board) {
-
+        // MrX to move
+        // Find any move, the source is MrX's location
         Optional<Integer> location = board.getAvailableMoves().stream()
                 .findAny().stream()
                 .map(Move::source)
@@ -54,7 +55,7 @@ public class AiBoardAdapter implements AiBoard {
                             new Player(
                                     piece,
                                     createPlayerTickets(board, piece),
-                                detectiveLocation.get()
+                                    detectiveLocation.get()
                             )
                     );
                 }).collect(Collectors.toList());

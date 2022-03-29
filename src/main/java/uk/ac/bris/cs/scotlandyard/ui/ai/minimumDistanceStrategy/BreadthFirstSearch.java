@@ -6,6 +6,10 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.*;
 
+/**
+ * Performs a breadth first search to find the minimum distance.
+ * Doesn't consider tickets.
+ */
 public class BreadthFirstSearch implements MinimumDistance{
     protected static final int POSITIVE_INFINITY = 10000000;
 

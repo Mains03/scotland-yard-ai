@@ -9,6 +9,11 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+/**
+ * Performs a breadth first search to find the minimum distance where a
+ * moves towards b. Considers the tickets available so is slower but more
+ * accurate.
+ */
 public class BreadthFirstSearchWithTicket extends BreadthFirstSearch {
     public BreadthFirstSearchWithTicket(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         super(graph);

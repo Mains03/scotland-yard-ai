@@ -6,6 +6,9 @@ import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
+/**
+ * Adapter for Board.
+ */
 public interface AiBoard {
     ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph();
 
