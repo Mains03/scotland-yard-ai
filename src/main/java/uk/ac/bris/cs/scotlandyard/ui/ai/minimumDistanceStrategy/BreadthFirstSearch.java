@@ -17,7 +17,9 @@ public class BreadthFirstSearch implements MinimumDistance{
     }
 
     @Override
-    public int minimumDistance(int source, int destination) {
+    public int minimumDistance(AiPlayer a, AiPlayer b) {
+        int source = a.getLocation();
+        int destination = b.getLocation();
         Queue<Integer> priorityQueue = new ArrayDeque<>();
         priorityQueue.add(source);
         int distance[] = new int[graph.nodes().size()+1];

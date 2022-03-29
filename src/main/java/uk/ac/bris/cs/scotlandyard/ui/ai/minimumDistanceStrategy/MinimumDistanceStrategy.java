@@ -38,9 +38,8 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
             List<AiPlayer> detectives,
             MinimumDistance strategy
     ) {
-        int mrXLocation = mrX.getLocation();
         Optional<Integer> minDist = detectives.stream()
-                .map(detective -> strategy.minimumDistance(mrXLocation, detective.getLocation()))
+                .map(detective -> strategy.minimumDistance(mrX, detective))
                 .min(Integer::compareTo);
         return minDist.orElse(POSITIVE_INFINITY);
     }
