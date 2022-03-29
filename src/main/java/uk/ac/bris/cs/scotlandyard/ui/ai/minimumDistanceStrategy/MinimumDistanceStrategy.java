@@ -23,17 +23,6 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
         for (Move move : aiBoard.getAvailableMoves()) {
             AiPlayer mrX = aiBoard.getMrX().applyMove(move);
             int dist = minimumDistanceBetweenMrXAndDetectives(mrX, aiBoard.getDetectives(), minimumDistanceStrategy);
-            System.out.println(move.accept(new Move.Visitor<Integer>() {
-                @Override
-                public Integer visit(Move.SingleMove move) {
-                    return move.destination;
-                }
-
-                @Override
-                public Integer visit(Move.DoubleMove move) {
-                    return move.destination2;
-                }
-            }) + " " + dist);
             if (dist > bestMoveDist) {
                 currentBestMove = move;
                 bestMoveDist = dist;
