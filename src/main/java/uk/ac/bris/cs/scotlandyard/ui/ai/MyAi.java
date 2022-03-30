@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.BreadthFirstSearchMinimumDistance;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MemoizedMinimumDistance;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceWithTickets;
 import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.MinimumDistanceSingleTurnLookAhead;
@@ -23,10 +24,7 @@ public class MyAi implements Ai {
 
 		return determineBestMove(new MinimumDistanceSingleTurnLookAhead(
 				board,
-				new MemoizedMinimumDistance(
-						graph.nodes().size(),
-						new MinimumDistanceWithTickets(graph)
-				)
+				new BreadthFirstSearchMinimumDistance(graph)
 		));
 	}
 
