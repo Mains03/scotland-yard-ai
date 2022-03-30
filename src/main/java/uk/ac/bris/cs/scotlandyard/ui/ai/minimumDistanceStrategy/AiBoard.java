@@ -12,7 +12,7 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 public interface AiBoard {
     ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph();
 
-    ImmutableSet<Move> getAvailableMoves();
+    ImmutableSet<AiMove> getAvailableMoves();
 
     AiPlayer getMrX();
 

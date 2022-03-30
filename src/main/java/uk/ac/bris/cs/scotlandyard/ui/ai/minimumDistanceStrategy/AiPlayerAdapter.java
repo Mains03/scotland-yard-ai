@@ -29,7 +29,7 @@ public class AiPlayerAdapter implements AiPlayer {
     }
 
     @Override
-    public ImmutableSet<Move> getAvailableMoves() {
+    public ImmutableSet<AiMove> getAvailableMoves() {
         if (player.isDetective())
             return ImmutableSet.copyOf(getAvailableSingleMoves().collect(Collectors.toList()));
         else {
@@ -42,27 +42,27 @@ public class AiPlayerAdapter implements AiPlayer {
         }
     }
 
-    private Stream<Move.SingleMove> getAvailableSingleMoves() {
+    private Stream<AiMove> getAvailableSingleMoves() {
         return graph.adjacentNodes(player.location()).stream()
                 .flatMap(destination -> {
-                    List<Move.SingleMove> moves = new ArrayList<>();
+                    List<AiMove> moves = new ArrayList<>();
                     graph.edgeValue(player.location(), destination).ifPresent(allTransport -> {
                         for (ScotlandYard.Transport transport : allTransport) {
                             if (player.has(transport.requiredTicket())) {
-                                moves.add(new Move.SingleMove(
+                                moves.add(new AiMoveAdapter(new Move.SingleMove(
                                         player.piece(),
                                         player.location(),
                                         transport.requiredTicket(),
                                         destination
-                                ));
+                                )));
                             }
                             if (player.has(ScotlandYard.Ticket.SECRET)) {
-                                moves.add(new Move.SingleMove(
+                                moves.add(new AiMoveAdapter(new Move.SingleMove(
                                         player.piece(),
                                         player.location(),
                                         ScotlandYard.Ticket.SECRET,
                                         destination
-                                ));
+                                )));
                             }
                         }
                     });
@@ -70,42 +70,32 @@ public class AiPlayerAdapter implements AiPlayer {
                 });
     }
 
-    private Stream<Move.DoubleMove> getAvailableDoubleMoves() {
+    private Stream<AiMove> getAvailableDoubleMoves() {
         if (player.isDetective() || (!player.has(ScotlandYard.Ticket.DOUBLE)))
             return Stream.empty();
         else {
-            return getAvailableSingleMoves().flatMap(singleMove -> {
+            return getAvailableSingleMoves().flatMap(move1 -> {
                 // apply singleMove to the player
-                AiPlayerAdapter newPlayer = (AiPlayerAdapter) applyMove(singleMove);
+                AiPlayerAdapter newPlayer = (AiPlayerAdapter) applyMove(move1);
                 // consider all single moves of the new player
-                return newPlayer.getAvailableSingleMoves().map(secondSingleMove -> new Move.DoubleMove(
-                        player.piece(),
-                        player.location(),
-                        singleMove.ticket,
-                        singleMove.destination,
-                        secondSingleMove.ticket,
-                        secondSingleMove.destination
-                ));
+                return newPlayer.getAvailableSingleMoves().map(move2 -> {
+                    Move.SingleMove singleMove1 = (Move.SingleMove) move1.asMove();
+                    Move.SingleMove singleMove2 = (Move.SingleMove) move2.asMove();
+                    return new AiMoveAdapter(new Move.DoubleMove(
+                            player.piece(),
+                            player.location(),
+                            singleMove1.ticket,
+                            singleMove1.destination,
+                            singleMove2.ticket,
+                            singleMove2.destination
+                    ));
+                });
             });
         }
     }
 
     @Override
-    public AiPlayer applyMove(Move move) {
-        return new AiPlayerAdapter(graph, player.use(move.tickets()).at(moveDestination(move)));
-    }
-
-    private int moveDestination(Move move) {
-        return move.accept(new Move.Visitor<Integer>() {
-            @Override
-            public Integer visit(Move.SingleMove move) {
-                return move.destination;
-            }
-
-            @Override
-            public Integer visit(Move.DoubleMove move) {
-                return move.destination2;
-            }
-        });
+    public AiPlayer applyMove(AiMove move) {
+        return new AiPlayerAdapter(graph, player.use(move.tickets()).at(move.getDestination()));
     }
 }

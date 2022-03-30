@@ -43,7 +43,7 @@ public class DijkstraWithTickets implements MinimumDistance {
             PQNode node = queue.poll();
             if (node.player.getLocation() == b.getLocation())
                 return node.distance;
-            for (Move move : node.player.getAvailableMoves()) {
+            for (AiMove move : node.player.getAvailableMoves()) {
                 queue.add(new PQNode(
                         node.player.applyMove(move),
                         node.distance + 1

@@ -27,9 +27,9 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
     @Override
     public Move determineBestMove() {
         MinimumDistance minimumDistanceStrategy = new DijkstraWithTickets(aiBoard.getGraph());
-        Move bestMove = null;
+        AiMove bestMove = null;
         int bestMoveDist = -1;
-        for (Move move : aiBoard.getAvailableMoves()) {
+        for (AiMove move : aiBoard.getAvailableMoves()) {
             AiPlayer mrX = aiBoard.getMrX().applyMove(move);
             int dist = minimumDistanceBetweenMrXAndDetectives(mrX, aiBoard.getDetectives(), minimumDistanceStrategy);
             if (dist > bestMoveDist) {
@@ -39,8 +39,7 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
         }
         if (bestMove == null)
             throw new NoSuchElementException("No moves available");
-        bestMove = bestMove;
-        return bestMove;
+        return bestMove.asMove();
     }
 
     protected int minimumDistanceBetweenMrXAndDetectives(

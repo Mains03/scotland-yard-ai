@@ -79,8 +79,12 @@ public class AiBoardAdapter implements AiBoard {
     }
 
     @Override
-    public ImmutableSet<Move> getAvailableMoves() {
-        return board.getAvailableMoves();
+    public ImmutableSet<AiMove> getAvailableMoves() {
+        return ImmutableSet.copyOf(
+                board.getAvailableMoves().stream()
+                        .map(AiMoveAdapter::new)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override

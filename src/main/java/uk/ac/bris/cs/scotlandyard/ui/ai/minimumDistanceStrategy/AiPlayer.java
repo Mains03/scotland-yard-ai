@@ -9,7 +9,7 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 public interface AiPlayer {
     int getLocation();
 
-    ImmutableSet<Move> getAvailableMoves();
+    ImmutableSet<AiMove> getAvailableMoves();
 
-    AiPlayer applyMove(Move move);
+    AiPlayer applyMove(AiMove move);
 }
