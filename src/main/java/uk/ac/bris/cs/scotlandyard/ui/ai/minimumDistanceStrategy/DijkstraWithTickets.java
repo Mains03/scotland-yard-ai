@@ -14,9 +14,13 @@ import java.util.Queue;
  * moves towards b. Considers the tickets available so is slower but more
  * accurate.
  */
-public class BreadthFirstSearchWithTicket extends BreadthFirstSearch {
-    public BreadthFirstSearchWithTicket(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
-        super(graph);
+public class DijkstraWithTickets implements MinimumDistance {
+    private static final int POSITIVE_INFINITY = 10000000;
+
+    private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
+
+    public DijkstraWithTickets(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+        this.graph = graph;
     }
 
     private class PQNode {

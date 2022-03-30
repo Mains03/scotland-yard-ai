@@ -22,7 +22,7 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
     public MinimumDistanceStrategy(Board board) {
         Objects.requireNonNull(board);
         AiBoard aiBoard = new AiBoardAdapter(board);
-        MinimumDistance minimumDistanceStrategy = new BreadthFirstSearchWithTicket(aiBoard.getGraph());
+        MinimumDistance minimumDistanceStrategy = new DijkstraWithTickets(aiBoard.getGraph());
         Move currentBestMove = null;
         int bestMoveDist = -1;
         for (Move move : aiBoard.getAvailableMoves()) {
