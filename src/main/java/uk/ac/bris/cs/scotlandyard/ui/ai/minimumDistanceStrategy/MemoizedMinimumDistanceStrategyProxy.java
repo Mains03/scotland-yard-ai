@@ -13,13 +13,11 @@ import java.util.List;
  */
 public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrategy {
     // memoized minimum distances
-    private int minimumDistances[];
+    private final MinimumDistanceLookupTable minimumDistances;
 
     public MemoizedMinimumDistanceStrategyProxy(Board board) {
         super(board);
-        minimumDistances = new int[board.getSetup().graph.nodes().size()+1];
-        for (int i=0; i<minimumDistances.length; ++i)
-            minimumDistances[i] = -1;
+        minimumDistances = new MinimumDistanceLookupTable(board.getSetup().graph.nodes().size());
     }
 
     @Override
@@ -29,24 +27,12 @@ public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrateg
             MinimumDistance strategy
     ) {
         // use memoization
-        if (foundMinimumDistance(mrX.getLocation()))
-            return getMinimumDistance(mrX.getLocation());
+        if (minimumDistances.foundMinimumDistance(mrX.getLocation()))
+            return minimumDistances.getMinimumDistance(mrX.getLocation());
         else {
             int dist = super.minimumDistanceBetweenMrXAndDetectives(mrX, detectives, strategy);
-            setMinimumDistance(mrX.getLocation(), dist);
+            minimumDistances.setMinimumDistance(mrX.getLocation(), dist);
             return dist;
         }
-    }
-
-    private boolean foundMinimumDistance(int node) {
-        return minimumDistances[node] >= 0;
-    }
-
-    private int getMinimumDistance(int node) {
-        return minimumDistances[node];
-    }
-
-    private void setMinimumDistance(int node, int distance) {
-        minimumDistances[node] = distance;
     }
 }
