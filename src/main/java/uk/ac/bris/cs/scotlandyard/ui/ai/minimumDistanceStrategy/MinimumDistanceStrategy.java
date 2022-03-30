@@ -17,25 +17,30 @@ import java.util.Optional;
 public class MinimumDistanceStrategy implements BestMoveStrategy {
     protected static final int POSITIVE_INFINITY = 100000000;
 
-    private final Move bestMove;
+    private final AiBoard aiBoard;
 
     public MinimumDistanceStrategy(Board board) {
         Objects.requireNonNull(board);
-        AiBoard aiBoard = new AiBoardAdapter(board);
+        aiBoard = new AiBoardAdapter(board);
+    }
+
+    @Override
+    public Move determineBestMove() {
         MinimumDistance minimumDistanceStrategy = new DijkstraWithTickets(aiBoard.getGraph());
-        Move currentBestMove = null;
+        Move bestMove = null;
         int bestMoveDist = -1;
         for (Move move : aiBoard.getAvailableMoves()) {
             AiPlayer mrX = aiBoard.getMrX().applyMove(move);
             int dist = minimumDistanceBetweenMrXAndDetectives(mrX, aiBoard.getDetectives(), minimumDistanceStrategy);
             if (dist > bestMoveDist) {
-                currentBestMove = move;
+                bestMove = move;
                 bestMoveDist = dist;
             }
         }
-        if (currentBestMove == null)
+        if (bestMove == null)
             throw new NoSuchElementException("No moves available");
-        bestMove = currentBestMove;
+        bestMove = bestMove;
+        return bestMove;
     }
 
     protected int minimumDistanceBetweenMrXAndDetectives(
@@ -49,10 +54,5 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
                 .map(detective -> strategy.minimumDistance(detective, mrX))
                 .min(Integer::compareTo);
         return minDist.orElse(POSITIVE_INFINITY);
-    }
-
-    @Override
-    public Move determineBestMove() {
-        return bestMove;
     }
 }

@@ -3,11 +3,13 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Proxy for MinimumDistanceStrategy which uses memoization for MrX locations.
+ */
 public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrategy {
     // memoized minimum distances
-    private final int minimumDistances[];
+    private int minimumDistances[] = null;
 
     public MemoizedMinimumDistanceStrategyProxy(Board board) {
         super(board);
@@ -22,7 +24,13 @@ public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrateg
             List<AiPlayer> detectives,
             MinimumDistance strategy
     ) {
-        return super.minimumDistanceBetweenMrXAndDetectives(mrX, detectives, strategy);
+        if (foundMinimumDistance(mrX.getLocation()))
+            return getMinimumDistance(mrX.getLocation());
+        else {
+            int dist = super.minimumDistanceBetweenMrXAndDetectives(mrX, detectives, strategy);
+            setMinimumDistance(mrX.getLocation(), dist);
+            return dist;
+        }
     }
 
     private boolean foundMinimumDistance(int node) {
