@@ -44,9 +44,6 @@ class GameState {
         Objects.requireNonNull(detectives);
         Objects.requireNonNull(moves);
 
-        this.graph = graph;
-
-
         // move all the players as appropriate
         Player newMrX = new Player(mrX.piece(), mrX.tickets(), mrX.location());
         List<Player> newDetectives = detectives.stream()
@@ -66,6 +63,7 @@ class GameState {
                 }
             }
         }
+        this.graph = graph;
         this.mrX = newMrX;
         this.detectives = newDetectives;
         this.moves = moves;
@@ -83,6 +81,7 @@ class GameState {
      * @return destination of the move
      */
     private int getMoveDestination(final Move move) {
+        // Use visitor pattern as Move can be SingleMove or DoubleMove
         return move.accept(new Move.Visitor<>() {
             @Override
             public Integer visit(Move.SingleMove move) {
@@ -138,7 +137,7 @@ class GameState {
                 .collect(Collectors.toList());
         List<List<Move>> result = new ArrayList<>();
         // generate the permutations of the moves each player can make
-        generateMovePermutations(moveLists, 0, new ArrayList<>(), result);
+        generateMoveCombinations(moveLists, 0, new ArrayList<>(), result);
         return result;
     }
 
@@ -177,20 +176,20 @@ class GameState {
     }
 
     /**
-     * Creates permutations of the given move lists.
+     * Creates combinations of the given move lists.
      * @param moveLists moves each player can make simultaneously
      * @param index index of moveLists
      * @param current current moveList being created
      * @param result the permutations
      */
-    private void generateMovePermutations(final List<List<Move>> moveLists, int index, List<Move> current, List<List<Move>> result) {
+    private void generateMoveCombinations(final List<List<Move>> moveLists, int index, List<Move> current, List<List<Move>> result) {
         if (index == moveLists.size())
             result.add(current);
         else {
             for (Move move : moveLists.get(index)) {
                 List<Move> newCurrent = new ArrayList<>(current);
                 newCurrent.add(move);
-                generateMovePermutations(moveLists, index + 1, newCurrent, result);
+                generateMoveCombinations(moveLists, index + 1, newCurrent, result);
             }
         }
     }
