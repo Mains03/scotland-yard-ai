@@ -1,7 +1,7 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
-import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 
 /**
  * Adapter for Player
