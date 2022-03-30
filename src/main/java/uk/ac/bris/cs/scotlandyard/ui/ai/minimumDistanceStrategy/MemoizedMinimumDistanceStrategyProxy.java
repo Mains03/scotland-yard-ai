@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrategy {
     // memoized minimum distances
-    private int minimumDistances[] = null;
+    private int minimumDistances[];
 
     public MemoizedMinimumDistanceStrategyProxy(Board board) {
         super(board);
