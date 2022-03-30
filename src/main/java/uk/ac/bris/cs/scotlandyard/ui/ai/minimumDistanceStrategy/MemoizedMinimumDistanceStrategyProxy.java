@@ -5,7 +5,9 @@ import uk.ac.bris.cs.scotlandyard.model.Board;
 import java.util.List;
 
 /**
- * Proxy for MinimumDistanceStrategy which uses memoization for MrX locations.
+ * Proxy for MinimumDistanceStrategy which uses memoization for MrX locations. If the minimum distance
+ * between the detectives and Mrx has already been calculated at a specific location, the distance is the
+ * same even if Mrx used different moves to get to the location.
  */
 public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrategy {
     // memoized minimum distances
@@ -24,6 +26,7 @@ public class MemoizedMinimumDistanceStrategyProxy extends MinimumDistanceStrateg
             List<AiPlayer> detectives,
             MinimumDistance strategy
     ) {
+        // use memoization
         if (foundMinimumDistance(mrX.getLocation()))
             return getMinimumDistance(mrX.getLocation());
         else {
