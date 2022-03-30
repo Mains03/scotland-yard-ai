@@ -92,17 +92,20 @@ public class AiPlayerAdapter implements AiPlayer {
 
     @Override
     public AiPlayer applyMove(Move move) {
-        Player newPlayer = move.accept(new Move.Visitor<Player>() {
+        return new AiPlayerAdapter(graph, player.use(move.tickets()).at(moveDestination(move)));
+    }
+
+    private int moveDestination(Move move) {
+        return move.accept(new Move.Visitor<Integer>() {
             @Override
-            public Player visit(Move.SingleMove move) {
-                return player.use(move.ticket).at(move.destination);
+            public Integer visit(Move.SingleMove move) {
+                return move.destination;
             }
 
             @Override
-            public Player visit(Move.DoubleMove move) {
-                return player.use(ScotlandYard.Ticket.DOUBLE).use(move.tickets()).at(move.destination2);
+            public Integer visit(Move.DoubleMove move) {
+                return move.destination2;
             }
         });
-        return new AiPlayerAdapter(graph, player);
     }
 }
