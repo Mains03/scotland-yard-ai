@@ -17,4 +17,6 @@ public interface AiBoard {
     AiPlayer getMrX();
 
     ImmutableList<AiPlayer> getDetectives();
+
+
 }
