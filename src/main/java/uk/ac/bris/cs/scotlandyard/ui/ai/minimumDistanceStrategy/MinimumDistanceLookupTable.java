@@ -20,4 +20,9 @@ public class MinimumDistanceLookupTable {
     public void setMinimumDistance(int node, int distance) {
         minimumDistances[node] = distance;
     }
+
+    public void clearDistances() {
+        for (int i=0; i<minimumDistances.length; ++i)
+            minimumDistances[i] = -1;
+    }
 }

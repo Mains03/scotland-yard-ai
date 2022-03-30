@@ -100,4 +100,9 @@ public class AiPlayerAdapter implements AiPlayer {
     public AiPlayer applyMove(AiMove move) {
         return new AiPlayerAdapter(graph, player.use(move.tickets()).at(move.getDestination()));
     }
+
+    @Override
+    public Player asPlayer() {
+        return player;
+    }
 }

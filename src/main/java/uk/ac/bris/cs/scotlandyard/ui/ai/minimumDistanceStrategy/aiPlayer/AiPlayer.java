@@ -1,6 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
+import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 
 /**
@@ -12,4 +13,6 @@ public interface AiPlayer {
     ImmutableSet<AiMove> getAvailableMoves();
 
     AiPlayer applyMove(AiMove move);
+
+    Player asPlayer();
 }

@@ -14,6 +14,7 @@ public class BreadthFirstSearchMinimumDistance implements MinimumDistanceAlgorit
 
     public BreadthFirstSearchMinimumDistance(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         this.graph = graph;
+        // use BreadthFirstSearch
         algorithm = new BreadthFirstSearch(graph);
     }
 

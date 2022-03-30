@@ -6,6 +6,10 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistance
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The evaluation of the game state is the minimum distance between the detectives
+ * and MrX.
+ */
 public class MinimumDistanceStaticPositionEvaluation implements StaticPositionEvaluationStrategy {
     private static final int POSITIVE_INFINITY = 10000000;
 
