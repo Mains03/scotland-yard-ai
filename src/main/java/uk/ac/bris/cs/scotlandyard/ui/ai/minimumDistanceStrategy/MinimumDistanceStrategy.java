@@ -15,7 +15,7 @@ import java.util.Optional;
  * which maximises this distance.
  */
 public class MinimumDistanceStrategy implements BestMoveStrategy {
-    private static final int POSITIVE_INFINITY = 100000000;
+    protected static final int POSITIVE_INFINITY = 100000000;
 
     private final Move bestMove;
 
@@ -38,7 +38,7 @@ public class MinimumDistanceStrategy implements BestMoveStrategy {
         bestMove = currentBestMove;
     }
 
-    private int minimumDistanceBetweenMrXAndDetectives(
+    protected int minimumDistanceBetweenMrXAndDetectives(
             AiPlayer mrX,
             List<AiPlayer> detectives,
             MinimumDistance strategy
