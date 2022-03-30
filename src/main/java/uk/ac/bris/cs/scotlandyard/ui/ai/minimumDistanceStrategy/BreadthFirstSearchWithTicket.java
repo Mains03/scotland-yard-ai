@@ -10,11 +10,12 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
- * Uses dijkstra's to find the minimum distance where a moves towards b.
- * Considers the tickets available so is slower but more accurate.
+ * Performs a breadth first search to find the minimum distance where a
+ * moves towards b. Considers the tickets available so is slower but more
+ * accurate.
  */
-public class MinimumDistanceWithTicket extends BreadthFirstSearch {
-    public MinimumDistanceWithTicket(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
+public class BreadthFirstSearchWithTicket extends BreadthFirstSearch {
+    public BreadthFirstSearchWithTicket(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph) {
         super(graph);
     }
 
