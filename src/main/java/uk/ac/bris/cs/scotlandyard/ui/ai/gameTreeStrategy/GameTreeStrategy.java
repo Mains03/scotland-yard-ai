@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class GameTreeStrategy implements BestMoveStrategy {
     private final Board board;
-    private final GameTreeDataStructureFactory factory;
+    private final GameTreeDataStructure.Factory factory;
     private final GameTreeEvaluationStrategy evaluationStrategy;
 
     /**
@@ -23,7 +23,7 @@ public class GameTreeStrategy implements BestMoveStrategy {
      */
     public GameTreeStrategy(
             Board board,
-            GameTreeDataStructureFactory factory,
+            GameTreeDataStructure.Factory factory,
             GameTreeEvaluationStrategy evaluationStrategy
     ) {
         Objects.requireNonNull(board);

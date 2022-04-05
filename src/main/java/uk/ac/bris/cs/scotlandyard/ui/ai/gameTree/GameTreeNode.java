@@ -11,7 +11,7 @@ import java.util.Objects;
  * A node in the game tree representing a state of the game.
  * Each state is either MrX to move or all detectives to move.
  */
-final class GameTreeNode {
+public class GameTreeNode {
     static final int NEGATIVE_INFINITY = -10000000;
     static final int POSITIVE_INFINITY = 10000000;
 
@@ -23,7 +23,7 @@ final class GameTreeNode {
      * @param gameState state of the game for this node
      * @param depth remaining depth of the tree
      */
-    GameTreeNode(final GameState gameState, int depth) {
+    public GameTreeNode(final GameState gameState, int depth) {
         System.out.println("depth: " + depth);
         Objects.requireNonNull(gameState);
         this.gameState = gameState;

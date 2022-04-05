@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
     private static final int POSITIVE_INFINITY = 1000000;
-    private static final int NEGATIVE_INFINITY = -10000000;
+    private static final int NEGATIVE_INFINITY = -1000000;
 
     private final StaticPositionEvaluationStrategy strategy;
 
