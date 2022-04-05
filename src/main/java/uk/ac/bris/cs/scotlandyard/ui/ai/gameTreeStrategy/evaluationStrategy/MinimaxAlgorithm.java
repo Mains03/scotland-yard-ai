@@ -11,9 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
-    private static final int POSITIVE_INFINITY = 1000000;
-    private static final int NEGATIVE_INFINITY = -1000000;
-
     private final StaticPositionEvaluationStrategy strategy;
 
     public MinimaxAlgorithm(StaticPositionEvaluationStrategy strategy) {
@@ -23,45 +20,26 @@ public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
 
     @Override
     public Move evaluateGameTree(GameTreeDataStructure gameTree) {
-        Move bestMove = null;
-        int bestMoveEvaluation = NEGATIVE_INFINITY;
+        MinimaxTreeEvaluation bestMove = new MinimaxTreeEvaluation(true);
         for (GameTreeDataStructure child : gameTree.getChildren()) {
             int eval = evaluateChild(child, false);
-            if (eval > bestMoveEvaluation) {
-                bestMove = child.getMove();
-                bestMoveEvaluation = eval;
-            }
+            bestMove = bestMove.updateEvaluation(child.getMove(), eval);
         }
-        if (bestMove == null)
+        if (bestMove.getBestMove() == null)
             throw new NoSuchElementException("No moves");
-        return bestMove;
+        return bestMove.getBestMove();
     }
 
     private int evaluateChild(GameTreeDataStructure node, boolean maximise) {
-        int nodeEval = initialEvaluation(maximise);
+        MinimaxNodeEvaluation evaluation = new MinimaxNodeEvaluation(maximise);
         if (hasChildren(node)) {
             for (GameTreeDataStructure child : node.getChildren()) {
                 int childEval = evaluateChild(child, !maximise);
-                if (childEvalBetter(nodeEval, childEval, maximise))
-                    nodeEval = childEval;
+                evaluation = evaluation.updateEvaluation(childEval);
             }
+            return evaluation.getEvaluation();
         } else
-            nodeEval = staticEvaluation(node);
-        return nodeEval;
-    }
-
-    private int initialEvaluation(boolean maximise) {
-        if (maximise)
-            return NEGATIVE_INFINITY;
-        else
-            return POSITIVE_INFINITY;
-    }
-
-    private boolean childEvalBetter(int currentEval, int childEval, boolean maximise) {
-        if (maximise)
-            return childEval > currentEval;
-        else
-            return childEval < currentEval;
+            return staticEvaluation(node);
     }
 
     private boolean hasChildren(GameTreeDataStructure node) {
