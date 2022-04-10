@@ -10,7 +10,11 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticP
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ * Minimax algorithm.
+ */
 public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
+    // evaluation strategy to use at leaf nodes
     private final StaticPositionEvaluationStrategy strategy;
 
     public MinimaxAlgorithm(StaticPositionEvaluationStrategy strategy) {
@@ -20,14 +24,14 @@ public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
 
     @Override
     public Move evaluateGameTree(GameTreeDataStructure gameTree) {
-        MinimaxTreeEvaluation bestMove = new MinimaxTreeEvaluation(true);
+        MinimaxTreeEvaluation treeEvaluation = new MinimaxTreeEvaluation(true);
         for (GameTreeDataStructure child : gameTree.getChildren()) {
             int eval = evaluateChild(child, false);
-            bestMove = bestMove.updateEvaluation(child.getMove(), eval);
+            treeEvaluation = treeEvaluation.updateEvaluation(child.getMove(), eval);
         }
-        if (bestMove.getBestMove() == null)
+        if (treeEvaluation.getBestMove() == null)
             throw new NoSuchElementException("No moves");
-        return bestMove.getBestMove();
+        return treeEvaluation.getBestMove();
     }
 
     private int evaluateChild(GameTreeDataStructure node, boolean maximise) {
@@ -42,11 +46,11 @@ public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
             return staticEvaluation(node);
     }
 
-    private boolean hasChildren(GameTreeDataStructure node) {
+    protected boolean hasChildren(GameTreeDataStructure node) {
         return node.getChildren().size() > 0;
     }
 
-    private int staticEvaluation(GameTreeDataStructure node) {
+    protected int staticEvaluation(GameTreeDataStructure node) {
         AiGameState gameState = createAiGameState(node);
         return strategy.evaluate(gameState);
     }
