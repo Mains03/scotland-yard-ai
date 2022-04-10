@@ -14,7 +14,9 @@ import java.util.Objects;
  * Minimax algorithm.
  */
 public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
-    // evaluation strategy to use at leaf nodes
+    private static final int POSITIVE_INFINITY = 1000000;
+    private static final int NEGATIVE_INFINITY = -1000000;
+
     private final StaticPositionEvaluationStrategy strategy;
 
     public MinimaxAlgorithm(StaticPositionEvaluationStrategy strategy) {
@@ -24,33 +26,52 @@ public class MinimaxAlgorithm implements GameTreeEvaluationStrategy {
 
     @Override
     public Move evaluateGameTree(GameTreeDataStructure gameTree) {
-        MinimaxTreeEvaluation treeEvaluation = new MinimaxTreeEvaluation(true);
+        Move bestMove = null;
+        int bestMoveEvaluation = NEGATIVE_INFINITY;
         for (GameTreeDataStructure child : gameTree.getChildren()) {
             int eval = evaluateChild(child, false);
-            treeEvaluation = treeEvaluation.updateEvaluation(child.getMove(), eval);
+            if (eval > bestMoveEvaluation) {
+                bestMove = child.getMove();
+                bestMoveEvaluation = eval;
+            }
         }
-        if (treeEvaluation.getBestMove() == null)
+        if (bestMove == null)
             throw new NoSuchElementException("No moves");
-        return treeEvaluation.getBestMove();
+        return bestMove;
     }
 
     private int evaluateChild(GameTreeDataStructure node, boolean maximise) {
-        MinimaxNodeEvaluation evaluation = new MinimaxNodeEvaluation(maximise);
+        int nodeEval = initialEvaluation(maximise);
         if (hasChildren(node)) {
             for (GameTreeDataStructure child : node.getChildren()) {
                 int childEval = evaluateChild(child, !maximise);
-                evaluation = evaluation.updateEvaluation(childEval);
+                if (childEvalBetter(nodeEval, childEval, maximise))
+                    nodeEval = childEval;
             }
-            return evaluation.getEvaluation();
         } else
-            return staticEvaluation(node);
+            nodeEval = staticEvaluation(node);
+        return nodeEval;
     }
 
-    protected boolean hasChildren(GameTreeDataStructure node) {
+    private int initialEvaluation(boolean maximise) {
+        if (maximise)
+            return NEGATIVE_INFINITY;
+        else
+            return POSITIVE_INFINITY;
+    }
+
+    private boolean childEvalBetter(int currentEval, int childEval, boolean maximise) {
+        if (maximise)
+            return childEval > currentEval;
+        else
+            return childEval < currentEval;
+    }
+
+    private boolean hasChildren(GameTreeDataStructure node) {
         return node.getChildren().size() > 0;
     }
 
-    protected int staticEvaluation(GameTreeDataStructure node) {
+    private int staticEvaluation(GameTreeDataStructure node) {
         AiGameState gameState = createAiGameState(node);
         return strategy.evaluate(gameState);
     }
