@@ -1,6 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
-import com.google.common.collect.ImmutableSet;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
@@ -11,17 +10,13 @@ import java.util.*;
  * A node in the game tree.
  */
 public class GameTreeDataStructure {
-    private static int POSITIVE_INFINITY = 1000000;
-    private static int NEGATIVE_INFINITY = -1000000;
+    static int POSITIVE_INFINITY = 1000000;
+    static int NEGATIVE_INFINITY = -1000000;
 
     private final GameTreeBoard board;
     private final Optional<Set<GameTreeDataStructure>> children;
 
-    public GameTreeDataStructure(Board board, int depth) {
-        this(new GameTreeBoardAdapter(board), depth);
-    }
-
-    private GameTreeDataStructure(GameTreeBoard board, int depth) {
+    public GameTreeDataStructure(GameTreeBoard board, int depth) {
         this.board = board;
         children = generateChildren(board, depth);
     }
