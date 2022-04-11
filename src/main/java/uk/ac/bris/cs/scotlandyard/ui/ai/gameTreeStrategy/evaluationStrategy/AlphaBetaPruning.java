@@ -1,49 +1,44 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.evaluationStrategy;
 
+import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeDataStructure;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
-public class AlphaBetaPruning implements GameTreeEvaluationStrategy {
-    private static final int POSITIVE_INFINITY = 1000000;
-    private static final int NEGATIVE_INFINITY = -1000000;
-
-    private final StaticPositionEvaluationStrategy strategy;
-
-    public AlphaBetaPruning(StaticPositionEvaluationStrategy strategy) {
-        this.strategy = Objects.requireNonNull(strategy);
+public class AlphaBetaPruning extends GameTreeStrategy implements BestMoveStrategy {
+    public AlphaBetaPruning(Board board, StaticPositionEvaluationStrategy evaluationStrategy) {
+        super(board, evaluationStrategy);
     }
 
     @Override
-    public Move evaluateGameTree(GameTreeDataStructure gameTree) {
+    protected GameTreeDataStructure createChild(GameTreeBoard gameTreeBoard, int depth) {
+        return new AlphaBetaGameTreeDataStructure(gameTreeBoard, depth);
+    }
+
+    @Override
+    public Move determineBestMove() {
         Move bestMove = null;
-        int bestMoveEvaluation = NEGATIVE_INFINITY;
-        int alpha = NEGATIVE_INFINITY;
-        int beta = POSITIVE_INFINITY;
-        for (GameTreeDataStructure child : gameTree.getChildren()) {
-            int eval = evaluateChild(child, alpha, beta, false);
-            if (eval >= beta)
-                break;
-            alpha = Math.max(alpha, eval);
-            if (eval > bestMoveEvaluation) {
-                bestMove = child.getMove();
-                bestMoveEvaluation = eval;
+        int bestMoveEval = GameTreeDataStructure.NEGATIVE_INFINITY;
+        int alpha = GameTreeDataStructure.NEGATIVE_INFINITY;
+        int beta = GameTreeDataStructure.POSITIVE_INFINITY;
+        for (Move childMove : children.keySet()) {
+            AlphaBetaGameTreeDataStructure child = (AlphaBetaGameTreeDataStructure) children.get(childMove);
+            int childEval = child.evaluate(false, alpha, beta, evaluationStrategy);
+            alpha = Math.max(alpha, childEval);
+            if (childEval > bestMoveEval) {
+                bestMove = childMove;
+                bestMoveEval = childEval;
             }
         }
         if (bestMove == null)
             throw new NoSuchElementException("No moves");
         return bestMove;
-    }
-
-    private int evaluateChild(
-            GameTreeDataStructure node,
-            int alpha,
-            int beta,
-            boolean maximise
-    ) {
-
     }
 }

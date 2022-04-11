@@ -1,6 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
 
@@ -10,11 +9,11 @@ import java.util.*;
  * A node in the game tree.
  */
 public class GameTreeDataStructure {
-    static int POSITIVE_INFINITY = 1000000;
-    static int NEGATIVE_INFINITY = -1000000;
+    public static int POSITIVE_INFINITY = 1000000;
+    public static int NEGATIVE_INFINITY = -1000000;
 
     private final GameTreeBoard board;
-    private final Optional<Set<GameTreeDataStructure>> children;
+    protected final Optional<Set<GameTreeDataStructure>> children;
 
     public GameTreeDataStructure(GameTreeBoard board, int depth) {
         this.board = board;
@@ -26,16 +25,20 @@ public class GameTreeDataStructure {
             Set<GameTreeDataStructure> children = new HashSet<>();
             for (Move availableMove : board.getAvailableMoves()) {
                 GameTreeBoard childBoard = board.advance(availableMove);
-                children.add(new GameTreeDataStructure(childBoard, depth - 1));
+                children.add(createChild(childBoard, depth-1));
             }
             return Optional.of(children);
         } else
             return Optional.empty();
     }
 
+    protected GameTreeDataStructure createChild(GameTreeBoard board, int depth) {
+        return new GameTreeDataStructure(board, depth);
+    }
+
     public int evaluate(boolean maximise, StaticPositionEvaluationStrategy evaluationStrategy) {
         if (children.isEmpty())
-            return evaluationStrategy.evaluate(board.asAiGameState());
+            return staticEvaluation(evaluationStrategy);
         else {
             // use minimax to evaluate the game tree
             Set<GameTreeDataStructure> children = this.children.get();
@@ -55,5 +58,9 @@ public class GameTreeDataStructure {
             }
             return eval;
         }
+    }
+
+    protected int staticEvaluation(StaticPositionEvaluationStrategy evaluationStrategy) {
+        return evaluationStrategy.evaluate(board.asAiGameState());
     }
 }

@@ -17,8 +17,8 @@ import java.util.Objects;
 public class GameTreeStrategy implements BestMoveStrategy {
     private static final int MAX_DEPTH = 3;
 
-    private final Map<Move, GameTreeDataStructure> children;
-    private final StaticPositionEvaluationStrategy evaluationStrategy;
+    protected final Map<Move, GameTreeDataStructure> children;
+    protected final StaticPositionEvaluationStrategy evaluationStrategy;
 
     /**
      * GameTreeStrategy constructor.
@@ -37,10 +37,14 @@ public class GameTreeStrategy implements BestMoveStrategy {
         GameTreeBoard gameTreeBoard = new GameTreeBoardAdapter(board);
         for (Move availableMove : gameTreeBoard.getAvailableMoves()) {
             GameTreeBoard childGameTreeBoard = gameTreeBoard.advance(availableMove);
-            GameTreeDataStructure child = new GameTreeDataStructure(childGameTreeBoard, MAX_DEPTH-1);
+            GameTreeDataStructure child = createChild(childGameTreeBoard, MAX_DEPTH-1);
             children.put(availableMove, child);
         }
         return children;
+    }
+
+    protected GameTreeDataStructure createChild(GameTreeBoard gameTreeBoard, int depth) {
+        return new GameTreeDataStructure(gameTreeBoard, depth);
     }
 
     @Override
