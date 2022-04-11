@@ -1,45 +1,64 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
+import com.google.common.collect.ImmutableSet;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Player;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A node in the game tree.
  */
-public abstract class GameTreeDataStructure {
-    public interface Factory {
-        GameTreeDataStructure createGameTree(Board board);
+public class GameTreeDataStructure {
+    private static int POSITIVE_INFINITY = 1000000;
+    private static int NEGATIVE_INFINITY = -1000000;
+
+    private final GameTreeBoard board;
+    private final Optional<Set<GameTreeDataStructure>> children;
+
+    public GameTreeDataStructure(Board board, int depth) {
+        this(new GameTreeBoardAdapter(board), depth);
     }
 
-    private final Player mrX;
-    private final List<Player> detectives;
-    private final Move mrXMoveMade;
-
-    public GameTreeDataStructure(Player mrX, List<Player> detectives, Move mrXMoveMade) {
-        Objects.requireNonNull(mrX);
-        Objects.requireNonNull(detectives);
-        Objects.requireNonNull(mrXMoveMade);
-        this.mrX = mrX;
-        this.detectives = detectives;
-        this.mrXMoveMade = mrXMoveMade;
+    private GameTreeDataStructure(GameTreeBoard board, int depth) {
+        this.board = board;
+        children = generateChildren(board, depth);
     }
 
-    public Player getMrX() {
-        return mrX;
+    private Optional<Set<GameTreeDataStructure>> generateChildren(GameTreeBoard board, int depth) {
+        if (depth > 0) {
+            Set<GameTreeDataStructure> children = new HashSet<>();
+            for (Move availableMove : board.getAvailableMoves()) {
+                GameTreeBoard childBoard = board.advance(availableMove);
+                children.add(new GameTreeDataStructure(childBoard, depth - 1));
+            }
+            return Optional.of(children);
+        } else
+            return Optional.empty();
     }
 
-    public List<Player> getDetectives() {
-        return List.copyOf(detectives);
+    public int evaluate(boolean maximise, StaticPositionEvaluationStrategy evaluationStrategy) {
+        if (children.isEmpty())
+            return evaluationStrategy.evaluate(board.asAiGameState());
+        else {
+            // use minimax to evaluate the game tree
+            Set<GameTreeDataStructure> children = this.children.get();
+            int eval;
+            if (maximise) {
+                eval = NEGATIVE_INFINITY;
+                for (GameTreeDataStructure child : children) {
+                    int childEval = child.evaluate(false, evaluationStrategy);
+                    eval = Math.max(eval, childEval);
+                }
+            } else {
+                eval = POSITIVE_INFINITY;
+                for (GameTreeDataStructure child : children) {
+                    int childEval = child.evaluate(true, evaluationStrategy);
+                    eval = Math.min(eval, childEval);
+                }
+            }
+            return eval;
+        }
     }
-
-    // returns the MrX move made to get to this position
-    public Move getMove() {
-        return mrXMoveMade;
-    }
-
-    public abstract List<GameTreeDataStructure> getChildren();
 }
