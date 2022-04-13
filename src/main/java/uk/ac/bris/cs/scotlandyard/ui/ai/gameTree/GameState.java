@@ -6,8 +6,8 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistancePlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistancePlayerAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.DijkstraWithTickets;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
@@ -212,9 +212,9 @@ class GameState {
         // return min distance between detectives and MrX
         int mrXLocation = mrX.location();
         MinimumDistance minDistCalc = new DijkstraWithTickets(graph);
-        AiPlayer aiMrX = new AiPlayerAdapter(graph, mrX);
+        MinimumDistancePlayer aiMrX = new MinimumDistancePlayerAdapter(graph, mrX);
         Optional<Integer> minDist = detectives.stream()
-                .map(player -> minDistCalc.minimumDistance(aiMrX, new AiPlayerAdapter(graph, player)))
+                .map(player -> minDistCalc.minimumDistance(aiMrX, new MinimumDistancePlayerAdapter(graph, player)))
                 .min(Integer::compareTo);
         if (minDist.isPresent())
             return minDist.get();

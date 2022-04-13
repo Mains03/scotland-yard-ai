@@ -3,7 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistancePlayer;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ public class BreadthFirstSearch implements MinimumDistance {
     }
 
     @Override
-    public int minimumDistance(AiPlayer a, AiPlayer b) {
+    public int minimumDistance(MinimumDistancePlayer a, MinimumDistancePlayer b) {
         int source = a.getLocation();
         int destination = b.getLocation();
         Queue<Integer> priorityQueue = new ArrayDeque<>();

@@ -1,14 +1,14 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Objects;
 
-public class AiMoveAdapter implements AiMove {
+public class MinimumDistanceMoveAdapter implements MinimumDistanceMove {
     private final Move move;
 
-    public AiMoveAdapter(Move move) {
+    public MinimumDistanceMoveAdapter(Move move) {
         Objects.requireNonNull(move);
         this.move = move;
     }

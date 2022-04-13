@@ -1,14 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMoveAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,19 +12,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AiBoardAdapter implements AiBoard {
-    private final Board board;
-    private final AiPlayer mrX;
-    private final List<AiPlayer> detectives;
+public class MinimumDistanceBoardAdapter implements MinimumDistanceBoard {
+    protected final Board board;
+    protected final MinimumDistancePlayer mrX;
+    protected final List<MinimumDistancePlayer> detectives;
 
-    public AiBoardAdapter(Board board) {
+    public MinimumDistanceBoardAdapter(Board board) {
         Objects.requireNonNull(board);
         this.board = board;
         mrX = createMrX(board);
         detectives = createDetectives(board);
     }
 
-    private AiPlayer createMrX(Board board) {
+    private MinimumDistancePlayer createMrX(Board board) {
         // MrX to move
         // Find any move, the source is MrX's location
         Optional<Integer> location = board.getAvailableMoves().stream()
@@ -37,7 +33,7 @@ public class AiBoardAdapter implements AiBoard {
                 .findAny();
         if (location.isEmpty())
             throw new NoSuchElementException("Piece not found");
-        return new AiPlayerAdapter(
+        return new MinimumDistancePlayerAdapter(
                 board.getSetup().graph,
                 new Player(
                     Piece.MrX.MRX,
@@ -47,14 +43,14 @@ public class AiBoardAdapter implements AiBoard {
         );
     }
 
-    private List<AiPlayer> createDetectives(Board board) {
+    private List<MinimumDistancePlayer> createDetectives(Board board) {
         return board.getPlayers().stream()
                 .filter(Piece::isDetective)
                 .map(piece -> {
                     Optional<Integer> detectiveLocation = board.getDetectiveLocation((Piece.Detective) piece);
                     if (detectiveLocation.isEmpty())
                         throw new NoSuchElementException("Piece not found");
-                    return new AiPlayerAdapter(
+                    return new MinimumDistancePlayerAdapter(
                             board.getSetup().graph,
                             new Player(
                                     piece,
@@ -82,22 +78,27 @@ public class AiBoardAdapter implements AiBoard {
         return board.getSetup().graph;
     }
 
+    /**
+     * Returns the available moves for all the detectives only. Does not consider
+     * whether the detectives have moved.
+     * @return the available moves
+     */
     @Override
-    public ImmutableSet<AiMove> getAvailableMoves() {
+    public ImmutableSet<MinimumDistanceMove> getAvailableMoves() {
         return ImmutableSet.copyOf(
                 board.getAvailableMoves().stream()
-                        .map(AiMoveAdapter::new)
+                        .map(MinimumDistanceMoveAdapter::new)
                         .collect(Collectors.toList())
         );
     }
 
     @Override
-    public AiPlayer getMrX() {
+    public MinimumDistancePlayer getMrX() {
         return mrX;
     }
 
     @Override
-    public ImmutableList<AiPlayer> getDetectives() {
+    public ImmutableList<MinimumDistancePlayer> getDetectives() {
         return ImmutableList.copyOf(detectives);
     }
 }

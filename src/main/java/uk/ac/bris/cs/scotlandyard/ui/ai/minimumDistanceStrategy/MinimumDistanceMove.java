@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
@@ -6,7 +6,7 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 /**
  * Adapter for Move.
  */
-public interface AiMove {
+public interface MinimumDistanceMove {
     int getDestination();
 
     Iterable<ScotlandYard.Ticket> tickets();

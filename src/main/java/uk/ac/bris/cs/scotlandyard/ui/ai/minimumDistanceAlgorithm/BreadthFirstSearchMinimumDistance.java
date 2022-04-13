@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistancePlayerAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.BreadthFirstSearch;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
@@ -21,8 +21,8 @@ public class BreadthFirstSearchMinimumDistance implements MinimumDistanceAlgorit
     @Override
     public int minimumDistance(Player a, Player b) {
         return algorithm.minimumDistance(
-                new AiPlayerAdapter(graph, a),
-                new AiPlayerAdapter(graph, b)
+                new MinimumDistancePlayerAdapter(graph, a),
+                new MinimumDistancePlayerAdapter(graph, b)
         );
     }
 }
