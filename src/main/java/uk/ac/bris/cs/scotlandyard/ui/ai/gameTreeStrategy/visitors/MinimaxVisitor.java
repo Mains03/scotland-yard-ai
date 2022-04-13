@@ -49,11 +49,11 @@ public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
         } else {
             intEvaluation = POSITIVE_INFINITY;
             for (GameTree<T> child : innerNode.getChildren()) {
-                MinimaxVisitor<T> childVisitor = new MinimaxVisitor<>(true, evalStrategy);
-                child.accept(childVisitor);
-                if (childVisitor.intEvaluation < intEvaluation) {
-                    bestMove = childVisitor.bestMove;
-                    intEvaluation = childVisitor.intEvaluation;
+                MinimaxVisitor<T> visitor = new MinimaxVisitor<>(true, evalStrategy);
+                child.accept(visitor);
+                if (visitor.intEvaluation < intEvaluation) {
+                    bestMove = visitor.bestMove;
+                    intEvaluation = visitor.intEvaluation;
                 }
             }
         }
