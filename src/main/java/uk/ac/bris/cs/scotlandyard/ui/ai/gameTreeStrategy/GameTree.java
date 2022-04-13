@@ -1,5 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
-public interface GameTree {
-
+public abstract class GameTree<T> {
+    public abstract void accept(GameTreeVisitor<T> visitor);
 }
