@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.minimax;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitors;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
@@ -10,18 +10,24 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
-    private static final int POSITIVE_INFINITY =  10000000;
-    private static final int NEGATIVE_INFINITY = -10000000;
+    public static final int POSITIVE_INFINITY =  10000000;
+    public static final int NEGATIVE_INFINITY = -10000000;
 
     private final boolean maximise;
-    private final MinimaxStaticEvalStrategy<T> evalStrategy;
+    private final StaticEvalStrategy<T> evalStrategy;
 
     private Optional<Move> bestMove;
     private int intEvaluation;
 
     public MinimaxVisitor(
+            StaticEvalStrategy<T> evalStrategy
+    ) {
+        this(true, evalStrategy);
+    }
+
+    private MinimaxVisitor(
             boolean maximise,
-            MinimaxStaticEvalStrategy<T> evalStrategy
+            StaticEvalStrategy<T> evalStrategy
     ) {
         this.maximise = maximise;
         this.evalStrategy = Objects.requireNonNull(evalStrategy);
@@ -29,15 +35,15 @@ public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
     }
 
     @Override
-    public void visit(GameTreeInnerNode innerNode) {
+    public void visit(GameTreeInnerNode<T> innerNode) {
         if (maximise) {
             intEvaluation = NEGATIVE_INFINITY;
             for (GameTree<T> child : innerNode.getChildren()) {
-                MinimaxVisitor<T> childVisitor = new MinimaxVisitor<>(false, evalStrategy);
-                child.accept(childVisitor);
-                if (childVisitor.intEvaluation > intEvaluation) {
-                    bestMove = childVisitor.bestMove;
-                    intEvaluation = childVisitor.intEvaluation;
+                MinimaxVisitor<T> visitor = new MinimaxVisitor<>(false, evalStrategy);
+                child.accept(visitor);
+                if (visitor.intEvaluation > intEvaluation) {
+                    bestMove = visitor.bestMove;
+                    intEvaluation = visitor.intEvaluation;
                 }
             }
         } else {
