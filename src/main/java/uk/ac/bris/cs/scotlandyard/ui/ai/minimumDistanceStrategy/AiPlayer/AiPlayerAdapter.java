@@ -2,15 +2,16 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiPlayer;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
-import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
+import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard.PiecePlayerFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard.PiecePlayerFactoryAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMoveAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,11 +19,21 @@ public class AiPlayerAdapter implements AiPlayer {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final Player player;
 
+    public AiPlayerAdapter(Board board, Player player) {
+        this(board.getSetup().graph, player);
+    }
+
     public AiPlayerAdapter(ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph, Player player) {
-        Objects.requireNonNull(graph);
-        Objects.requireNonNull(player);
-        this.graph = graph;
-        this.player = player;
+        this.graph = Objects.requireNonNull(graph);
+        this.player = Objects.requireNonNull(player);
+    }
+
+    public AiPlayerAdapter(Board board, Piece piece) {
+        this.graph = Objects.requireNonNull(board.getSetup().graph);
+        Optional<Player> mPlayer = new PiecePlayerFactoryAdapter(board).createPlayer(piece);
+        if (mPlayer.isEmpty())
+            throw new RuntimeException("Failed to create piece " + piece.webColour());
+        player = mPlayer.get();
     }
 
     @Override
