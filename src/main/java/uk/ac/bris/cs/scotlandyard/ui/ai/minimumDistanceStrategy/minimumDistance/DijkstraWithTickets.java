@@ -3,8 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceMove;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistancePlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiPlayer.AiPlayer;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -25,17 +25,17 @@ public class DijkstraWithTickets implements MinimumDistance {
     }
 
     private class PQNode {
-        private final MinimumDistancePlayer player;
+        private final AiPlayer player;
         private final int distance;
 
-        private PQNode(MinimumDistancePlayer player, int distance) {
+        private PQNode(AiPlayer player, int distance) {
             this.player = player;
             this.distance = distance;
         }
     }
 
     @Override
-    public int minimumDistance(MinimumDistancePlayer a, MinimumDistancePlayer b) {
+    public int minimumDistance(AiPlayer a, AiPlayer b) {
         Queue<PQNode> queue = new PriorityQueue<>(
                 Comparator.comparingInt(node -> node.distance)
         );
@@ -44,7 +44,7 @@ public class DijkstraWithTickets implements MinimumDistance {
             PQNode node = queue.poll();
             if (node.player.getLocation() == b.getLocation())
                 return node.distance;
-            for (MinimumDistanceMove move : node.player.getAvailableMoves()) {
+            for (AiMove move : node.player.getAvailableMoves()) {
                 queue.add(new PQNode(
                         node.player.applyMove(move),
                         node.distance + 1
