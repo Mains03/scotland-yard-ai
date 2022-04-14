@@ -6,6 +6,10 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactoryAdapterV2;
 
@@ -38,8 +42,10 @@ public class AiPlayerAdapterV2 implements AiPlayer {
     }
 
     @Override
-    public Set<Move> getAvailableMovesNormal(List<Integer> playerLocations) {
-        return MoveGenerationFactory.getInstance().generateMoves(playerLocations, player);
+    public Set<Move> getAvailableMoves(Board board) {
+        MoveGenerationBoard moveGenerationBoard = new MoveGenerationBoardAdapter(board);
+        MoveGenerationFactory moveGenerationFactory = StandardMoveGenerationFactory.getInstance();
+        return moveGenerationFactory.generateMoves(moveGenerationBoard, player);
     }
 
     /**
