@@ -4,7 +4,7 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 
 import java.util.Optional;
 
-public abstract class GameTreeVisitor<T> {
-    public abstract Optional<Move> visit(GameTreeInnerNode<T> innerNode);
-    public abstract Optional<Move> visit(GameTreeLeafNode<T> leafNode);
+public abstract class GameTreeVisitor {
+    public abstract Optional<Move> visit(GameTreeInnerNode innerNode);
+    public abstract Optional<Move> visit(GameTreeLeafNode leafNode);
 }

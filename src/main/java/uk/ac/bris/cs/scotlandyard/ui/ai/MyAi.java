@@ -8,8 +8,17 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitors.MinimaxVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.BreadthFirstSearchMinimumDistance;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.BreadthFirstSearch;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.MinimumDistanceSingleTurnLookAhead;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinimumDistanceStaticPositionEvaluation;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -19,14 +28,16 @@ public class MyAi implements Ai {
 			Pair<Long, TimeUnit> timeoutPair
 	) {
 		ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph = board.getSetup().graph;
-
-		return determineBestMove(new MinimumDistanceSingleTurnLookAhead(
+		MinimumDistanceAlgorithmStrategy minimumDistanceStrategy = new BreadthFirstSearchMinimumDistance(graph);
+		StaticPositionEvaluationStrategy evaluationStrategy = new MinimumDistanceStaticPositionEvaluation(
+				minimumDistanceStrategy
+		);
+		GameTreeVisitor gameTreeVisitor = new MinimaxVisitor(evaluationStrategy);
+		BestMoveStrategy bestMoveStrategy = new GameTreeStrategy(
 				board,
-				new BreadthFirstSearchMinimumDistance(graph)
-		));
-	}
-
-	private Move determineBestMove(BestMoveStrategy strategy) {
-		return strategy.determineBestMove();
+				3,
+				gameTreeVisitor
+		);
+		return bestMoveStrategy.determineBestMove();
 	}
 }

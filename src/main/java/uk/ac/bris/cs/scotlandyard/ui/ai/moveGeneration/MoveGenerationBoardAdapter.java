@@ -15,19 +15,12 @@ public class MoveGenerationBoardAdapter implements MoveGenerationBoard {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final List<Integer> detectiveLocations;
 
-    public MoveGenerationBoardAdapter(Board board) {
-        graph = board.getSetup().graph;
-        detectiveLocations = generateDetectiveLocations(board);
-    }
-
-    private List<Integer> generateDetectiveLocations(Board board) {
-        List<Piece> detectives = board.getPlayers().stream()
-                .filter(Piece::isDetective)
-                .collect(Collectors.toList());
-        return detectives.stream()
-                .map(detective -> board.getDetectiveLocation((Piece.Detective) detective))
-                .flatMap(Optional::stream)
-                .collect(Collectors.toList());
+    public MoveGenerationBoardAdapter(
+            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
+            List<Integer> detectiveLocations
+    ) {
+        this.graph = Objects.requireNonNull(graph);
+        this.detectiveLocations = Objects.requireNonNull(detectiveLocations);
     }
 
     @Override

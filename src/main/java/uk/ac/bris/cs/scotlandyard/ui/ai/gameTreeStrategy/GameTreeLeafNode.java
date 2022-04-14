@@ -1,25 +1,29 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class GameTreeLeafNode<T> extends GameTree<T> {
-    private final T data;
+public class GameTreeLeafNode extends GameTree {
+    private final AiBoard board;
+    private final Optional<Move> mMrXMoveMade;
 
-    public GameTreeLeafNode(T data) {
-        this.data = Objects.requireNonNull(data);
+    public GameTreeLeafNode(AiBoard board, Optional<Move> mMrXMoveMade) {
+        this.board = Objects.requireNonNull(board);
+        this.mMrXMoveMade = Objects.requireNonNull(mMrXMoveMade);
     }
 
     @Override
-    public Optional<Move> accept(GameTreeVisitor<T> visitor) {
+    public Optional<Move> accept(GameTreeVisitor visitor) {
         return visitor.visit(this);
     }
 
-    public T getData() { return data; }
-
-    public interface StaticEvalStrategy<T> {
-        int staticEvaluation(T data);
+    @Override
+    public Optional<Move> mrXMoveMade() {
+        return mMrXMoveMade;
     }
+
+    public AiBoard getBoard() { return board; }
 }

@@ -12,12 +12,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlaye
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @deprecated Deprecated since AiBoard is deprecated.
- */
-@Deprecated
 public class AiBoardAdapter implements AiBoard {
     protected final Board board;
     protected final AiPlayer mrX;
@@ -68,6 +65,11 @@ public class AiBoardAdapter implements AiBoard {
     }
 
     @Override
+    public Set<Move> getAvailableMovesNormal() {
+        return null;
+    }
+
+    @Override
     public AiPlayer getMrX() {
         return mrX;
     }
@@ -75,5 +77,10 @@ public class AiBoardAdapter implements AiBoard {
     @Override
     public ImmutableList<AiPlayer> getDetectives() {
         return ImmutableList.copyOf(detectives);
+    }
+
+    @Override
+    public AiBoard applyMove(Move move) {
+        return null;
     }
 }

@@ -1,17 +1,15 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
-import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.model.Player;
+import com.google.common.graph.ImmutableValueGraph;
+import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoardAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactoryAdapterV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapterV2;
 
 import java.util.List;
 import java.util.Set;
@@ -42,8 +40,11 @@ public class AiPlayerAdapterV2 implements AiPlayer {
     }
 
     @Override
-    public Set<Move> getAvailableMoves(Board board) {
-        MoveGenerationBoard moveGenerationBoard = new MoveGenerationBoardAdapter(board);
+    public Set<Move> getAvailableMoves(
+            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
+            List<Integer> detectiveLocations)
+    {
+        MoveGenerationBoard moveGenerationBoard = new MoveGenerationBoardAdapter(graph, detectiveLocations);
         MoveGenerationFactory moveGenerationFactory = StandardMoveGenerationFactory.getInstance();
         return moveGenerationFactory.generateMoves(moveGenerationBoard, player);
     }

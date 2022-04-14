@@ -1,9 +1,5 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 
-/**
- * @deprecated Deprecated since useless.
- */
-@Deprecated
 public class MinimumDistanceLookupTable {
     private int minimumDistances[];
 

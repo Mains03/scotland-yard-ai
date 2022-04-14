@@ -5,10 +5,6 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.Objects;
 
-/**
- * @deprecated Deprecated since {@link AiMove} is deprecated
- */
-@Deprecated
 public class AiMoveAdapter implements AiMove {
     private final Move move;
 

@@ -4,13 +4,13 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 
 import java.util.Optional;
 
-public abstract class GameTree<T> {
+public abstract class GameTree {
     /**
      * Determines the best move in the tree.
      * @param visitor visitor
      * @return the best move
      */
-    public abstract Optional<Move> accept(GameTreeVisitor<T> visitor);
+    public abstract Optional<Move> accept(GameTreeVisitor visitor);
 
     /**
      * Returns the move MrX made to get to this position. Optional

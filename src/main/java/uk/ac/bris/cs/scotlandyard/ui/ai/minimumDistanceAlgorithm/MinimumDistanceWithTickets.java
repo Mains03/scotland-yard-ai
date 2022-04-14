@@ -8,10 +8,6 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlaye
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.DijkstraWithTickets;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
-/**
- * @deprecated Deprecated since uses {@link AiPlayerAdapter} which is deprecated.
- */
-@Deprecated
 public class MinimumDistanceWithTickets implements MinimumDistanceAlgorithmStrategy {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final MinimumDistance algorithm;
