@@ -1,6 +1,5 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
 
-import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactoryAdapterV2;

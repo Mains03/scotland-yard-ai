@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;

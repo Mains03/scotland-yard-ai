@@ -1,13 +1,11 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
-import jdk.jshell.spi.ExecutionControl;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
