@@ -8,6 +8,7 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.MoveApplyFactory;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -57,21 +58,24 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
     private Set<Move> generateSingleMoves(MoveGenerationBoard board, Player player) {
         Set<Move> moves = new HashSet<>();
         ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph = board.getGraph();
+        List<Integer> detectiveLocations = board.getDetectiveLocations();
         int location = player.location();
         for (int destination : graph.adjacentNodes(location)) {
-            Optional<ImmutableSet<ScotlandYard.Transport>> mTransports = graph.edgeValue(location, destination);
-            if (mTransports.isPresent()) {
-                ImmutableSet<ScotlandYard.Transport> transports = mTransports.get();
-                for (ScotlandYard.Transport transport : transports) {
-                    ScotlandYard.Ticket ticket = transport.requiredTicket();
-                    if (player.has(transport.requiredTicket())) {
-                        Move move = new Move.SingleMove(player.piece(), location, ticket, destination);
+            if (!detectiveLocations.contains(destination)) {
+                Optional<ImmutableSet<ScotlandYard.Transport>> mTransports = graph.edgeValue(location, destination);
+                if (mTransports.isPresent()) {
+                    ImmutableSet<ScotlandYard.Transport> transports = mTransports.get();
+                    for (ScotlandYard.Transport transport : transports) {
+                        ScotlandYard.Ticket ticket = transport.requiredTicket();
+                        if (player.has(transport.requiredTicket())) {
+                            Move move = new Move.SingleMove(player.piece(), location, ticket, destination);
+                            moves.add(move);
+                        }
+                    }
+                    if (player.has(ScotlandYard.Ticket.SECRET)) {
+                        Move move = new Move.SingleMove(player.piece(), location, ScotlandYard.Ticket.SECRET, destination);
                         moves.add(move);
                     }
-                }
-                if (player.has(ScotlandYard.Ticket.SECRET)) {
-                    Move move = new Move.SingleMove(player.piece(), location, ScotlandYard.Ticket.SECRET, destination);
-                    moves.add(move);
                 }
             }
         }
