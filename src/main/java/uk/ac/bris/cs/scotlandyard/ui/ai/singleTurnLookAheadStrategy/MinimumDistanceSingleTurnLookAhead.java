@@ -1,7 +1,7 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.singleTurnLookAheadStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinimumDistanceStaticPositionEvaluation;
 
 /**

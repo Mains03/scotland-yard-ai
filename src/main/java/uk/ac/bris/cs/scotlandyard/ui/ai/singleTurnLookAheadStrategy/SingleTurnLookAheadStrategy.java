@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.singleTurnLookAheadStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
@@ -7,11 +7,11 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticP
  * Looks ahead one move and finds the best move.
  *
  * @deprecated Deprecated since uses
- * {@link uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.SingleTurnLookAheadStrategy}
+ * {@link uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.SingleTurnLookAheadStrategy}
  * which is deprecated.
  */
 @Deprecated
-public class SingleTurnLookAheadStrategy extends uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.SingleTurnLookAheadStrategy {
+public class SingleTurnLookAheadStrategy extends uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.SingleTurnLookAheadStrategy {
     public SingleTurnLookAheadStrategy(
             Board board,
             StaticPositionEvaluationStrategy evaluationStrategy

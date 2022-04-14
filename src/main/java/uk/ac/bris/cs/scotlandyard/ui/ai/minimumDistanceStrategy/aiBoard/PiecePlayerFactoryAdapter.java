@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiBoard;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
 
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
@@ -8,10 +8,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * @deprecated Deprecated since {@link PiecePlayerFactory} is deprecated
- */
-@Deprecated
 public class PiecePlayerFactoryAdapter implements PiecePlayerFactory {
     private final Board board;
 

@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy;
 
 /**
  * @deprecated Deprecated since useless.

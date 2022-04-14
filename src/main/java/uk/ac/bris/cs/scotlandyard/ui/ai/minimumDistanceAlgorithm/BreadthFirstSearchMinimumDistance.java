@@ -1,12 +1,12 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiPlayer.AiPlayerAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.minimumDistance.BreadthFirstSearch;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.minimumDistance.MinimumDistance;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.BreadthFirstSearch;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
 /**
  * @deprecated Deprecated since uses {@link AiPlayerAdapter} which is deprecated.

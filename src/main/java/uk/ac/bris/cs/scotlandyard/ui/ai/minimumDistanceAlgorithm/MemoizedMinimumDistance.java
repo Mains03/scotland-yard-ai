@@ -1,7 +1,7 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.MinimumDistanceLookupTable;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceLookupTable;
 
 import java.util.Objects;
 

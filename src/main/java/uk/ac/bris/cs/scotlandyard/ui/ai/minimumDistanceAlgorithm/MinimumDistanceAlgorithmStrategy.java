@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
 import uk.ac.bris.cs.scotlandyard.model.Player;
 
