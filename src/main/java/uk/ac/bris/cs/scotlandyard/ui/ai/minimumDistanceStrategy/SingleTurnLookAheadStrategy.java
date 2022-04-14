@@ -18,7 +18,10 @@ import java.util.stream.Collectors;
 
 /**
  * Looks ahead one move and finds the best move.
+ *
+ * @deprecated Deprecated since uses {@link AiBoardAdapter} which is deprecated.
  */
+@Deprecated
 public class SingleTurnLookAheadStrategy implements BestMoveStrategy {
     private static final int NEGATIVE_INFINITY = -10000000;
 

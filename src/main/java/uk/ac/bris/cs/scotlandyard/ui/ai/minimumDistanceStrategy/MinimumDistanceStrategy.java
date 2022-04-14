@@ -11,7 +11,10 @@ import java.util.Objects;
  * Implementation of best move strategy which simply considers the minimum distance
  * between the detectives and MrX for each move MrX can make. The best move is the one
  * which maximises this distance.
+ *
+ * @deprecated Deprecated since uses {@link MinimumDistanceWithTickets} which is deprecated.
  */
+@Deprecated
 public class MinimumDistanceStrategy extends SingleTurnLookAheadStrategy {
     public MinimumDistanceStrategy(Board board) {
         super(

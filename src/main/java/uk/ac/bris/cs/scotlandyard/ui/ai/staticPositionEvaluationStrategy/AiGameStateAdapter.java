@@ -7,6 +7,10 @@ import uk.ac.bris.cs.scotlandyard.model.Player;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @deprecated Deprecated since uses deprecated classes.
+ */
+@Deprecated
 public class AiGameStateAdapter implements AiGameState {
     private final Player mrX;
     private final List<Player> detectives;
