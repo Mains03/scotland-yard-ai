@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
 
 import java.util.List;
 import java.util.Objects;

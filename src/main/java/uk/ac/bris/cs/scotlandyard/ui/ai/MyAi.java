@@ -8,10 +8,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.BreadthFirstSearchMinimumDistance;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MemoizedMinimumDistance;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceWithTickets;
-import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.MinimumDistanceSingleTurnLookAhead;
+import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm.BreadthFirstSearchMinimumDistance;
+import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.singleTurnLookAheadStrategy.MinimumDistanceSingleTurnLookAhead;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }

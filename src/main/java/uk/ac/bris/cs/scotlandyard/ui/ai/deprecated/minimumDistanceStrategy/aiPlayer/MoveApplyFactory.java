@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.Move;

@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove;
+package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiMove;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;

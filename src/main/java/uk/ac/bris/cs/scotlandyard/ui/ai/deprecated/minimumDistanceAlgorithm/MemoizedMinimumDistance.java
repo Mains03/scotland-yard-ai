@@ -1,14 +1,17 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
+package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm;
 
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceLookupTable;
+import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.MinimumDistanceLookupTable;
 
 import java.util.Objects;
 
 /**
  * Stores the minimum distances found at nodes to player b for memoization. If player b's
  * location changes, the distances are cleared.
+ *
+ * @deprecated Deprecated since {@link MinimumDistanceLookupTable} is deprecated
  */
+@Deprecated
 public class MemoizedMinimumDistance extends MinimumDistanceLookupTable implements MinimumDistanceAlgorithmStrategy {
     private final MinimumDistanceAlgorithmStrategy algorithm;
 
