@@ -15,4 +15,8 @@ public abstract class GameTreeLeafNode<T> extends GameTree<T> {
     }
 
     public T getData() { return data; }
+
+    public interface StaticEvalStrategy<T> {
+        int staticEvaluation(T data);
+    }
 }

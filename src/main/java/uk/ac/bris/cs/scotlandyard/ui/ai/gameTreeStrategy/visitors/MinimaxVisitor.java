@@ -14,20 +14,20 @@ public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
     public static final int NEGATIVE_INFINITY = -10000000;
 
     private final boolean maximise;
-    private final StaticEvalStrategy<T> evalStrategy;
+    private final GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy;
 
     private Optional<Move> bestMove;
     private int intEvaluation;
 
     public MinimaxVisitor(
-            StaticEvalStrategy<T> evalStrategy
+            GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy
     ) {
         this(true, evalStrategy);
     }
 
     private MinimaxVisitor(
             boolean maximise,
-            StaticEvalStrategy<T> evalStrategy
+            GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy
     ) {
         this.maximise = maximise;
         this.evalStrategy = Objects.requireNonNull(evalStrategy);

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
     private final boolean maximise;
-    private final StaticEvalStrategy<T> evalStrategy;
+    private final GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy;
 
     private int alpha;
     private int beta;
@@ -20,7 +20,7 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
     private int intEvaluation;
 
     public AlphaBetaVisitor(
-            StaticEvalStrategy<T> evalStrategy
+            GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy
     ) {
         this(
                 true,
@@ -34,7 +34,7 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
             boolean maximise,
             int alpha,
             int beta,
-            StaticEvalStrategy<T> evalStrategy
+            GameTreeLeafNode.StaticEvalStrategy<T> evalStrategy
     ) {
         this.maximise = maximise;
         this.alpha = alpha;
