@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;

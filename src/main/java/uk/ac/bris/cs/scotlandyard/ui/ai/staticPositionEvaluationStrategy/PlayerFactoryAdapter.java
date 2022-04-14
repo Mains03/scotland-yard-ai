@@ -5,8 +5,8 @@ import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiBoard.AiBoardAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiPlayer.AiPlayerAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
