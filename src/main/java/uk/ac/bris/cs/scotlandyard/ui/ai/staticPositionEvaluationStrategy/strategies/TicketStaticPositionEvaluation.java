@@ -1,8 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies;
 
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
 
 import java.util.List;
 import java.util.Objects;

@@ -7,8 +7,8 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiMov
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactoryAdapterV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapterV2;
 
 import java.util.List;
 import java.util.Set;

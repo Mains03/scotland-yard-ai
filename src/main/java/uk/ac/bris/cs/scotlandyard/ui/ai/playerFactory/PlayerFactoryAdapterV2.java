@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;

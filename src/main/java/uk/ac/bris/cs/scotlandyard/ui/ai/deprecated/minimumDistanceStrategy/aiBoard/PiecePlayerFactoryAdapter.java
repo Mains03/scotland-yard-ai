@@ -1,8 +1,8 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiBoard;
 
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactoryAdapterV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapterV2;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;

@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.singleTurnLookAheadStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.MinimumDistanceStaticPositionEvaluation;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinimumDistanceStaticPositionEvaluation;
 
 /**
  * @deprecated Deprecated singe {@link SingleTurnLookAheadStrategy} is deprecated.

@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiBo
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.PlayerFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
 
 import java.util.Optional;
 
