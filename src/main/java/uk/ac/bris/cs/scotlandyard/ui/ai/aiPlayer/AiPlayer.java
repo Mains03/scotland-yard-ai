@@ -1,31 +1,26 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.graph.ImmutableValueGraph;
+import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.deprecated.minimumDistanceStrategy.aiMove.AiMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 
-import java.util.List;
 import java.util.Set;
 
 /**
- * Adapter for {@link Player}
+ * Adapter for Player
  */
 public interface AiPlayer {
     int getLocation();
 
     /**
-     * @deprecated Use {@link #getAvailableMoves()}
+     * @deprecated Use {@link #getAvailableMovesNormal()}
      */
     @Deprecated
     ImmutableSet<AiMove> getAvailableMoves();
 
-    default Set<Move> getAvailableMoves(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
-            List<Integer> detectiveLocations
-    ) {
+    default Set<Move> getAvailableMoves(Board board) {
         throw new UnsupportedOperationException();
     }
 
