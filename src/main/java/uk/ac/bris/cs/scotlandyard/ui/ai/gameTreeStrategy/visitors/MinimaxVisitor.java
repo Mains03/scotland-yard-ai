@@ -35,7 +35,7 @@ public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
     }
 
     @Override
-    public void visit(GameTreeInnerNode<T> innerNode) {
+    public Optional<Move> visit(GameTreeInnerNode<T> innerNode) {
         if (maximise) {
             intEvaluation = NEGATIVE_INFINITY;
             for (GameTree<T> child : innerNode.getChildren()) {
@@ -57,10 +57,12 @@ public class MinimaxVisitor<T> extends GameTreeVisitor<T> {
                 }
             }
         }
+        return bestMove;
     }
 
     @Override
-    public void visit(GameTreeLeafNode<T> leafNode) {
+    public Optional<Move> visit(GameTreeLeafNode<T> leafNode) {
         intEvaluation = evalStrategy.staticEvaluation(leafNode.getData());
+        return Optional.empty();
     }
 }

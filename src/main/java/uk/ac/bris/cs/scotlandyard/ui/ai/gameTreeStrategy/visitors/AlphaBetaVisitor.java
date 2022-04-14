@@ -16,7 +16,6 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
     private int alpha;
     private int beta;
 
-    private Optional<Move> bestMove;
     private int intEvaluation;
 
     public AlphaBetaVisitor(
@@ -40,11 +39,11 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
         this.alpha = alpha;
         this.beta = beta;
         this.evalStrategy = evalStrategy;
-        bestMove = Optional.empty();
     }
 
     @Override
-    public void visit(GameTreeInnerNode<T> innerNode) {
+    public Optional<Move> visit(GameTreeInnerNode<T> innerNode) {
+        Optional<Move> bestMove = Optional.empty();
         if (maximise) {
             intEvaluation = MinimaxVisitor.NEGATIVE_INFINITY;
             Iterator<GameTree<T>> childIterator = innerNode.getChildren().iterator();
@@ -60,7 +59,7 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
                     prune = true;
                 else {
                     if (visitor.intEvaluation > intEvaluation) {
-                        bestMove = visitor.bestMove;
+                        bestMove = child.mrXMoveMade();
                         intEvaluation = visitor.intEvaluation;
                     }
                 }
@@ -80,16 +79,18 @@ public class AlphaBetaVisitor<T> extends GameTreeVisitor<T> {
                     prune = true;
                 else {
                     if (visitor.intEvaluation < intEvaluation) {
-                        bestMove = visitor.bestMove;
+                        bestMove = child.mrXMoveMade();
                         intEvaluation = visitor.intEvaluation;
                     }
                 }
             }
         }
+        return bestMove;
     }
 
     @Override
-    public void visit(GameTreeLeafNode<T> leafNode) {
+    public Optional<Move> visit(GameTreeLeafNode<T> leafNode) {
         intEvaluation = evalStrategy.staticEvaluation(leafNode.getData());
+        return leafNode.mrXMoveMade();
     }
 }

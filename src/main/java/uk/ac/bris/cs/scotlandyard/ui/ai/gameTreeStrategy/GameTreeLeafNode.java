@@ -1,6 +1,9 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
+import uk.ac.bris.cs.scotlandyard.model.Move;
+
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class GameTreeLeafNode<T> extends GameTree<T> {
     private final T data;
@@ -10,8 +13,8 @@ public abstract class GameTreeLeafNode<T> extends GameTree<T> {
     }
 
     @Override
-    public void accept(GameTreeVisitor<T> visitor) {
-        visitor.visit(this);
+    public Optional<Move> accept(GameTreeVisitor<T> visitor) {
+        return visitor.visit(this);
     }
 
     public T getData() { return data; }
