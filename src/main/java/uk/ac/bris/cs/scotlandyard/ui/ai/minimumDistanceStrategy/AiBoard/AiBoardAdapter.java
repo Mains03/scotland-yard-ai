@@ -14,6 +14,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated Deprecated since AiBoard is deprecated.
+ */
+@Deprecated
 public class AiBoardAdapter implements AiBoard {
     protected final Board board;
     protected final AiPlayer mrX;

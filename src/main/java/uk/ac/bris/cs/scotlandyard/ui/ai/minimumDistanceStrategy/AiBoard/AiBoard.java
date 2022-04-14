@@ -9,7 +9,10 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiPlayer.AiPlaye
 
 /**
  * Adapter for Board. Provides functionality for generating the MrX player.
+ *
+ * @deprecated Deprecated since not useful, use {@link AiPlayer} for all functionality
  */
+@Deprecated
 public interface AiBoard {
     ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph();
 

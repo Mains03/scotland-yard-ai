@@ -3,18 +3,18 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiPlayer;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard.PiecePlayerFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiBoard.PiecePlayerFactoryAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.AiMove.AiMoveAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @deprecated Generates illegal moves, use {@link AiPlayerAdapterV2}
+ */
+@Deprecated
 public class AiPlayerAdapter implements AiPlayer {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final Player player;
