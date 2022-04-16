@@ -8,6 +8,11 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlaye
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.DijkstraWithTickets;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
+/**
+ * Finds the minimum distance between players a and b
+ * using Dijkstra's algorithm and accounting for the
+ * players' tickets
+ */
 public class MinimumDistanceWithTickets implements MinimumDistanceAlgorithmStrategy {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final MinimumDistance algorithm;

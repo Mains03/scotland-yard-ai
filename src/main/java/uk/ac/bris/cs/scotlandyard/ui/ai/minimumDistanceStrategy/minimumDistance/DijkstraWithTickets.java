@@ -24,6 +24,7 @@ public class DijkstraWithTickets implements MinimumDistance {
         this.graph = graph;
     }
 
+    // Node used in dijkstra, contains an AiPlayer and its distance to source
     private class PQNode {
         private final AiPlayer player;
         private final int distance;
@@ -36,10 +37,17 @@ public class DijkstraWithTickets implements MinimumDistance {
 
     @Override
     public int minimumDistance(AiPlayer a, AiPlayer b) {
+        // Creates a priority queue with nodes ordered by distance
         Queue<PQNode> queue = new PriorityQueue<>(
                 Comparator.comparingInt(node -> node.distance)
         );
+        // Source is first node
         queue.add(new PQNode(a, 0));
+        /*
+        While there are available moves, if current location is destination, return that distance.
+        If not, look at all available moves from this location, if these locations have not been found,
+        add them.
+         */
         while (!queue.isEmpty()) {
             PQNode node = queue.poll();
             if (node.player.getLocation() == b.getLocation())
@@ -51,6 +59,7 @@ public class DijkstraWithTickets implements MinimumDistance {
                 ));
             }
         }
+        // If no route exists, distance is infinite
         return POSITIVE_INFINITY;
     }
 }
