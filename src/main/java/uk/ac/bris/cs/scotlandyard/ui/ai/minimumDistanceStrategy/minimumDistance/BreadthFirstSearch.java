@@ -2,6 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
+import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinDistStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.SimpleBFS;
@@ -27,7 +28,8 @@ public class BreadthFirstSearch implements MinimumDistance {
     public int minimumDistance(AiPlayer a, AiPlayer b) {
         int source = a.getLocation();
         int destination = b.getLocation();
-        MinDistStrategy strategy = new SimpleBFS(graph, source, destination);
-        return strategy.getMinimumDistance();
+        MinDistStrategy<Pair<Integer, Integer>> strategy = new SimpleBFS(graph);
+        Pair<Integer, Integer> locations = new Pair<>(source, destination);
+        return strategy.getMinimumDistance(locations);
     }
 }

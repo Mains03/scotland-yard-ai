@@ -8,13 +8,18 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMoveAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated since {@link AiBoard} is deprecated, use {@link AiBoardV2Adapter}.
+ */
+@Deprecated
 public class AiBoardAdapter implements AiBoard {
     protected final Board board;
     protected final AiPlayer mrX;
@@ -51,22 +56,55 @@ public class AiBoardAdapter implements AiBoard {
         return board.getSetup().graph;
     }
 
-    /**
-     * Only returns the moves immediately available at the start of the round.
-     * @return the available moves
-     */
     @Override
     public ImmutableSet<AiMove> getAvailableMoves() {
-        return ImmutableSet.copyOf(
-                board.getAvailableMoves().stream()
-                        .map(AiMoveAdapter::new)
-                        .collect(Collectors.toList())
-        );
+        Set<Move> moves = new HashSet<>();
+        moves.addAll(generateMrXMoves());
+        moves.addAll(generateDetectiveMoves());
+        Set<AiMove> aiMoves = new HashSet<>();
+        for (Move move : moves)
+            aiMoves.add(createAiMove(move));
+        return ImmutableSet.copyOf(aiMoves);
     }
 
-    @Override
-    public Set<Move> getAvailableMovesNormal() {
-        return null;
+    private AiMove createAiMove(Move move) {
+        return new AiMoveAdapter(move);
+    }
+
+    private Set<Move> generateMrXMoves() {
+        Player mrX = this.mrX.asPlayer();
+        MoveGenerationFactory factory = createMoveGenerationFactory();
+        MoveGenerationBoard board = createMoveGenerationBoard();
+        return factory.generateMoves(board, mrX);
+    }
+
+    private Set<Move> generateDetectiveMoves() {
+        MoveGenerationFactory factory = createMoveGenerationFactory();
+        MoveGenerationBoard board = createMoveGenerationBoard();
+        Set<Move> moves = new HashSet<>();
+        for (AiPlayer detective : detectives) {
+            Player detectivePlayer = detective.asPlayer();
+            Set<Move> detectiveMoves = factory.generateMoves(board, detectivePlayer);
+            moves.addAll(detectiveMoves);
+        }
+        return moves;
+    }
+
+    private MoveGenerationFactory createMoveGenerationFactory() {
+        return StandardMoveGenerationFactory.getInstance();
+    }
+
+    private MoveGenerationBoard createMoveGenerationBoard() {
+        var graph = board.getSetup().graph;
+        List<Integer> detectiveLocations = generateDetectiveLocations();
+        return new MoveGenerationBoardAdapter(graph, detectiveLocations);
+    }
+
+    private List<Integer> generateDetectiveLocations() {
+        List<Integer> detectiveLocations = new ArrayList<>();
+        for (AiPlayer detective : detectives)
+            detectiveLocations.add(detective.getLocation());
+        return detectiveLocations;
     }
 
     @Override
@@ -81,6 +119,6 @@ public class AiBoardAdapter implements AiBoard {
 
     @Override
     public AiBoard applyMove(Move move) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

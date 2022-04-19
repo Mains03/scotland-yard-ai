@@ -28,18 +28,18 @@ public class SimpleBFS implements MinDistStrategy<Pair<Integer, Integer>> {
     public int getMinimumDistance(Pair<Integer, Integer> locations) {
         int source = locations.left();
         int destination = locations.right();
-        Queue<Integer> pq = new ArrayDeque<>();
-        pq.add(source);
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(source);
         int[] distances = createDistancesArray();
         initialiseDistances(distances);
-        while (!pq.isEmpty()) {
-            int node = pq.poll();
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
             if (node == destination)
                 // we know this is the minimum distance since each edge has weight 1
                 return distances[node];
             for (int adjacent : getAdjacent(node)) {
                 if (!visited(distances, adjacent)) {
-                    pq.add(adjacent);
+                    queue.add(adjacent);
                     updateDistance(distances, node, adjacent);
                 }
             }

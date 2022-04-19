@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @deprecated Generates illegal moves, use {@link AiPlayerAdapterV2}
+ * @deprecated since {@link AiPlayer} is deprecated, use {@link AiPlayerV2Adapter}.
  */
 @Deprecated
 public class AiPlayerAdapter implements AiPlayer {
