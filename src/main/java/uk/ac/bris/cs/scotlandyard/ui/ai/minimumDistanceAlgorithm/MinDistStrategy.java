@@ -1,5 +1,9 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
-public interface MinDistStrategy {
-    int getMinimumDistance();
+/**
+ *
+ * @param <T> data required to calculate minimum distance
+ */
+public interface MinDistStrategy<T> {
+    int getMinimumDistance(T data);
 }

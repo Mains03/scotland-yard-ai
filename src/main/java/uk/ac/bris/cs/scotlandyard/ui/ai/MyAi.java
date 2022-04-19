@@ -12,6 +12,8 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitors.MinimaxVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.BreadthFirstSearchMinimumDistance;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinDistStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinDistStrategyFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinimumDistanceStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.BreadthFirstSearch;
@@ -27,11 +29,8 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph = board.getSetup().graph;
-		MinimumDistanceAlgorithmStrategy minimumDistanceStrategy = new BreadthFirstSearchMinimumDistance(graph);
-		StaticPositionEvaluationStrategy evaluationStrategy = new MinimumDistanceStaticPositionEvaluation(
-				minimumDistanceStrategy
-		);
+		MinDistStrategyFactory minDistStrategyFactory = new MinDistStrategyFactory(board);
+		MinDistStrategy minDistStrategy = minDistStrategyFactory.createSimpleBFSStrategy();
 		GameTreeVisitor gameTreeVisitor = new MinimaxVisitor(evaluationStrategy);
 		BestMoveStrategy bestMoveStrategy = new GameTreeStrategy(
 				board,

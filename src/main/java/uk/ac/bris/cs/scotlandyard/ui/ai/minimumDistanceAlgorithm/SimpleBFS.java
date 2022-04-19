@@ -2,6 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
+import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.ArrayDeque;
@@ -11,26 +12,22 @@ import java.util.Queue;
 /**
  * Breadth-first search algorithm to find the minimum distance between two nodes ignoring tickets.
  */
-public class SimpleBFS implements MinDistStrategy {
+public class SimpleBFS implements MinDistStrategy<Pair<Integer, Integer>> {
     private static final int INITIAL_DISTANCE_VAL = -1;
     private static final int POSITIVE_INFINITY = 1000000;
 
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
-    private final int source;
-    private final int destination;
 
     public SimpleBFS(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
-            int source,
-            int destination
+            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph
     ) {
         this.graph = graph;
-        this.source = source;
-        this.destination = destination;
     }
 
     @Override
-    public int getMinimumDistance() {
+    public int getMinimumDistance(Pair<Integer, Integer> locations) {
+        int source = locations.left();
+        int destination = locations.right();
         Queue<Integer> pq = new ArrayDeque<>();
         pq.add(source);
         int[] distances = createDistancesArray();
