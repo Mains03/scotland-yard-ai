@@ -10,9 +10,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Singleton class to generate moves for a player.
- */
 public class StandardMoveGenerationFactory implements MoveGenerationFactory {
     private static StandardMoveGenerationFactory moveGenerationFactory;
 
@@ -54,12 +51,6 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
         return moves;
     }
 
-    /**
-     * Returns adjacent locations not occupied by a detective.
-     * @param board board
-     * @param player player
-     * @return destinations
-     */
     private Iterable<Integer> getUnoccupiedAdjacentNodes(MoveGenerationBoard board, Player player) {
         int location = player.location();
         var graph = board.getGraph();
