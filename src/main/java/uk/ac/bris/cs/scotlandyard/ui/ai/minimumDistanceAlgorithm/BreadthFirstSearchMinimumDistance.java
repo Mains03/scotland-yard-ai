@@ -9,8 +9,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 
 /**
- * Finds the minimum distance between two players (a and b) with a breadth-first search
+ * @deprecated since more information than graph is required.
  */
+@Deprecated
 public class BreadthFirstSearchMinimumDistance implements MinimumDistanceAlgorithmStrategy {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final MinimumDistance algorithm;
