@@ -20,6 +20,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.minimumDistance.MinimumDistance;
 import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.MinimumDistanceSingleTurnLookAhead;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinDistStaticPosEval;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinimumDistanceStaticPositionEvaluation;
 
 public class MyAi implements Ai {
@@ -30,7 +31,8 @@ public class MyAi implements Ai {
 			Pair<Long, TimeUnit> timeoutPair
 	) {
 		MinDistStrategyFactory minDistStrategyFactory = new MinDistStrategyFactory(board);
-		MinDistStrategy minDistStrategy = minDistStrategyFactory.createSimpleBFSStrategy();
+		MinDistStrategy<Pair<Integer, Integer>> minDistStrategy = minDistStrategyFactory.createSimpleBFSStrategy();
+		StaticPositionEvaluationStrategy evaluationStrategy = new MinDistStaticPosEval(minDistStrategy);
 		GameTreeVisitor gameTreeVisitor = new MinimaxVisitor(evaluationStrategy);
 		BestMoveStrategy bestMoveStrategy = new GameTreeStrategy(
 				board,
