@@ -3,8 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2Adapter;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,7 +15,7 @@ public class GameTreeStrategy implements BestMoveStrategy {
     public GameTreeStrategy(Board board, int depth, GameTreeVisitor gameTreeVisitor) {
         if (depth < 1)
             throw new IllegalArgumentException();
-        AiBoard aiBoard = new AiBoardAdapter(board);
+        AiBoardV2 aiBoard = new AiBoardV2Adapter(board);
         GameTree gameTree = new GameTreeInnerNode(aiBoard, depth);
         mBestMove = gameTree.accept(gameTreeVisitor);
     }

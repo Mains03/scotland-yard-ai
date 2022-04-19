@@ -69,6 +69,16 @@ public class AiBoardV2Adapter implements AiBoardV2 {
     }
 
     @Override
+    public AiPlayerV2 getMrX() {
+        return mrX;
+    }
+
+    @Override
+    public List<AiPlayerV2> getDetectives() {
+        return List.copyOf(detectives);
+    }
+
+    @Override
     public Set<Move> getAvailableMoves() {
         Set<Move> moves = new HashSet<>();
         for (Piece piece : this.remaining) {
@@ -146,7 +156,22 @@ public class AiBoardV2Adapter implements AiBoardV2 {
     }
 
     private List<AiPlayerV2> updateDetectives(Move move) {
-        return null;
+        List<AiPlayerV2> detectives = new ArrayList<>();
+        for (AiPlayerV2 player : this.detectives) {
+            AiPlayerV2 detective;
+            if (moveMadeByPlayer(player, move))
+                detective = movePlayer(player, move);
+            else
+                detective = player;
+            detectives.add(detective);
+        }
+        return detectives;
+    }
+
+    private boolean moveMadeByPlayer(AiPlayerV2 player, Move move) {
+        Piece piece = getPlayerPiece(player);
+        Piece movedPiece = move.commencedBy();
+        return piece.equals(movedPiece);
     }
 
     private AiPlayerV2 movePlayer(AiPlayerV2 player, Move move) {

@@ -5,8 +5,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeInnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeLeafNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameStateAiBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameStateAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
 
 import java.util.Objects;
@@ -65,7 +66,8 @@ public class MinimaxVisitor extends GameTreeVisitor {
 
     @Override
     public Optional<Move> visit(GameTreeLeafNode leafNode) {
-        AiGameState aiGameState = new AiGameStateAiBoardAdapter(leafNode.getBoard());
+        AiBoardV2 board = leafNode.getBoard();
+        AiGameState aiGameState = new AiGameStateAdapter(board);
         intEvaluation = evalStrategy.evaluate(aiGameState);
         return leafNode.mrXMoveMade();
     }

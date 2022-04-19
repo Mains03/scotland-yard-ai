@@ -53,6 +53,6 @@ public class AiPlayerV2Adapter implements AiPlayerV2 {
 
     @Override
     public Player asPlayer() {
-        return null;
+        return player;
     }
 }
