@@ -1,16 +1,16 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class GameTreeLeafNode extends GameTreeNode {
     // required to statically evaluate
-    private final AiBoardV2 board;
+    private final AiBoard board;
 
-    public GameTreeLeafNode(AiBoardV2 board) {
+    public GameTreeLeafNode(AiBoard board) {
         this.board = Objects.requireNonNull(board);
     }
 
@@ -25,5 +25,5 @@ public class GameTreeLeafNode extends GameTreeNode {
         return Optional.empty();
     }
 
-    public AiBoardV2 getBoard() { return board; }
+    public AiBoard getBoard() { return board; }
 }

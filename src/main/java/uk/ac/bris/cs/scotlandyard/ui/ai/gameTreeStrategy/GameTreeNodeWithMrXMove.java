@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
 
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class GameTreeNodeWithMrXMove extends GameTreeInnerNode {
     private Move move;
 
-    public GameTreeNodeWithMrXMove(AiBoardV2 board, int depth, Move mrXMove) {
+    public GameTreeNodeWithMrXMove(AiBoard board, int depth, Move mrXMove) {
         super(board, depth);
         move = mrXMove;
     }

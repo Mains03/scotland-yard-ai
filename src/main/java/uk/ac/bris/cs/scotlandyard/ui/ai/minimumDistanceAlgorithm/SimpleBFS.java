@@ -1,43 +1,33 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.graph.ImmutableValueGraph;
-import io.atlassian.fugue.Pair;
-import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
+import uk.ac.bris.cs.scotlandyard.model.Piece;
+import uk.ac.bris.cs.scotlandyard.model.Player;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
+import java.util.*;
 
 /**
- * Breadth-first search algorithm to find the minimum distance between two nodes ignoring tickets.
+ * Ignores tickets for efficiency.
  */
-public class SimpleBFS implements MinDistStrategy<Pair<Integer, Integer>> {
+public class SimpleBFS implements MinDistStrategy {
     private static final int INITIAL_DISTANCE_VAL = -1;
     private static final int POSITIVE_INFINITY = 1000000;
 
-    private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
-
-    public SimpleBFS(
-            ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph
-    ) {
-        this.graph = graph;
-    }
-
     @Override
-    public int getMinimumDistance(Pair<Integer, Integer> locations) {
-        int source = locations.left();
-        int destination = locations.right();
+    public int getMinimumDistance(AiBoard board, Piece a, Piece b) {
+        int source = getPieceLocation(board, a);
+        int destination = getPieceLocation(board, b);
         Queue<Integer> queue = new ArrayDeque<>();
         queue.add(source);
-        int[] distances = createDistancesArray();
-        initialiseDistances(distances);
+        int[] distances = createDistancesArray(board);
+        initialiseDistances(distances, source);
         while (!queue.isEmpty()) {
             int node = queue.poll();
             if (node == destination)
                 // we know this is the minimum distance since each edge has weight 1
                 return distances[node];
-            for (int adjacent : getAdjacent(node)) {
+            for (int adjacent : getAdjacent(board, node)) {
                 if (!visited(distances, adjacent)) {
                     queue.add(adjacent);
                     updateDistance(distances, node, adjacent);
@@ -47,18 +37,57 @@ public class SimpleBFS implements MinDistStrategy<Pair<Integer, Integer>> {
         return POSITIVE_INFINITY;
     }
 
-    private int[] createDistancesArray() {
+    private int getPieceLocation(AiBoard board, Piece piece) {
+        int location;
+        if (piece.isMrX())
+            location = getMrXLocation(board);
+        else
+            location = getDetectiveLocation(board, piece);
+        return location;
+    }
+
+    private int getMrXLocation(AiBoard board) {
+        AiPlayer player = board.getMrX();
+        return playerLocation(player);
+    }
+
+    private int getDetectiveLocation(AiBoard board, Piece piece) {
+        int location = -1;
+        List<AiPlayer> detectives = board.getDetectives();
+        for (AiPlayer detective : detectives) {
+            if (isPiece(detective, piece))
+                location = playerLocation(detective);
+        }
+        if (location == -1)
+            throw new NoSuchElementException("Piece " + piece + " not found");
+        return location;
+    }
+
+    private boolean isPiece(AiPlayer aiPlayer, Piece piece) {
+        Player player = aiPlayer.asPlayer();
+        Piece playerPiece = player.piece();
+        return playerPiece.equals(piece);
+    }
+
+    private int playerLocation(AiPlayer aiPlayer) {
+        Player player = aiPlayer.asPlayer();
+        return player.location();
+    }
+
+    private int[] createDistancesArray(AiBoard board) {
+        var graph = board.getGraph();
+        int numNodes = graph.nodes().size();
         // one more than the size since nodes are numbered from 1 not 0
-        return new int[graph.nodes().size()+1];
+        return new int[numNodes + 1];
     }
 
-    private void initialiseDistances(int[] distances) {
+    private void initialiseDistances(int[] distances, int source) {
         Arrays.fill(distances, INITIAL_DISTANCE_VAL);
-        distances[0] = 0;
+        distances[source] = 0;
     }
 
-    private Iterable<Integer> getAdjacent(int node) {
-        return graph.adjacentNodes(node);
+    private Iterable<Integer> getAdjacent(AiBoard board, int node) {
+        return board.getGraph().adjacentNodes(node);
     }
 
     private boolean visited(int[] distances, int location) {
@@ -66,6 +95,7 @@ public class SimpleBFS implements MinDistStrategy<Pair<Integer, Integer>> {
     }
 
     private void updateDistance(int[] distances, int source, int destination) {
+        // each edge has weight 1
         distances[destination] = distances[source] + 1;
     }
 }

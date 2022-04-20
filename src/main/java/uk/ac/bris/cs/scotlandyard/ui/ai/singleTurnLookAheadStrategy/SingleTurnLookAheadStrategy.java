@@ -3,8 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2Adapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardAdapter;
 
 import java.util.NoSuchElementException;
 
@@ -14,10 +14,10 @@ import java.util.NoSuchElementException;
 public abstract class SingleTurnLookAheadStrategy implements BestMoveStrategy {
     private static final int NEGATIVE_INFINITY = -10000000;
 
-    private final AiBoardV2 board;
+    private final AiBoard board;
 
     public SingleTurnLookAheadStrategy(Board board) {
-        this.board = new AiBoardV2Adapter(board);
+        this.board = new AiBoardAdapter(board);
     }
 
     @Override
@@ -37,9 +37,9 @@ public abstract class SingleTurnLookAheadStrategy implements BestMoveStrategy {
     }
 
     private int evaluateMove(Move move) {
-        AiBoardV2 newBoard = board.applyMove(move);
+        AiBoard newBoard = board.applyMove(move);
         return staticEvaluation(newBoard);
     }
 
-    public abstract int staticEvaluation(AiBoardV2 board);
+    public abstract int staticEvaluation(AiBoard board);
 }

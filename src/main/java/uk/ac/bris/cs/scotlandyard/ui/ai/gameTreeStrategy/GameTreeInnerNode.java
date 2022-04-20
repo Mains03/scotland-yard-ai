@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
 
 import java.util.*;
 
@@ -12,16 +12,16 @@ import java.util.*;
 public class GameTreeInnerNode extends GameTreeNode {
     private final Set<GameTreeNode> children;
 
-    public GameTreeInnerNode(AiBoardV2 board, int depth) {
+    public GameTreeInnerNode(AiBoard board, int depth) {
         this.children = createChildren(board, depth);
     }
 
-    private Set<GameTreeNode> createChildren(AiBoardV2 board, int depth) {
+    private Set<GameTreeNode> createChildren(AiBoard board, int depth) {
         if (depth < 0)
             throw new IllegalArgumentException();
         Set<GameTreeNode> children = new HashSet<>();
-        List<AiBoardV2> newBoards = generateNewBoards(board);
-        for (AiBoardV2 newBoard : newBoards) {
+        List<AiBoard> newBoards = generateNewBoards(board);
+        for (AiBoard newBoard : newBoards) {
             GameTreeNode child = createChild(newBoard, depth);
             children.add(child);
         }
@@ -29,8 +29,8 @@ public class GameTreeInnerNode extends GameTreeNode {
     }
 
     // possible boards reached by either moving MrX or all the detectives
-    private List<AiBoardV2> generateNewBoards(AiBoardV2 board) {
-        List<AiBoardV2> newBoards;
+    private List<AiBoard> generateNewBoards(AiBoard board) {
+        List<AiBoard> newBoards;
         if (isMrXMove(board))
             newBoards = moveMrX(board);
         else
@@ -38,13 +38,13 @@ public class GameTreeInnerNode extends GameTreeNode {
         return newBoards;
     }
 
-    private boolean isMrXMove(AiBoardV2 board) {
+    private boolean isMrXMove(AiBoard board) {
         Move move = getAnyMove(board);
         Piece piece = move.commencedBy();
         return piece.isMrX();
     }
 
-    private Move getAnyMove(AiBoardV2 board) {
+    private Move getAnyMove(AiBoard board) {
         Optional<Move> move = board.getAvailableMoves().stream()
                 .findAny();
         if (move.isEmpty())
@@ -53,22 +53,22 @@ public class GameTreeInnerNode extends GameTreeNode {
     }
 
     // possible boards by moving MrX
-    private List<AiBoardV2> moveMrX(AiBoardV2 board) {
-        List<AiBoardV2> boards = new ArrayList<>();
+    private List<AiBoard> moveMrX(AiBoard board) {
+        List<AiBoard> boards = new ArrayList<>();
         for (Move move : board.getAvailableMoves()) {
-            AiBoardV2 newBoard = board.applyMove(move);
+            AiBoard newBoard = board.applyMove(move);
             boards.add(newBoard);
         }
         return boards;
     }
 
     // possible boards by moving detectives
-    private List<AiBoardV2> moveDetectives(AiBoardV2 board) {
+    private List<AiBoard> moveDetectives(AiBoard board) {
         // TODO: implement me
         return null;
     }
 
-    private GameTreeNode createChild(AiBoardV2 board, int depth) {
+    private GameTreeNode createChild(AiBoard board, int depth) {
         GameTreeNode child;
         if (depth == 0)
             child = new GameTreeLeafNode(board);

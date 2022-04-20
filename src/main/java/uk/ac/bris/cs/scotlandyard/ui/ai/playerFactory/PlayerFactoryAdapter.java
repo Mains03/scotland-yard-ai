@@ -1,45 +1,70 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import com.google.common.collect.ImmutableMap;
+import uk.ac.bris.cs.scotlandyard.model.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
-/**
- * @deprecated Uses {@link AiPlayerAdapter}
- * which is deprecated, use {@link PlayerFactoryV2Adapter}.
- */
-@Deprecated
 public class PlayerFactoryAdapter implements PlayerFactory {
-    private final Player mrX;
-    private final List<Player> detectives;
-
-    public PlayerFactoryAdapter(Board board) {
-        AiBoard aiBoard = new AiBoardAdapter(board);
-        mrX = aiBoard.getMrX().asPlayer();
-        detectives = aiBoard.getDetectives().stream()
-                .map(AiPlayer::asPlayer)
-                .collect(Collectors.toList());
+    @Override
+    public Player createPlayer(Board board, Piece piece) {
+        var tickets = createTickets(board, piece);
+        int location = determineLocation(board, piece);
+        return new Player(piece, tickets, location);
     }
 
-    @Override
-    public Player createMrX() {
-        return mrX;
+    private ImmutableMap<ScotlandYard.Ticket, Integer> createTickets(Board board, Piece piece) {
+        Board.TicketBoard ticketBoard = getTicketBoard(board, piece);
+        Map<ScotlandYard.Ticket, Integer> tickets = createTicketMap(ticketBoard);
+        return ImmutableMap.copyOf(tickets);
     }
 
-    @Override
-    public List<Player> createDetectives() {
-        return List.copyOf(detectives);
+    private Board.TicketBoard getTicketBoard(Board board, Piece piece) {
+        Optional<Board.TicketBoard> ticketBoard = board.getPlayerTickets(piece);
+        if (ticketBoard.isEmpty())
+            throw new NoSuchElementException("Failed to find " + piece + " tickets");
+        return ticketBoard.get();
     }
 
-    @Override
-    public Player createFromPiece(Piece piece) {
-        return null;
+    private Map<ScotlandYard.Ticket, Integer> createTicketMap(Board.TicketBoard ticketBoard) {
+        Map<ScotlandYard.Ticket, Integer> tickets = new HashMap<>();
+        for (ScotlandYard.Ticket ticket : ScotlandYard.Ticket.values())
+            tickets.put(ticket, ticketBoard.getCount(ticket));
+        return tickets;
+    }
+
+    private int determineLocation(Board board, Piece piece) {
+        // distinguish between MrX and detectives since MrX location is not known by the board
+        int location;
+        if (piece.isMrX())
+            location = getMrXLocation(board);
+        else
+            location = getDetectiveLocation(board, (Piece.Detective) piece);
+        return location;
+    }
+
+    private int getMrXLocation(Board board) {
+        Move move = getMrXMove(board);
+        return move.source();
+    }
+
+    private Move getMrXMove(Board board) {
+        // MrX is always next to move
+        Optional<Move> mMove = board.getAvailableMoves().stream()
+                .findAny().stream()
+                .findAny();
+        if (mMove.isEmpty())
+            throw new NoSuchElementException("No moves found");
+        return mMove.get();
+    }
+
+    private int getDetectiveLocation(Board board, Piece.Detective detective) {
+        Optional<Integer> mLocation = board.getDetectiveLocation(detective);
+        if (mLocation.isEmpty())
+            throw new NoSuchElementException("Failed to find " + detective + " location");
+        return mLocation.get();
     }
 }

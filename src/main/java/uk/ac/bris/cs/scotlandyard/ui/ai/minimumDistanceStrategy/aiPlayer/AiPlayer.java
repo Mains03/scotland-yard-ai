@@ -1,22 +1,18 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
 
-import com.google.common.collect.ImmutableSet;
+import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
+
+import java.util.List;
+import java.util.Set;
 
 /**
- * Provides functionality for manipulating a player.
- *
- * @deprecated since generating available moves requires more information,
- * use {@link AiPlayerV2}.
+ * Adapter for {@link Player} providing more functionality.
  */
-@Deprecated
 public interface AiPlayer {
-    int getLocation();
+    Set<Move> getAvailableMoves(List<Integer> detectiveLocations);
 
-    ImmutableSet<AiMove> getAvailableMoves();
-
-    AiPlayer applyMove(AiMove move);
+    AiPlayer applyMove(Move move);
 
     Player asPlayer();
 }

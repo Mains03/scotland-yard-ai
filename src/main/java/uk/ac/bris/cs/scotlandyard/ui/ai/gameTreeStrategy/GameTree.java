@@ -2,8 +2,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2Adapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class GameTree {
 
     private List<GameTreeNode> createGameTreeNodes(Board board, int depth) {
         List<GameTreeNode> gameTreeNodes = new ArrayList<>();
-        AiBoardV2 aiBoard = new AiBoardV2Adapter(board);
+        AiBoard aiBoard = new AiBoardAdapter(board);
         for (Move move : aiBoard.getAvailableMoves()) {
             GameTreeNode gameTreeNode = createGameTreeNode(aiBoard, depth, move);
             gameTreeNodes.add(gameTreeNode);
@@ -28,7 +28,7 @@ public class GameTree {
         return gameTreeNodes;
     }
 
-    private GameTreeNode createGameTreeNode(AiBoardV2 board, int depth, Move move) {
+    private GameTreeNode createGameTreeNode(AiBoard board, int depth, Move move) {
         return new GameTreeNodeWithMrXMove(board, depth, move);
     }
 
