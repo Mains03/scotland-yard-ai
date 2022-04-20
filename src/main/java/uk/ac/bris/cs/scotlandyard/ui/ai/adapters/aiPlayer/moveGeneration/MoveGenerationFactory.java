@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;

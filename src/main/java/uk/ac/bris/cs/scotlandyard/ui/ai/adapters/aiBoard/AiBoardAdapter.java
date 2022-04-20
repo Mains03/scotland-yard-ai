@@ -1,10 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayerAdapter;
 
 import java.util.*;
 import java.util.stream.Collectors;

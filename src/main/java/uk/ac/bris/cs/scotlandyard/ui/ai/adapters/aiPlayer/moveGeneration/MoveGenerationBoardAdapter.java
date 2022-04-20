@@ -1,15 +1,11 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
-import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class MoveGenerationBoardAdapter implements MoveGenerationBoard {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;

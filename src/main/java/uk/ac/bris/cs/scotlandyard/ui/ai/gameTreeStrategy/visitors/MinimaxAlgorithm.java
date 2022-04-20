@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitors;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategyV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
-public class MinimaxAlgorithm implements BestMoveStrategyV2 {
+public class MinimaxAlgorithm implements BestMoveStrategy {
     private static final int NEGATIVE_INFINITY = -10000000;
 
     private final StaticPosEvalStrategy strategy;

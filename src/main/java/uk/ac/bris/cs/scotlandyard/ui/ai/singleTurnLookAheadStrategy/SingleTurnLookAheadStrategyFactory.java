@@ -1,9 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameStateAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinDistStaticPosEval;
 
 /**
@@ -11,7 +9,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strateg
  */
 public class SingleTurnLookAheadStrategyFactory {
     public SingleTurnLookAheadStrategy createMinDistStrategy(Board board, MinDistStaticPosEval strategy) {
-        return new SingleTurnLookAheadStrategy(board) {
+        return new SingleTurnLookAheadStrategy() {
             @Override
             public int staticEvaluation(AiBoard board) {
                 AiGameState gameState = new AiGameStateAdapter(board);

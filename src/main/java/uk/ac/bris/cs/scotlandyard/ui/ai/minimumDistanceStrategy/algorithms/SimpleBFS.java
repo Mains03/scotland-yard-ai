@@ -1,9 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm;
+package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.algorithms;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
 
 import java.util.*;
 

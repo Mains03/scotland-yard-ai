@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;

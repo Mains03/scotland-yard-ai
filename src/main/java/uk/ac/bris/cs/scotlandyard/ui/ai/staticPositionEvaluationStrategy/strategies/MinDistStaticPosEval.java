@@ -1,9 +1,10 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies;
 
-import io.atlassian.fugue.Pair;
+import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinDistStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.ArrayList;
@@ -16,34 +17,41 @@ import java.util.Objects;
 public class MinDistStaticPosEval implements StaticPosEvalStrategy {
     private static final int POSITIVE_INFINITY = 1000000;
 
-    private final MinDistStrategy<Pair<Integer, Integer>> strategy;
+    private final MinDistStrategy strategy;
 
-    public MinDistStaticPosEval(MinDistStrategy<Pair<Integer, Integer>> strategy) {
+    public MinDistStaticPosEval(MinDistStrategy strategy) {
         this.strategy = Objects.requireNonNull(strategy);
     }
 
     @Override
-    public int evaluate(AiGameState gameState) {
-        int mrXLocation = getMrXLocation(gameState);
+    public int evaluate(AiBoard board) {
         int minDist = POSITIVE_INFINITY;
-        for (int location : getDetectiveLocations(gameState)) {
-            Pair<Integer, Integer> locations = new Pair<>(mrXLocation, location);
-            int minDistComparison = strategy.getMinimumDistance(locations);
+        List<Piece> detectives = getDetectivePieces(board);
+        for (Piece piece : detectives) {
+            int minDistComparison = minimumDistance(board, piece);
             minDist = Math.min(minDist, minDistComparison);
         }
         return minDist;
     }
 
-    private int getMrXLocation(AiGameState gameState) {
-        Player mrX = gameState.getMrX();
-        return mrX.location();
+    private List<Piece> getDetectivePieces(AiBoard board) {
+        List<AiPlayer> detectives = board.getDetectives();
+        List<Piece> pieces = new ArrayList<>();
+        for (AiPlayer aiDetective : detectives) {
+            Player detective = aiDetective.asPlayer();
+            pieces.add(detective.piece());
+        }
+        return pieces;
     }
 
-    private Iterable<Integer> getDetectiveLocations(AiGameState gameState) {
-        List<Player> detectives = gameState.getDetectives();
-        List<Integer> locations = new ArrayList<>();
-        for (Player detective : detectives)
-            locations.add(detective.location());
-        return locations;
+    private int playerLocation(AiPlayer aiPlayer) {
+        Player player = aiPlayer.asPlayer();
+        return player.location();
+    }
+
+    // minimum distance between MrX and piece
+    private int minimumDistance(AiBoard board, Piece piece) {
+        Piece mrX = Piece.MrX.MRX;
+        return strategy.getMinimumDistance(board, mrX, piece);
     }
 }

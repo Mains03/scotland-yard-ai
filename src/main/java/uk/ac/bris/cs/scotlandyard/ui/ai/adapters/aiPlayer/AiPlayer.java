@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;

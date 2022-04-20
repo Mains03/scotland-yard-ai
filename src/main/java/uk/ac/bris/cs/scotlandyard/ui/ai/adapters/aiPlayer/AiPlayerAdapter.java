@@ -1,12 +1,12 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoardAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.StandardMoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapter;
 

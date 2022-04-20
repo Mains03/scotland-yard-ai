@@ -1,10 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration;
 
 import com.google.common.collect.ImmutableSet;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.MoveApplyFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.MoveApplyFactory;
 
 import java.util.HashSet;
 import java.util.Optional;
