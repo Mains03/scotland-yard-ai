@@ -12,8 +12,7 @@ public class SingleTurnLookAheadStrategyFactory {
         return new SingleTurnLookAheadStrategy() {
             @Override
             public int staticEvaluation(AiBoard board) {
-                AiGameState gameState = new AiGameStateAdapter(board);
-                return strategy.evaluate(gameState);
+                return strategy.evaluate(board);
             }
         };
     }
