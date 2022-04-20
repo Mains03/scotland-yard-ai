@@ -24,8 +24,7 @@ public class TicketStaticPositionEvaluation implements StaticPosEvalStrategy {
     @Override
     public int evaluate(AiBoard board) {
         int mrXEval = mrXTicketEvaluation(board.getMrX().asPlayer());
-        int detectivesEval = detectivesTicketEvaluation(board.getAiDetectives()
-                .stream().map(AiPlayer::asPlayer).toList());
+        int detectivesEval = detectivesTicketEvaluation(board.getDetectives());
         return mrXEval - detectivesEval;
     }
 
