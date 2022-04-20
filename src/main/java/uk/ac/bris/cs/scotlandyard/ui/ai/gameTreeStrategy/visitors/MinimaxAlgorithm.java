@@ -8,7 +8,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MinimaxAlgorithm implements BestMoveStrategyV2 {
     private static final int NEGATIVE_INFINITY = -10000000;
@@ -25,14 +27,28 @@ public class MinimaxAlgorithm implements BestMoveStrategyV2 {
         Move bestMove = null;
         int bestMoveEval = NEGATIVE_INFINITY;
         for (GameTreeNode node : gameTree.getGameTreeNodes()) {
-
+            int nodeEvaluation = evaluateNode(node);
+            if (nodeEvaluation > bestMoveEval) {
+                bestMove = getMrXMove(node);
+                bestMoveEval = nodeEvaluation;
+            }
         }
-        return null;
+        if (bestMove == null)
+            throw new NoSuchElementException("No moves");
+        return bestMove;
+    }
+
+    private Move getMrXMove(GameTreeNode node) {
+        Optional<Move> move = node.mrXMoveMade();
+        if (move.isEmpty())
+            throw new NoSuchElementException("Expected MrX move");
+        return move.get();
     }
 
     private int evaluateNode(GameTreeNode node) {
         // MrX made move so detectives to move
         boolean maximise = false;
-        GameTreeVisitor visitor = new MinimaxVisitor()
+        GameTreeVisitor visitor = new MinimaxVisitor(maximise, strategy);
+        return node.accept(visitor);
     }
 }

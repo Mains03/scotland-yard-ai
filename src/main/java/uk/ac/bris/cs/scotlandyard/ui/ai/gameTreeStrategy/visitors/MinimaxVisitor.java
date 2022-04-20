@@ -18,7 +18,7 @@ public class MinimaxVisitor extends GameTreeVisitor {
     private final boolean maximise;
     private final StaticPosEvalStrategy evalStrategy;
 
-    private MinimaxVisitor(boolean maximise, StaticPosEvalStrategy evalStrategy) {
+    public MinimaxVisitor(boolean maximise, StaticPosEvalStrategy evalStrategy) {
         this.maximise = maximise;
         this.evalStrategy = Objects.requireNonNull(evalStrategy);
     }
