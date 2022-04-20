@@ -34,7 +34,7 @@ public class DijkstraWithTickets implements MinDistStrategy {
         queue.add(new PQNode(a, 0));
         while (!queue.isEmpty()) {
             PQNode node = queue.poll();
-            if (node.player.getLocation() == b.getLocation())
+            if (node.player.location() == b.getLocation())
                 return node.distance;
             for (AiMove move : node.player.getAvailableMoves()) {
                 queue.add(new PQNode(
