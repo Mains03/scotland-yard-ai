@@ -9,7 +9,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayer;
 
 /**
- * Adapter for Board. Provides functionality for generating the MrX player.
+ * Adapter for board providing more functionality.
  *
  * @deprecated since {@link AiPlayer} is deprecated, use {@link AiBoardV2}.
  */

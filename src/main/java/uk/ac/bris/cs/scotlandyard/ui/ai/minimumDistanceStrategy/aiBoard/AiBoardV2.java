@@ -6,6 +6,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlaye
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Replacement for {@link AiBoard}.
+ */
 public interface AiBoardV2 {
     AiPlayerV2 getMrX();
 

@@ -1,14 +1,11 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerV2;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerV2Adapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryV2Adapter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AiBoardV2Adapter implements AiBoardV2 {
     private final AiPlayerV2 mrX;
@@ -22,38 +19,24 @@ public class AiBoardV2Adapter implements AiBoardV2 {
     }
 
     private AiPlayerV2 createMrX(Board board) {
-        var graph = getGraph(board);
-        PlayerFactory playerFactory = createPlayerFactory();
-        Player mrX = playerFactory.createMrX(board);
-        return new AiPlayerV2Adapter(graph, mrX);
+        Piece piece = Piece.MrX.MRX;
+        return new AiPlayerV2Adapter(board, piece);
     }
 
     private List<AiPlayerV2> createDetectives(Board board) {
-        List<Player> detectivePlayers = createDetectivePlayers(board);
+        List<Piece> pieces = getDetectivePieces(board);
         List<AiPlayerV2> detectives = new ArrayList<>();
-        for (Player player : detectivePlayers) {
-            AiPlayerV2 aiDetective = createDetective(board, player);
-            detectives.add(aiDetective);
+        for (Piece piece : pieces) {
+            AiPlayerV2 player = new AiPlayerV2Adapter(board, piece);
+            detectives.add(player);
         }
         return detectives;
     }
 
-    private List<Player> createDetectivePlayers(Board board) {
-        PlayerFactory playerFactory = createPlayerFactory();
-        return playerFactory.createDetectives(board);
-    }
-
-    private AiPlayerV2 createDetective(Board board, Player detective) {
-        var graph = getGraph(board);
-        return new AiPlayerV2Adapter(graph, detective);
-    }
-
-    private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph(Board board) {
-        return board.getSetup().graph;
-    }
-
-    private PlayerFactory createPlayerFactory() {
-        return new PlayerFactoryV2Adapter();
+    private List<Piece> getDetectivePieces(Board board) {
+        return board.getPlayers().stream()
+                .filter(Piece::isDetective)
+                .collect(Collectors.toList());
     }
 
     private List<Piece> createRemaining() {
@@ -61,7 +44,7 @@ public class AiBoardV2Adapter implements AiBoardV2 {
         return List.of(Piece.MrX.MRX);
     }
 
-    // used to apply a move to the board
+    // used when applying a move to the board
     private AiBoardV2Adapter(AiPlayerV2 mrX, List<AiPlayerV2> detectives, List<Piece> remaining) {
         this.mrX = mrX;
         this.detectives = detectives;
@@ -195,6 +178,7 @@ public class AiBoardV2Adapter implements AiBoardV2 {
         return remaining;
     }
 
+    // used when the last remaining player moves
     private List<Piece> recreateRemaining(Move move) {
         List<Piece> remaining;
         if (isMrXMove(move))

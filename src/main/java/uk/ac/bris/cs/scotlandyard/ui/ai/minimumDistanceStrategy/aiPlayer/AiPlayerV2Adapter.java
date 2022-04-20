@@ -7,6 +7,8 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationBoardAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.MoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.moveGeneration.StandardMoveGenerationFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryV2Adapter;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +19,21 @@ public class AiPlayerV2Adapter implements AiPlayerV2 {
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final Player player;
 
-    public AiPlayerV2Adapter(
+    public AiPlayerV2Adapter(Board board, Piece piece) {
+        graph = getGraph(board);
+        PlayerFactoryV2 playerFactory = createPlayerFactory();
+        player = playerFactory.createPlayer(board, piece);
+    }
+
+    private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph(Board board) {
+        return board.getSetup().graph;
+    }
+
+    private PlayerFactoryV2 createPlayerFactory() {
+        return new PlayerFactoryV2Adapter();
+    }
+
+    private AiPlayerV2Adapter(
             ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph,
             Player player
     ) {
