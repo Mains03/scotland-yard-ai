@@ -54,7 +54,7 @@ public class SimpleBFS implements MinDistStrategy {
 
     private int getDetectiveLocation(AiBoard board, Piece piece) {
         int location = -1;
-        List<AiPlayer> detectives = board.getDetectives();
+        List<AiPlayer> detectives = board.getAiDetectives();
         for (AiPlayer detective : detectives) {
             if (isPiece(detective, piece))
                 location = playerLocation(detective);

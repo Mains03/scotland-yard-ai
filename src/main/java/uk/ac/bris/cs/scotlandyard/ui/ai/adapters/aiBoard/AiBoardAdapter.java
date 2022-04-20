@@ -70,8 +70,13 @@ public class AiBoardAdapter implements AiBoard {
     }
 
     @Override
-    public List<AiPlayer> getDetectives() {
+    public List<AiPlayer> getAiDetectives() {
         return List.copyOf(detectives);
+    }
+
+    @Override
+    public List<Player> getDetectives() {
+        return getAiDetectives().stream().map(AiPlayer::asPlayer).toList();
     }
 
     @Override

@@ -3,6 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
 import uk.ac.bris.cs.scotlandyard.model.Board;
@@ -18,7 +19,9 @@ public interface AiBoard {
 
     AiPlayer getMrX();
 
-    List<AiPlayer> getDetectives();
+    List<AiPlayer> getAiDetectives();
+
+    List<Player> getDetectives();
 
     Set<Move> getAvailableMoves();
 

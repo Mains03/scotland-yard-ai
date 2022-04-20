@@ -35,7 +35,7 @@ public class MinDistStaticPosEval implements StaticPosEvalStrategy {
     }
 
     private List<Piece> getDetectivePieces(AiBoard board) {
-        List<AiPlayer> detectives = board.getDetectives();
+        List<AiPlayer> detectives = board.getAiDetectives();
         List<Piece> pieces = new ArrayList<>();
         for (AiPlayer aiDetective : detectives) {
             Player detective = aiDetective.asPlayer();
