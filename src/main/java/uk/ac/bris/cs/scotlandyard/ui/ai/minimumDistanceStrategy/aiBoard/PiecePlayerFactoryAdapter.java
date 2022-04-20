@@ -7,6 +7,10 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * @deprecated since {@link PiecePlayerFactory} is deprecated.
+ */
+@Deprecated
 public class PiecePlayerFactoryAdapter implements PiecePlayerFactory {
     private final Board board;
 

@@ -1,21 +1,38 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
+import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2Adapter;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class GameTree {
-    /**
-     * Determines the best move in the tree.
-     * @param visitor visitor
-     * @return the best move
-     */
-    public abstract Optional<Move> accept(GameTreeVisitor visitor);
+public class GameTree {
+    private static final int MAX_DEPTH = 3;
 
-    /**
-     * Returns the move MrX made to get to this position. Optional
-     * since MrX may not have made a move, the detective(s) may have.
-     * @return MrX move made
-     */
-    public abstract Optional<Move> mrXMoveMade();
+    // each GameTreeNode corresponds to a MrX move
+    private final List<GameTreeNode> gameTreeNodes;
+
+    public GameTree(Board board) {
+        gameTreeNodes = createGameTreeNodes(board, MAX_DEPTH);
+    }
+
+    private List<GameTreeNode> createGameTreeNodes(Board board, int depth) {
+        List<GameTreeNode> gameTreeNodes = new ArrayList<>();
+        AiBoardV2 aiBoard = new AiBoardV2Adapter(board);
+        for (Move move : aiBoard.getAvailableMoves()) {
+            GameTreeNode gameTreeNode = createGameTreeNode(aiBoard, depth, move);
+            gameTreeNodes.add(gameTreeNode);
+        }
+        return gameTreeNodes;
+    }
+
+    private GameTreeNode createGameTreeNode(AiBoardV2 board, int depth, Move move) {
+        return new GameTreeNodeWithMrXMove(board, depth, move);
+    }
+
+    public List<GameTreeNode> getGameTreeNodes() {
+        return List.copyOf(gameTreeNodes);
+    }
 }

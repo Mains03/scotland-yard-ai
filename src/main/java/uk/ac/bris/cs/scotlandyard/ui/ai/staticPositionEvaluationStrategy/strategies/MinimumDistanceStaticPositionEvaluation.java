@@ -3,7 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strate
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinimumDistanceAlgorithmStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * {@link MinDistStaticPosEval}.
  */
 @Deprecated
-public class MinimumDistanceStaticPositionEvaluation implements StaticPositionEvaluationStrategy {
+public class MinimumDistanceStaticPositionEvaluation implements StaticPosEvalStrategy {
     private static final int POSITIVE_INFINITY = 10000000;
 
     private final MinimumDistanceAlgorithmStrategy algorithm;

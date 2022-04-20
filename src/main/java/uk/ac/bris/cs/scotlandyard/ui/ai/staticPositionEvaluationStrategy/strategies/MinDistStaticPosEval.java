@@ -4,7 +4,7 @@ import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceAlgorithm.MinDistStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.AiGameState;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPositionEvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * Evaluation is minimum distance between MrX and the detectives.
  */
-public class MinDistStaticPosEval implements StaticPositionEvaluationStrategy {
+public class MinDistStaticPosEval implements StaticPosEvalStrategy {
     private static final int POSITIVE_INFINITY = 1000000;
 
     private final MinDistStrategy<Pair<Integer, Integer>> strategy;

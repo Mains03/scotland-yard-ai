@@ -1,46 +1,55 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
-;
+
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiBoard.AiBoardV2;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiMove.AiMove;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-public class GameTreeInnerNode extends GameTree {
-    private final Set<GameTree> children;
+/**
+ * An inner node has children.
+ */
+public class GameTreeInnerNode extends GameTreeNode {
+    private final Set<GameTreeNode> children;
 
     public GameTreeInnerNode(AiBoardV2 board, int depth) {
-        Objects.requireNonNull(board);
-        if (depth < 1)
+        this.children = createChildren(board, depth);
+    }
+
+    private Set<GameTreeNode> createChildren(AiBoardV2 board, int depth) {
+        if (depth < 0)
             throw new IllegalArgumentException();
-        Set<GameTree> children = new HashSet<>();
+        Set<GameTreeNode> children = new HashSet<>();
         for (Move move : board.getAvailableMoves()) {
             AiBoardV2 newBoard = board.applyMove(move);
-            GameTree child;
-            if (depth == 0)
-                child = new GameTreeLeafNode(newBoard, Optional.of(move));
-            else
-                child = new GameTreeInnerNode(newBoard, depth-1);
+            GameTreeNode child = createChild(newBoard, depth);
             children.add(child);
         }
-        this.children = children;
+        return children;
+    }
+
+    private GameTreeNode createChild(AiBoardV2 board, int depth) {
+        GameTreeNode child;
+        if (depth == 0)
+            child = new GameTreeLeafNode(board);
+        else
+            child = new GameTreeInnerNode(board, depth-1);
+        return child;
     }
 
     @Override
-    public Optional<Move> accept(GameTreeVisitor visitor) {
+    public int accept(GameTreeVisitor visitor) {
         return visitor.visit(this);
     }
 
     @Override
     public Optional<Move> mrXMoveMade() {
+        // MrX didn't make a move to get here
         return Optional.empty();
     }
 
-    public Set<GameTree> getChildren() {
+    public Set<GameTreeNode> getChildren() {
         return Set.copyOf(children);
     }
 }
