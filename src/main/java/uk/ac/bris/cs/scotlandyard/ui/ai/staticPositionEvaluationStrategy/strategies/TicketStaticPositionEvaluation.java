@@ -3,6 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strate
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.List;
@@ -20,9 +22,10 @@ public class TicketStaticPositionEvaluation implements StaticPosEvalStrategy {
     }
 
     @Override
-    public int evaluate(AiGameState gameState) {
-        int mrXEval = mrXTicketEvaluation(gameState.getMrX());
-        int detectivesEval = detectivesTicketEvaluation(gameState.getDetectives());
+    public int evaluate(AiBoard board) {
+        int mrXEval = mrXTicketEvaluation(board.getMrX().asPlayer());
+        int detectivesEval = detectivesTicketEvaluation(board.getDetectives()
+                .stream().map(AiPlayer::asPlayer).toList());
         return mrXEval - detectivesEval;
     }
 
