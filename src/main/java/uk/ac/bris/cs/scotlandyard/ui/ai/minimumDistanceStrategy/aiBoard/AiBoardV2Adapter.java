@@ -6,7 +6,7 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerV2;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.aiPlayer.AiPlayerV2Adapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapterV2;
+import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryV2Adapter;
 
 import java.util.*;
 
@@ -53,7 +53,7 @@ public class AiBoardV2Adapter implements AiBoardV2 {
     }
 
     private PlayerFactory createPlayerFactory() {
-        return new PlayerFactoryAdapterV2();
+        return new PlayerFactoryV2Adapter();
     }
 
     private List<Piece> createRemaining() {

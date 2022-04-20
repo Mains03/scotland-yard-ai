@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * @deprecated Uses {@link AiPlayerAdapter}
- * which is deprecated, use {@link PlayerFactoryAdapterV2}.
+ * which is deprecated, use {@link PlayerFactoryV2Adapter}.
  */
 @Deprecated
 public class PlayerFactoryAdapter implements PlayerFactory {
