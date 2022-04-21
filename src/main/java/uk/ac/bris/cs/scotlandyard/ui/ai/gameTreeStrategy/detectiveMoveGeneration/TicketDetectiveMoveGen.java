@@ -2,6 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneratio
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
+import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
@@ -20,7 +21,7 @@ public class TicketDetectiveMoveGen implements DetectiveMoveGeneration{
         graph = aiBoard.getGraph();
         moves.clear();
         generateCombinations(pastMoves, detectives);
-        return makeAiBoards();
+        return makeAiBoards(aiBoard);
     }
 
 
@@ -33,7 +34,16 @@ public class TicketDetectiveMoveGen implements DetectiveMoveGeneration{
         }
     }
 
-    private Set<AiBoard> makeAiBoards() {
-        for (ArrayList<Move> moveSet: moves)
+    private Set<AiBoard> makeAiBoards(AiBoard aiBoard) {
+        // Store results
+        Set<AiBoard> newBoards = new HashSet<>();
+        for (ArrayList<Move> moveSet : moves) {
+            // Resets to original board then applies moves
+            AiBoard board = aiBoard;
+            for (Move move : moveSet) {
+                board.applyMove(move);
+            }
+            newBoards.add(board);
+        }
     }
 }
