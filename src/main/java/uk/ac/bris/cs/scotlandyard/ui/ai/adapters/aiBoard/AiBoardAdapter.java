@@ -207,9 +207,9 @@ public class AiBoardAdapter implements AiBoard {
     private List<Piece> recreateRemaining(Move move) {
         List<Piece> remaining;
         if (isMrXMove(move))
-            remaining = List.of(Piece.MrX.MRX);
-        else
             remaining = createDetectivesRemaining();
+        else
+            remaining = List.of(Piece.MrX.MRX);
         return remaining;
     }
 

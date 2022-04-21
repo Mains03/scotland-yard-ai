@@ -73,7 +73,7 @@ public class AlphaBetaVisitor implements GameTreeVisitor {
             if (beta <= alpha)
                 prune = true;
             else
-                evaluation = Math.max(evaluation, childEvaluation);
+                evaluation = Math.min(evaluation, childEvaluation);
         }
         return evaluation;
     }

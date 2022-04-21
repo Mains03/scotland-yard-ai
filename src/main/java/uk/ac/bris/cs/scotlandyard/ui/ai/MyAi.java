@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.alphaBeta.AlphaBetaStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.minimax.MinimaxStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.algorithms.SimpleBFS;
@@ -25,7 +26,7 @@ public class MyAi implements Ai {
 
 	private BestMoveStrategy createBestMoveStrategy() {
 		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy();
-		return new MinimaxStrategy(strategy);
+		return new AlphaBetaStrategy(strategy);
 	}
 
 	private StaticPosEvalStrategy createStaticPosEvalStrategy() {

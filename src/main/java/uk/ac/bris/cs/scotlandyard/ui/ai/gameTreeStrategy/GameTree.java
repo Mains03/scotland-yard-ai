@@ -34,11 +34,12 @@ public class GameTree {
     }
 
     private GameTreeNode createGameTreeNode(AiBoard board, int depth, Move move) {
+        AiBoard newBoard = board.applyMove(move);
         GameTreeNode node;
         if (depth == 0)
-            node = new LeafNodeWithMrXMove(board, move);
+            node = new LeafNodeWithMrXMove(newBoard, move);
         else
-            node = new InnerNodeWithMrXMove(board, depth, move);
+            node = new InnerNodeWithMrXMove(newBoard, depth, move);
         return node;
     }
 
