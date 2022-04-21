@@ -5,14 +5,19 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
-/**
- * Various evaluation strategies only need to look one move ahead.
- */
-public abstract class SingleTurnLookAheadStrategy implements BestMoveStrategy {
+public class SingleTurnLookAheadStrategy implements BestMoveStrategy {
     private static final int NEGATIVE_INFINITY = -10000000;
+
+    private final StaticPosEvalStrategy strategy;
+
+    public SingleTurnLookAheadStrategy(StaticPosEvalStrategy strategy) {
+        this.strategy = Objects.requireNonNull(strategy);
+    }
 
     @Override
     public Move determineBestMove(Board board) {
@@ -36,5 +41,7 @@ public abstract class SingleTurnLookAheadStrategy implements BestMoveStrategy {
         return staticEvaluation(newAiBoard);
     }
 
-    public abstract int staticEvaluation(AiBoard board);
+    private int staticEvaluation(AiBoard board) {
+        return strategy.evaluate(board);
+    }
 }

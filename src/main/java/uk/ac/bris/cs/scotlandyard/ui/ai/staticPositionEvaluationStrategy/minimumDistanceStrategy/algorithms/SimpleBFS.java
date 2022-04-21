@@ -1,17 +1,17 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.algorithms;
+package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
 
 import java.util.*;
 
 /**
  * Ignores tickets for efficiency.
  */
-public class SimpleBFS implements MinDistStrategy {
+public class SimpleBFS implements MinDistAlgorithm {
     private static final int INITIAL_DISTANCE_VAL = -1;
     private static final int POSITIVE_INFINITY = 1000000;
 
@@ -19,6 +19,10 @@ public class SimpleBFS implements MinDistStrategy {
     public int getMinimumDistance(AiBoard board, Piece a, Piece b) {
         int source = getPieceLocation(board, a);
         int destination = getPieceLocation(board, b);
+        return minimumDistance(board, source, destination);
+    }
+
+    protected int minimumDistance(AiBoard board, int source, int destination) {
         Queue<Integer> queue = new ArrayDeque<>();
         queue.add(source);
         int[] distances = createDistancesArray(board);

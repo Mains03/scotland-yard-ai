@@ -1,10 +1,9 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies;
+package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.ArrayList;
@@ -17,9 +16,9 @@ import java.util.Objects;
 public class MinDistStaticPosEval implements StaticPosEvalStrategy {
     private static final int POSITIVE_INFINITY = 1000000;
 
-    private final MinDistStrategy strategy;
+    private final MinDistAlgorithm strategy;
 
-    public MinDistStaticPosEval(MinDistStrategy strategy) {
+    public MinDistStaticPosEval(MinDistAlgorithm strategy) {
         this.strategy = Objects.requireNonNull(strategy);
     }
 
@@ -42,11 +41,6 @@ public class MinDistStaticPosEval implements StaticPosEvalStrategy {
             pieces.add(detective.piece());
         }
         return pieces;
-    }
-
-    private int playerLocation(AiPlayer aiPlayer) {
-        Player player = aiPlayer.asPlayer();
-        return player.location();
     }
 
     // minimum distance between MrX and piece

@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.alphaBeta.AlphaBetaStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.minimax.MinimaxStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.algorithms.SimpleBFS;
+import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.SingleTurnLookAheadStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.SimpleBFS;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.strategies.MinDistStaticPosEval;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistStaticPosEval;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -26,15 +26,15 @@ public class MyAi implements Ai {
 
 	private BestMoveStrategy createBestMoveStrategy() {
 		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy();
-		return new AlphaBetaStrategy(strategy);
+		return new SingleTurnLookAheadStrategy(strategy);
 	}
 
 	private StaticPosEvalStrategy createStaticPosEvalStrategy() {
-		MinDistStrategy minDistStrategy = createMinDistStrategy();
+		MinDistAlgorithm minDistStrategy = createMinDistStrategy();
 		return new MinDistStaticPosEval(minDistStrategy);
 	}
 
-	private MinDistStrategy createMinDistStrategy() {
+	private MinDistAlgorithm createMinDistStrategy() {
 		return new SimpleBFS();
 	}
 }

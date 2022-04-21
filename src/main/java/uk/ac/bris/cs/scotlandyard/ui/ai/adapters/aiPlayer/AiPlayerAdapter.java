@@ -7,8 +7,6 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGen
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationBoardAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.StandardMoveGenerationFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory.PlayerFactoryAdapter;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,16 +19,12 @@ public class AiPlayerAdapter implements AiPlayer {
 
     public AiPlayerAdapter(Board board, Piece piece) {
         graph = getGraph(board);
-        PlayerFactory playerFactory = createPlayerFactory();
+        PlayerFactory playerFactory = PlayerFactory.getInstance();
         player = playerFactory.createPlayer(board, piece);
     }
 
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph(Board board) {
         return board.getSetup().graph;
-    }
-
-    private PlayerFactory createPlayerFactory() {
-        return new PlayerFactoryAdapter();
     }
 
     private AiPlayerAdapter(

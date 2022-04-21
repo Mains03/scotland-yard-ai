@@ -1,20 +1,19 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.algorithms;
+package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.minimumDistanceStrategy.MinDistStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 /**
  * Performs a breadth first search to find the minimum distance where a
  * moves towards b. Considers the tickets available so is slower but more
  * accurate.
  */
-public class DijkstraWithTickets implements MinDistStrategy {
+public class DijkstraWithTickets implements MinDistAlgorithm {
     private static final int POSITIVE_INFINITY = 10000000;
 
     // used in dijkstra

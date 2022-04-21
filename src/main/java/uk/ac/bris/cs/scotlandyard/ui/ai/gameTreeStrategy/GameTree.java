@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameTree {
-    private static final int MAX_DEPTH = 2;
+    private static final int MAX_DEPTH = 3;
 
     // each GameTreeNode corresponds to a MrX move
     private final List<GameTreeNode> gameTreeNodes;

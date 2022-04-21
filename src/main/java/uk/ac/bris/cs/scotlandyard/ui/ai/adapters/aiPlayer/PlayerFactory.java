@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.playerFactory;
+package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer;
 
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
@@ -8,8 +8,17 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class PlayerFactoryAdapter implements PlayerFactory {
-    @Override
+public class PlayerFactory {
+    private static PlayerFactory instance;
+
+    public static PlayerFactory getInstance() {
+        if (instance == null)
+            instance = new PlayerFactory();
+        return instance;
+    }
+
+    private PlayerFactory() {}
+
     public Player createPlayer(Board board, Piece piece) {
         var tickets = createTickets(board, piece);
         int location = determineLocation(board, piece);
