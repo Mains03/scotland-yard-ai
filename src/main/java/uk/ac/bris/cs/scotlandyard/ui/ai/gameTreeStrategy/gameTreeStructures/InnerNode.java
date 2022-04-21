@@ -6,6 +6,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.DetectiveMoveGeneration;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.SimpleDetectiveMoveGen;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.TimedSimpleDetectiveMoveGen;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class InnerNode implements GameTreeNode {
     }
 
     private Set<GameTreeNode> createChildren(AiBoard board, int depth) {
-        if (depth < 0)
+        if (depth < 1)
             throw new IllegalArgumentException();
         Set<GameTreeNode> children = new HashSet<>();
         Set<AiBoard> newBoards = generateNewBoards(board);
@@ -72,12 +73,12 @@ public class InnerNode implements GameTreeNode {
     }
 
     private DetectiveMoveGeneration getDetectiveMoveGeneration() {
-        return SimpleDetectiveMoveGen.getInstance();
+        return TimedSimpleDetectiveMoveGen.getInstance();
     }
 
     private GameTreeNode createChild(AiBoard board, int depth) {
         GameTreeNode child;
-        if (depth == 0)
+        if (depth == 1)
             child = new LeafNode(board);
         else
             child = new InnerNode(board, depth-1);

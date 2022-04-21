@@ -88,10 +88,11 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
     private Set<Move> generateMrXMoves(MoveGenerationBoard board, Player player) {
         if (player.isDetective())
             throw new IllegalArgumentException();
-        Set<Move> singleMoves = generateSingleMoves(board, player);
-        Set<Move> doubleMoves = generateDoubleMoves(board, player);
-        Set<Move> moves = singleMoves;
-        moves.addAll(doubleMoves);
+        Set<Move> moves = generateSingleMoves(board, player);
+        if (player.has(ScotlandYard.Ticket.DOUBLE)) {
+            Set<Move> doubleMoves = generateDoubleMoves(board, player);
+            moves.addAll(doubleMoves);
+        }
         return moves;
     }
 

@@ -4,11 +4,13 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Doesn't consider all variations of detective moves but is fast.
+ */
 public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
     private static SimpleDetectiveMoveGen instance;
 
@@ -18,7 +20,7 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
         return instance;
     }
 
-    private SimpleDetectiveMoveGen() {}
+    protected SimpleDetectiveMoveGen() {}
 
     @Override
     public Set<AiBoard> moveDetectives(AiBoard board) {

@@ -30,7 +30,7 @@ public class DijkstraWithTickets implements MinDistStrategy {
 
     @Override
     public int getMinimumDistance(AiBoard board, Piece a, Piece b) {
-        Queue<PQNode> queue = createPriorityQueue();
+        /*Queue<PQNode> queue = createPriorityQueue();
         queue.add(new PQNode(a, 0));
         while (!queue.isEmpty()) {
             PQNode node = queue.poll();
@@ -42,7 +42,7 @@ public class DijkstraWithTickets implements MinDistStrategy {
                         node.distance + 1
                 ));
             }
-        }
+        }*/
         // If no route exists, distance is infinite
         return POSITIVE_INFINITY;
     }
