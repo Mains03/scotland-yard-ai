@@ -5,7 +5,7 @@ import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.DetectiveMoveGeneration;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.StandardDetectiveMoveGen;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.SimpleDetectiveMoveGen;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public class InnerNode implements GameTreeNode {
         if (depth < 0)
             throw new IllegalArgumentException();
         Set<GameTreeNode> children = new HashSet<>();
-        List<AiBoard> newBoards = generateNewBoards(board);
+        Set<AiBoard> newBoards = generateNewBoards(board);
         for (AiBoard newBoard : newBoards) {
             GameTreeNode child = createChild(newBoard, depth);
             children.add(child);
@@ -32,8 +32,8 @@ public class InnerNode implements GameTreeNode {
     }
 
     // possible boards reached by either moving MrX or all the detectives
-    private List<AiBoard> generateNewBoards(AiBoard board) {
-        List<AiBoard> newBoards;
+    private Set<AiBoard> generateNewBoards(AiBoard board) {
+        Set<AiBoard> newBoards;
         if (isMrXMove(board))
             newBoards = moveMrX(board);
         else
@@ -56,8 +56,8 @@ public class InnerNode implements GameTreeNode {
     }
 
     // possible boards by moving MrX
-    private List<AiBoard> moveMrX(AiBoard board) {
-        List<AiBoard> boards = new ArrayList<>();
+    private Set<AiBoard> moveMrX(AiBoard board) {
+        Set<AiBoard> boards = new HashSet<>();
         for (Move move : board.getAvailableMoves()) {
             AiBoard newBoard = board.applyMove(move);
             boards.add(newBoard);
@@ -66,13 +66,13 @@ public class InnerNode implements GameTreeNode {
     }
 
     // possible boards by moving detectives
-    private List<AiBoard> moveDetectives(AiBoard board) {
+    private Set<AiBoard> moveDetectives(AiBoard board) {
         DetectiveMoveGeneration moveGeneration = getDetectiveMoveGeneration();
         return moveGeneration.moveDetectives(board);
     }
 
     private DetectiveMoveGeneration getDetectiveMoveGeneration() {
-        return StandardDetectiveMoveGen.getInstance();
+        return SimpleDetectiveMoveGen.getInstance();
     }
 
     private GameTreeNode createChild(AiBoard board, int depth) {

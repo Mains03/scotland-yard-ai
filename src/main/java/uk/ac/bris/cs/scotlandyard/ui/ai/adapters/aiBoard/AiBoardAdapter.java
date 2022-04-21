@@ -80,6 +80,13 @@ public class AiBoardAdapter implements AiBoard {
     }
 
     @Override
+    public List<Integer> getDetectiveLocations() {
+        return getDetectives().stream()
+                .map(Player::location)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Set<Move> getAvailableMoves() {
         Set<Move> moves = new HashSet<>();
         for (Piece piece : this.remaining) {

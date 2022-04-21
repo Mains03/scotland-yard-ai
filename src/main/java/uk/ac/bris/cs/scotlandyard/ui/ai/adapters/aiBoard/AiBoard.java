@@ -23,6 +23,8 @@ public interface AiBoard {
 
     List<Player> getDetectives();
 
+    List<Integer> getDetectiveLocations();
+
     Set<Move> getAvailableMoves();
 
     AiBoard applyMove(Move move);
