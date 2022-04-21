@@ -9,10 +9,9 @@ import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class TicketDetectiveMoveGen implements DetectiveMoveGeneration {
+public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 
     @Override
