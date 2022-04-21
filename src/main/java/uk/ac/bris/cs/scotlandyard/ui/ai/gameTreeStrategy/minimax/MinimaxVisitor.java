@@ -1,19 +1,20 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitors;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.minimax;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeNode;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeInnerNode;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeLeafNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.GameTreeNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.InnerNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.LeafNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.Objects;
 
-public class MinimaxVisitor extends GameTreeVisitor {
+public class MinimaxVisitor implements GameTreeVisitor {
     private static final int POSITIVE_INFINITY =  10000000;
     private static final int NEGATIVE_INFINITY = -10000000;
 
     private final boolean maximise;
+
     private final StaticPosEvalStrategy evalStrategy;
 
     public MinimaxVisitor(boolean maximise, StaticPosEvalStrategy evalStrategy) {
@@ -22,16 +23,16 @@ public class MinimaxVisitor extends GameTreeVisitor {
     }
 
     @Override
-    public int visit(GameTreeInnerNode innerNode) {
+    public int visit(InnerNode node) {
         int evaluation;
         if (maximise)
-            evaluation = maximiseEvaluation(innerNode);
+            evaluation = maximiseEvaluation(node);
         else
-            evaluation = minimiseEvaluation(innerNode);
+            evaluation = minimiseEvaluation(node);
         return evaluation;
     }
 
-    private int maximiseEvaluation(GameTreeInnerNode node) {
+    private int maximiseEvaluation(InnerNode node) {
         int evaluation = NEGATIVE_INFINITY;
         for (GameTreeNode child : node.getChildren()) {
             // this node maximises so child minimises
@@ -43,7 +44,7 @@ public class MinimaxVisitor extends GameTreeVisitor {
         return evaluation;
     }
 
-    private int minimiseEvaluation(GameTreeInnerNode node) {
+    private int minimiseEvaluation(InnerNode node) {
         int evaluation = POSITIVE_INFINITY;
         for (GameTreeNode child : node.getChildren()) {
             // this node minimises so child maximises
@@ -56,8 +57,8 @@ public class MinimaxVisitor extends GameTreeVisitor {
     }
 
     @Override
-    public int visit(GameTreeLeafNode leafNode) {
-        AiBoard board = leafNode.getBoard();
+    public int visit(LeafNode node) {
+        AiBoard board = node.getBoard();
         return evalStrategy.evaluate(board);
     }
 }

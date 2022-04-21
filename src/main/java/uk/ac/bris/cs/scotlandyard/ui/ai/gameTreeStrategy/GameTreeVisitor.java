@@ -1,10 +1,13 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
-/**
- * Generic since different visitors require different data.
- */
-public abstract class GameTreeVisitor {
-    public abstract int visit(GameTreeInnerNode innerNode);
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.InnerNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.LeafNode;
 
-    public abstract int visit(GameTreeLeafNode leafNode);
+/**
+ * Returns integer evaluation of a node.
+ */
+public interface GameTreeVisitor {
+    int visit(InnerNode node);
+
+    int visit(LeafNode node);
 }

@@ -4,6 +4,9 @@ import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoardAdapter;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.GameTreeNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.InnerNodeWithMrXMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.LeafNodeWithMrXMove;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +22,24 @@ public class GameTree {
     }
 
     private List<GameTreeNode> createGameTreeNodes(Board board, int depth) {
+        if (depth < 1)
+            throw new IllegalArgumentException();
         List<GameTreeNode> gameTreeNodes = new ArrayList<>();
         AiBoard aiBoard = new AiBoardAdapter(board);
         for (Move move : aiBoard.getAvailableMoves()) {
-            GameTreeNode gameTreeNode = createGameTreeNode(aiBoard, depth, move);
+            GameTreeNode gameTreeNode = createGameTreeNode(aiBoard, depth-1, move);
             gameTreeNodes.add(gameTreeNode);
         }
         return gameTreeNodes;
     }
 
     private GameTreeNode createGameTreeNode(AiBoard board, int depth, Move move) {
-        return new GameTreeNodeWithMrXMove(board, depth, move);
+        GameTreeNode node;
+        if (depth == 0)
+            node = new LeafNodeWithMrXMove(board, move);
+        else
+            node = new InnerNodeWithMrXMove(board, depth, move);
+        return node;
     }
 
     public List<GameTreeNode> getGameTreeNodes() {

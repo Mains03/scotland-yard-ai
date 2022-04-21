@@ -1,18 +1,21 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.DetectiveMoveGeneration;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.StandardDetectiveMoveGen;
 
 import java.util.*;
 
 /**
- * An inner node has children.
+ * Node with children.
  */
-public class GameTreeInnerNode extends GameTreeNode {
+public class InnerNode implements GameTreeNode {
     private final Set<GameTreeNode> children;
 
-    public GameTreeInnerNode(AiBoard board, int depth) {
+    public InnerNode(AiBoard board, int depth) {
         this.children = createChildren(board, depth);
     }
 
@@ -64,16 +67,20 @@ public class GameTreeInnerNode extends GameTreeNode {
 
     // possible boards by moving detectives
     private List<AiBoard> moveDetectives(AiBoard board) {
-        // TODO: implement me
-        return null;
+        DetectiveMoveGeneration moveGeneration = getDetectiveMoveGeneration();
+        return moveGeneration.moveDetectives(board);
+    }
+
+    private DetectiveMoveGeneration getDetectiveMoveGeneration() {
+        return StandardDetectiveMoveGen.getInstance();
     }
 
     private GameTreeNode createChild(AiBoard board, int depth) {
         GameTreeNode child;
         if (depth == 0)
-            child = new GameTreeLeafNode(board);
+            child = new LeafNode(board);
         else
-            child = new GameTreeInnerNode(board, depth-1);
+            child = new InnerNode(board, depth-1);
         return child;
     }
 
@@ -83,7 +90,7 @@ public class GameTreeInnerNode extends GameTreeNode {
     }
 
     @Override
-    public Optional<Move> mrXMoveMade() {
+    public Optional<Move> getMrXMove() {
         // MrX didn't make a move to get here
         return Optional.empty();
     }

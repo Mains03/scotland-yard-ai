@@ -1,16 +1,20 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTreeVisitor;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class GameTreeLeafNode extends GameTreeNode {
-    // required to statically evaluate
+/**
+ * Node without children.
+ */
+public class LeafNode implements GameTreeNode {
+    // used in static evaluation
     private final AiBoard board;
 
-    public GameTreeLeafNode(AiBoard board) {
+    public LeafNode(AiBoard board) {
         this.board = Objects.requireNonNull(board);
     }
 
@@ -20,7 +24,7 @@ public class GameTreeLeafNode extends GameTreeNode {
     }
 
     @Override
-    public Optional<Move> mrXMoveMade() {
+    public Optional<Move> getMrXMove() {
         // MrX didn't make a move to get here
         return Optional.empty();
     }
