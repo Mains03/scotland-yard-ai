@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * Singleton factory which applies a move to a player and returns a new object
+ */
 public class MoveApplyFactory {
     private static MoveApplyFactory moveApplyFactory;
 

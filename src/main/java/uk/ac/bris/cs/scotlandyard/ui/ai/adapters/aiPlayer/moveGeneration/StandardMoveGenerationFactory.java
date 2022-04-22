@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Singleton implementation of {@link MoveGenerationFactory} class for move generation
+ */
 public class StandardMoveGenerationFactory implements MoveGenerationFactory {
     private static StandardMoveGenerationFactory moveGenerationFactory;
 
@@ -19,7 +22,8 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
         return moveGenerationFactory;
     }
 
-    private StandardMoveGenerationFactory() {}
+    private StandardMoveGenerationFactory() {
+    }
 
     @Override
     public Set<Move> generateMoves(MoveGenerationBoard board, Player player) {
@@ -106,7 +110,7 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
         return moves;
     }
 
-
+    // Creates a set of double moves from an initial first move
     private Set<Move> createDoubleMoves(MoveGenerationBoard board, Player player, Move.SingleMove firstMove) {
         Player newPlayer = applyMove(player, firstMove);
         Set<Move> secondMoves = generateSingleMoves(board, newPlayer);

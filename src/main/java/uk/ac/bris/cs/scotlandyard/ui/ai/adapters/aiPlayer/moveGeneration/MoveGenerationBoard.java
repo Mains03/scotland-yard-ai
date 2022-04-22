@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface MoveGenerationBoard {
     ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph();
-
+    // Only shows where there are detectives, does not specify which
     List<Integer> getDetectiveLocations();
 }
