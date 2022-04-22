@@ -2,11 +2,11 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneratio
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
-import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,20 +15,23 @@ public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 
     @Override
-    public Set<AiBoard> moveDetectives(AiBoard aiBoard) {
-        ArrayList<Player> detectives = new ArrayList<>(aiBoard.getDetectives());
+    public Set<AiBoard> moveDetectives(AiBoard board) {
+        List<Player> detectives = createDetectives(board);
         ArrayList<Move> pastMoves = new ArrayList<>(detectives.size());
-        graph = aiBoard.getGraph();
-        return generateBoards(pastMoves, detectives, aiBoard);
+        graph = board.getSetup().graph;
+        return generateBoards(pastMoves, detectives, board);
     }
 
+    private List<Player> createDetectives(AiBoard board) {
+        return PlayerFactory.getInstance().createDetectives(board);
+    }
 
-    private Set<AiBoard> generateBoards(ArrayList<Move> pastMoves, ArrayList<Player> detectives, AiBoard aiBoard) {
+    private Set<AiBoard> generateBoards(List<Move> pastMoves, List<Player> detectives, AiBoard aiBoard) {
         // If nobody else to move, make board
         if (detectives.isEmpty()) {
             // Resets to original board then applies moves
             for (Move move : pastMoves) {
-                aiBoard = aiBoard.applyMove(move);
+                aiBoard = (AiBoard) aiBoard.advance(move);
             }
             HashSet<AiBoard> container = new HashSet<>();
             container.add(aiBoard);

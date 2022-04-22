@@ -3,9 +3,10 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.alphaBeta;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.GameTreeNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.NoSuchElementException;
@@ -23,7 +24,7 @@ public class AlphaBetaStrategy implements BestMoveStrategy {
     }
 
     @Override
-    public Move determineBestMove(Board board) {
+    public Move determineBestMove(AiBoard board) {
         GameTree gameTree = new GameTree(board);
         Move bestMove = null;
         int bestMoveEval = NEGATIVE_INFINITY;

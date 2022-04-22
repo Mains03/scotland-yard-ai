@@ -1,13 +1,9 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,26 +21,17 @@ public class MinDistStaticPosEval implements StaticPosEvalStrategy {
     @Override
     public int evaluate(AiBoard board) {
         int minDist = POSITIVE_INFINITY;
-        List<Piece> detectives = getDetectivePieces(board);
-        for (Piece piece : detectives) {
-            int minDistComparison = minimumDistance(board, piece);
-            minDist = Math.min(minDist, minDistComparison);
+        for (Piece piece : board.getPlayers()) {
+            if (piece.isDetective()) {
+                int dist = minDistToMrX(board, piece);
+                minDist = Math.min(minDist, dist);
+            }
         }
         return minDist;
     }
 
-    private List<Piece> getDetectivePieces(AiBoard board) {
-        List<AiPlayer> detectives = board.getAiDetectives();
-        List<Piece> pieces = new ArrayList<>();
-        for (AiPlayer aiDetective : detectives) {
-            Player detective = aiDetective.asPlayer();
-            pieces.add(detective.piece());
-        }
-        return pieces;
-    }
-
     // minimum distance between MrX and piece
-    private int minimumDistance(AiBoard board, Piece piece) {
+    private int minDistToMrX(AiBoard board, Piece piece) {
         Piece mrX = Piece.MrX.MRX;
         return strategy.getMinimumDistance(board, mrX, piece);
     }

@@ -35,7 +35,9 @@ public class AiBoard implements Board.GameState {
     @Override
     public GameState advance(Move move) {
         GameState gameState = this.gameState.advance(move);
-        Player mrX = PlayerMoveAdvance.getInstance().applyMove(this.mrX, move);
+        Player mrX = this.mrX;
+        if (move.commencedBy().isMrX())
+            mrX = PlayerMoveAdvance.getInstance().applyMove(this.mrX, move);
         return new AiBoard(gameState, mrX);
     }
 

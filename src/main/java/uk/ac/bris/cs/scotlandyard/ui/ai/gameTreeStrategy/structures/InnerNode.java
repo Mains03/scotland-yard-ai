@@ -1,8 +1,8 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.DetectiveMoveGeneration;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.SimpleDetectiveMoveGen;
@@ -23,12 +23,19 @@ public class InnerNode implements GameTreeNode {
         if (depth < 1)
             throw new IllegalArgumentException();
         Set<GameTreeNode> children = new HashSet<>();
-        Set<AiBoard> newBoards = generateNewBoards(board);
-        for (AiBoard newBoard : newBoards) {
-            GameTreeNode child = createChild(newBoard, depth);
-            children.add(child);
+        if (!isGameOver(board)) {
+            children = new HashSet<>();
+            Set<AiBoard> newBoards = generateNewBoards(board);
+            for (AiBoard newBoard : newBoards) {
+                GameTreeNode child = createChild(newBoard, depth);
+                children.add(child);
+            }
         }
         return children;
+    }
+
+    private boolean isGameOver(AiBoard board) {
+        return board.getWinner().size() != 0;
     }
 
     // possible boards reached by either moving MrX or all the detectives
@@ -59,7 +66,7 @@ public class InnerNode implements GameTreeNode {
     private Set<AiBoard> moveMrX(AiBoard board) {
         Set<AiBoard> boards = new HashSet<>();
         for (Move move : board.getAvailableMoves()) {
-            AiBoard newBoard = board.applyMove(move);
+            AiBoard newBoard = (AiBoard) board.advance(move);
             boards.add(newBoard);
         }
         return boards;

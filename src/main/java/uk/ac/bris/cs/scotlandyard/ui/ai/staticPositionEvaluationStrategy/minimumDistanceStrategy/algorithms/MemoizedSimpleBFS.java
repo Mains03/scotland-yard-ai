@@ -3,7 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimu
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 
 import java.util.Objects;
 

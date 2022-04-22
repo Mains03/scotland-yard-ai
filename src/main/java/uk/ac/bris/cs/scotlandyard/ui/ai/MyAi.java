@@ -6,7 +6,9 @@ import javax.annotation.Nonnull;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.alphaBeta.AlphaBetaStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.SingleTurnLookAheadStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.SimpleBFS;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
@@ -20,10 +22,8 @@ public class MyAi implements Ai {
 			Pair<Long, TimeUnit> timeoutPair
 	) {
 		BestMoveStrategy strategy = createBestMoveStrategy(board);
-		return strategy.determineBestMove(board);
+		return strategy.determineBestMove(new AiBoard(board));
 	}
-
-
 
 	private BestMoveStrategy createBestMoveStrategy(Board board) {
 		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy(board);
@@ -36,7 +36,6 @@ public class MyAi implements Ai {
 	}
 
 	private MinDistAlgorithm createMinDistStrategy(Board board) {
-		var graph = board.getSetup().graph;
 		return new SimpleBFS();
 	}
 }

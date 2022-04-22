@@ -1,8 +1,8 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 
 public interface BestMoveStrategy {
-    Move determineBestMove(Board board);
+    Move determineBestMove(AiBoard board);
 }

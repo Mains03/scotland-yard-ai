@@ -1,6 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 
 /**
  * Returns an integer evaluation of an AiGameState.

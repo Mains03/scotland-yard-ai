@@ -1,9 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms;
 
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayer;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
 
 import java.util.*;
@@ -45,42 +43,21 @@ public class SimpleBFS implements MinDistAlgorithm {
     private int getPieceLocation(AiBoard board, Piece piece) {
         int location;
         if (piece.isMrX())
-            location = getMrXLocation(board);
+            location = board.mrX.location();
         else
-            location = getDetectiveLocation(board, piece);
+            location = getDetectiveLocation(board, (Piece.Detective) piece);
         return location;
     }
 
-    private int getMrXLocation(AiBoard board) {
-        AiPlayer player = board.getMrX();
-        return playerLocation(player);
-    }
-
-    private int getDetectiveLocation(AiBoard board, Piece piece) {
-        int location = -1;
-        List<AiPlayer> detectives = board.getAiDetectives();
-        for (AiPlayer detective : detectives) {
-            if (isPiece(detective, piece))
-                location = playerLocation(detective);
-        }
-        if (location == -1)
-            throw new NoSuchElementException("Piece " + piece + " not found");
-        return location;
-    }
-
-    private boolean isPiece(AiPlayer aiPlayer, Piece piece) {
-        Player player = aiPlayer.asPlayer();
-        Piece playerPiece = player.piece();
-        return playerPiece.equals(piece);
-    }
-
-    private int playerLocation(AiPlayer aiPlayer) {
-        Player player = aiPlayer.asPlayer();
-        return player.location();
+    private int getDetectiveLocation(AiBoard board, Piece.Detective piece) {
+        Optional<Integer> location = board.getDetectiveLocation(piece);
+        if (location.isEmpty())
+            throw new NoSuchElementException("Could not find " + piece + " location");
+        return location.get();
     }
 
     private int[] createDistancesArray(AiBoard board) {
-        var graph = board.getGraph();
+        var graph = board.getSetup().graph;
         int numNodes = graph.nodes().size();
         // one more than the size since nodes are numbered from 1 not 0
         return new int[numNodes + 1];
@@ -92,7 +69,7 @@ public class SimpleBFS implements MinDistAlgorithm {
     }
 
     private Iterable<Integer> getAdjacent(AiBoard board, int node) {
-        return board.getGraph().adjacentNodes(node);
+        return board.getSetup().graph.adjacentNodes(node);
     }
 
     private boolean visited(int[] distances, int location) {
