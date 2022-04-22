@@ -39,6 +39,7 @@ public class MemoizedSimpleBFS extends SimpleBFS {
         else {
             minimumDistance = super.minimumDistance(board, source, destination);
             memoizedDistances[source][destination] = minimumDistance;
+            memoizedDistances[destination][source] = minimumDistance;
         }
         return minimumDistance;
     }

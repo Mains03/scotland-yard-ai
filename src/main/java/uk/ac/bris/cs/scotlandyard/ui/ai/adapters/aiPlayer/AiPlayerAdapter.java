@@ -3,6 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerMoveAdvance;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationBoardAdapter;
 import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.moveGeneration.MoveGenerationFactory;
@@ -49,7 +51,7 @@ public class AiPlayerAdapter implements AiPlayer {
     }
 
     private Player applyMove(Player player, Move move) {
-        MoveApplyFactory moveApplyFactory = MoveApplyFactory.getInstance();
+        PlayerMoveAdvance moveApplyFactory = PlayerMoveAdvance.getInstance();
         return moveApplyFactory.applyMove(player, move);
     }
 

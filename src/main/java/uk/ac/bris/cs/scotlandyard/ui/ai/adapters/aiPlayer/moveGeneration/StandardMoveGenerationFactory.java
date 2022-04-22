@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.MoveApplyFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerMoveAdvance;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -119,7 +119,7 @@ public class StandardMoveGenerationFactory implements MoveGenerationFactory {
     }
 
     private Player applyMove(Player player, Move move) {
-        return MoveApplyFactory.getInstance().applyMove(player, move);
+        return PlayerMoveAdvance.getInstance().applyMove(player, move);
     }
 
     private Move.DoubleMove createDoubleMove(Player player, Move.SingleMove firstMove, Move.SingleMove secondMove) {

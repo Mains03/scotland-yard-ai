@@ -9,6 +9,10 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer.AiPlayerAdapter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated since {@link AiBoard} is deprecated.
+ */
+@Deprecated
 public class AiBoardAdapter implements AiBoard {
     private final ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
     private final AiPlayer mrX;

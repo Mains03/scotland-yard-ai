@@ -1,12 +1,10 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiPlayer;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard;
 
 import com.google.common.collect.ImmutableMap;
 import uk.ac.bris.cs.scotlandyard.model.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlayerFactory {
     private static PlayerFactory instance;
@@ -19,7 +17,24 @@ public class PlayerFactory {
 
     private PlayerFactory() {}
 
-    public Player createPlayer(Board board, Piece piece) {
+    public Player createMrX(Board board) {
+        return createPlayer(board, Piece.MrX.MRX);
+    }
+
+    public List<Player> createDetectives(Board board) {
+        List<Piece> detectivePieces = getDetectivePieces(board);
+        return detectivePieces.stream()
+                .map(piece -> createPlayer(board, piece))
+                .collect(Collectors.toList());
+    }
+
+    private List<Piece> getDetectivePieces(Board board) {
+        return board.getPlayers().stream()
+                .filter(Piece::isDetective)
+                .collect(Collectors.toList());
+    }
+
+    private Player createPlayer(Board board, Piece piece) {
         var tickets = createTickets(board, piece);
         int location = determineLocation(board, piece);
         return new Player(piece, tickets, location);

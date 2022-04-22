@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
+package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor;
 
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.InnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.LeafNode;

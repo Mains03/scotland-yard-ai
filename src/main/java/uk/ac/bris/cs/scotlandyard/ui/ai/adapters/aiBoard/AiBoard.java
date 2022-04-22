@@ -13,7 +13,10 @@ import java.util.Set;
 
 /**
  * Adapter for {@link Board} providing more functionality.
+ *
+ * @deprecated use {@link uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard}.
  */
+@Deprecated
 public interface AiBoard {
     ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> getGraph();
 
