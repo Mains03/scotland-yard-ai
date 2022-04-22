@@ -11,7 +11,20 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Singleton detective move generation.
+ * Generates all possible combinations of detective moves, regardless of order.
+ * Does not account for switches
+ */
 public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
+    static CombinationDetectiveMoveGen instance;
+    private CombinationDetectiveMoveGen() {}
+
+    public static CombinationDetectiveMoveGen getInstance() {
+        if (instance == null) instance = new CombinationDetectiveMoveGen();
+        return instance;
+    }
+
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 
     @Override
@@ -63,7 +76,7 @@ public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
                 int i = pastMoves.size() - 1;
                 boolean added = false;
                 ArrayList<Move> newMoves = new ArrayList<>(pastMoves);
-                while (i >= 0 && ! added) {
+                while (i >= 0 && !added) {
                     if (newMoves.get(i).source() == dest) {
                         newMoves.add(i + 1, currentMove);
                         added = true;
@@ -71,10 +84,10 @@ public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
                     i -= 1;
                 }
                 // If not needed to move after anyone, go first
-                if (!added) newMoves.add(0,currentMove);
+                if (!added) newMoves.add(0, currentMove);
 
                 // Add all boards from this move
-                boards.addAll(generateBoards(newMoves, newDetectives , aiBoard));
+                boards.addAll(generateBoards(newMoves, newDetectives, aiBoard));
             }
             return boards;
         }

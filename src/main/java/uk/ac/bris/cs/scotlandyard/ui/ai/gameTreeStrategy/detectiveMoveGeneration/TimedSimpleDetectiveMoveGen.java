@@ -4,6 +4,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 
 import java.util.Set;
 
+/**
+ * Singleton extension of {@link SimpleDetectiveMoveGen} that records the time taken
+ */
 public class TimedSimpleDetectiveMoveGen extends SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
     private static TimedSimpleDetectiveMoveGen instance;
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Singleton detective move generation.
  * Doesn't consider all variations of detective moves but is fast.
  */
 public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
@@ -30,6 +31,7 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
         return variations;
     }
 
+    // Recursively generates moves until all detectives calculated
     private void generateCombinations(
             List<AiPlayer> detectives,
             int depth,
