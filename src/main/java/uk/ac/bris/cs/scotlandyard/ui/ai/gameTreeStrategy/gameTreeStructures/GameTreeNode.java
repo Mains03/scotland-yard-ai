@@ -13,6 +13,7 @@ public interface GameTreeNode {
 
     /**
      * Not all nodes stores MrX move.
+     * If not MrX's move, returns empty
      */
     Optional<Move> getMrXMove();
 }

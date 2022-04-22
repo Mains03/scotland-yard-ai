@@ -12,6 +12,8 @@ import java.util.*;
 
 /**
  * Node with children.
+ * Assumed to be after a detective moves
+ * Go to {@link InnerNodeWithMrXMove} for after a mrX move
  */
 public class InnerNode implements GameTreeNode {
     private final Set<GameTreeNode> children;
@@ -42,6 +44,7 @@ public class InnerNode implements GameTreeNode {
         return newBoards;
     }
 
+    // Check it's MrX's turn to move
     private boolean isMrXMove(AiBoard board) {
         Move move = getAnyMove(board);
         Piece piece = move.commencedBy();
@@ -72,9 +75,10 @@ public class InnerNode implements GameTreeNode {
         return moveGeneration.moveDetectives(board);
     }
 
+    // Returns a singleton instance of a move generation strategy
     private DetectiveMoveGeneration getDetectiveMoveGeneration() {
         //return TimedSimpleDetectiveMoveGen.getInstance();
-        return new CombinationDetectiveMoveGen();
+        return CombinationDetectiveMoveGen.getInstance();
     }
 
     private GameTreeNode createChild(AiBoard board, int depth) {

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 /**
  * To determine MrX's best move, we need to know what move was made to get to this position.
+ * Identical to parent {@link InnerNode} but also stores mrX's move
  */
 public class InnerNodeWithMrXMove extends InnerNode {
     private Move move;

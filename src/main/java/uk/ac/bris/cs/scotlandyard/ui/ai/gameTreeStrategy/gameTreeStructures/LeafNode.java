@@ -9,6 +9,8 @@ import java.util.Optional;
 
 /**
  * Node without children.
+ * Evaluates after a detective moves
+ * Go to {@link LeafNodeWithMrXMove} for after a mrX move
  */
 public class LeafNode implements GameTreeNode {
     // used in static evaluation

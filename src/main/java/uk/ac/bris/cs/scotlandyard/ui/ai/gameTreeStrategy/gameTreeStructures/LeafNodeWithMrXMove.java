@@ -5,6 +5,10 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
 
 import java.util.Optional;
 
+/**
+ * To determine MrX's best move, we need to know what move was made to get to this position.
+ * Identical to parent {@link LeafNode} but also stores mrX's move
+ */
 public class LeafNodeWithMrXMove extends LeafNode {
     private Move move;
 
