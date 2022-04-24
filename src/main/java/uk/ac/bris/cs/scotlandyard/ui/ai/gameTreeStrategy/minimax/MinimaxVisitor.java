@@ -9,6 +9,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticP
 
 import java.util.Objects;
 
+/**
+ * Implementation of {@link GameTreeVisitor} that evaluates nodes
+ */
 public class MinimaxVisitor implements GameTreeVisitor {
     private static final int POSITIVE_INFINITY =  10000000;
     private static final int NEGATIVE_INFINITY = -10000000;

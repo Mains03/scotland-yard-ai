@@ -12,6 +12,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Minimax algorithm, does not include alpha-beta pruning
+ */
 public class MinimaxStrategy implements BestMoveStrategy {
     private static final int NEGATIVE_INFINITY = -10000000;
 
