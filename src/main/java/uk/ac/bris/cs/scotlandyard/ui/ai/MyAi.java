@@ -13,6 +13,9 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.SingleTurnLookAheadStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.minimumDistance.MinimumDistanceEvaluation;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove.GameTreeBestMoveStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove.MinimaxBestMove;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -27,7 +30,8 @@ public class MyAi implements Ai {
 	}
 
 	private BestMoveStrategy createBestMoveStrategy() {
-		EvaluationStrategy strategy = new MinimumDistanceEvaluation();
-		return new SingleTurnLookAheadStrategy(strategy);
+		MinimumDistanceEvaluation evaluation = MinimumDistanceEvaluation.getInstance();
+		GameTreeBestMoveStrategy strategy = new MinimaxBestMove(evaluation, true);
+		return new GameTree(strategy);
 	}
 }

@@ -10,10 +10,17 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
  * and the detectives is the evaluation of a board.
  */
 public class MinimumDistanceEvaluation implements EvaluationStrategy {
+    private static MinimumDistanceEvaluation instance;
+
+    public static MinimumDistanceEvaluation getInstance() {
+        if (instance == null)
+            instance = new MinimumDistanceEvaluation();
+        return instance;
+    }
+
     private static final int POSITIVE_INFINITY = 1000000;
 
-    public MinimumDistanceEvaluation() {
-    }
+    private MinimumDistanceEvaluation() {}
 
     @Override
     public Integer visit(StandardAiBoard board) {
