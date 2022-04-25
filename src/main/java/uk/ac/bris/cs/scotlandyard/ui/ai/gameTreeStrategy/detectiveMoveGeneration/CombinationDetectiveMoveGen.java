@@ -5,7 +5,7 @@ import com.google.common.graph.ImmutableValueGraph;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerFactory;
 
 import java.util.*;
@@ -15,25 +15,25 @@ public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
     private ImmutableValueGraph<Integer, ImmutableSet<ScotlandYard.Transport>> graph;
 
     @Override
-    public Set<AiBoard> moveDetectives(AiBoard board) {
+    public Set<StandardAiBoard> moveDetectives(StandardAiBoard board) {
         List<Player> detectives = createDetectives(board);
         ArrayList<Move> pastMoves = new ArrayList<>(detectives.size());
         graph = board.getSetup().graph;
         return generateBoards(pastMoves, detectives, board);
     }
 
-    private List<Player> createDetectives(AiBoard board) {
+    private List<Player> createDetectives(StandardAiBoard board) {
         return PlayerFactory.getInstance().createDetectives(board);
     }
 
-    private Set<AiBoard> generateBoards(List<Move> pastMoves, List<Player> detectives, AiBoard aiBoard) {
+    private Set<StandardAiBoard> generateBoards(List<Move> pastMoves, List<Player> detectives, StandardAiBoard aiBoard) {
         // If nobody else to move, make board
         if (detectives.isEmpty()) {
             // Resets to original board then applies moves
             for (Move move : pastMoves) {
-                aiBoard = (AiBoard) aiBoard.advance(move);
+                aiBoard = (StandardAiBoard) aiBoard.advance(move);
             }
-            HashSet<AiBoard> container = new HashSet<>();
+            HashSet<StandardAiBoard> container = new HashSet<>();
             container.add(aiBoard);
             return container;
 
@@ -46,7 +46,7 @@ public class CombinationDetectiveMoveGen implements DetectiveMoveGeneration {
 
             // Setup boards to return and get nodes detective can reach
             int source = detective.location();
-            Set<AiBoard> boards = new HashSet<>();
+            Set<StandardAiBoard> boards = new HashSet<>();
             Set<Integer> adjacent = graph.adjacentNodes(source).stream()
                     .filter(
                             dest -> graph.edgeValue(source, dest).get().stream()

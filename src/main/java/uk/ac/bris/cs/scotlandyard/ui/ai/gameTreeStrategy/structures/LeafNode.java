@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
 
 import java.util.Objects;
@@ -12,9 +12,9 @@ import java.util.Optional;
  */
 public class LeafNode implements GameTreeNode {
     // used in static evaluation
-    private final AiBoard board;
+    private final StandardAiBoard board;
 
-    public LeafNode(AiBoard board) {
+    public LeafNode(StandardAiBoard board) {
         this.board = Objects.requireNonNull(board);
     }
 
@@ -29,5 +29,5 @@ public class LeafNode implements GameTreeNode {
         return Optional.empty();
     }
 
-    public AiBoard getBoard() { return board; }
+    public StandardAiBoard getBoard() { return board; }
 }

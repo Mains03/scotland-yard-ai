@@ -1,13 +1,12 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.minimax;
 
-import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class MinimaxStrategy implements BestMoveStrategy {
     }
 
     @Override
-    public Move determineBestMove(AiBoard board) {
+    public Move determineBestMove(StandardAiBoard board) {
         GameTree gameTree = new GameTree(board);
         Move bestMove = null;
         int bestMoveEval = NEGATIVE_INFINITY;

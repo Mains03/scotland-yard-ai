@@ -6,13 +6,12 @@ import javax.annotation.Nonnull;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.alphaBeta.AlphaBetaStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.singleTurnLookAheadStrategy.SingleTurnLookAheadStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistAlgorithm;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.SimpleBFS;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistStaticPosEval;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.BFS;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.MinDistAlgorithm;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistStaticPosEval;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -21,21 +20,17 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		BestMoveStrategy strategy = createBestMoveStrategy(board);
-		return strategy.determineBestMove(new AiBoard(board));
+		BestMoveStrategy strategy = createBestMoveStrategy();
+		return strategy.determineBestMove(new StandardAiBoard(board));
 	}
 
-	private BestMoveStrategy createBestMoveStrategy(Board board) {
-		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy(board);
-		return new AlphaBetaStrategy(strategy);
+	private BestMoveStrategy createBestMoveStrategy() {
+		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy();
+		return new SingleTurnLookAheadStrategy(strategy, true);
 	}
 
-	private StaticPosEvalStrategy createStaticPosEvalStrategy(Board board) {
-		MinDistAlgorithm minDistStrategy = createMinDistStrategy(board);
+	private StaticPosEvalStrategy createStaticPosEvalStrategy() {
+		MinDistAlgorithm minDistStrategy = new BFS();
 		return new MinDistStaticPosEval(minDistStrategy);
-	}
-
-	private MinDistAlgorithm createMinDistStrategy(Board board) {
-		return new SimpleBFS();
 	}
 }

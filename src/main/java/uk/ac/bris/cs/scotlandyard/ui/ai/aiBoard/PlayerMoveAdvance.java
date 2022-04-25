@@ -3,6 +3,11 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Player;
 
+import java.util.Objects;
+
+/**
+ * Singleton helper class to apply a {@link Move} to a {@link Player}.
+ */
 public class PlayerMoveAdvance {
     private static PlayerMoveAdvance moveApplyFactory;
 
@@ -15,13 +20,15 @@ public class PlayerMoveAdvance {
     private PlayerMoveAdvance() {}
 
     public Player applyMove(Player player, Move move) {
+        Objects.requireNonNull(player);
+        Objects.requireNonNull(move);
         player = player.use(move.tickets());
         int destination = moveDestination(move);
         return player.at(destination);
     }
 
-    private int moveDestination(Move move) {
-        return move.accept(new Move.Visitor<Integer>() {
+    public int moveDestination(Move move) {
+        return move.accept(new Move.Visitor<>() {
             @Override
             public Integer visit(Move.SingleMove move) {
                 return move.destination;

@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneratio
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,16 +24,16 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
     protected SimpleDetectiveMoveGen() {}
 
     @Override
-    public Set<AiBoard> moveDetectives(AiBoard board) {
+    public Set<StandardAiBoard> moveDetectives(StandardAiBoard board) {
         List<Piece> detectives = getDetectivePieces(board);
-        Set<AiBoard> boards = new HashSet<>();
+        Set<StandardAiBoard> boards = new HashSet<>();
         boards.add(board);
         for (Piece piece : detectives) {
-            for (AiBoard b : boards) {
+            for (StandardAiBoard b : boards) {
                 Set<Move> moves = getDetectiveMoves(b, piece);
-                Set<AiBoard> newBoards = new HashSet<>();
+                Set<StandardAiBoard> newBoards = new HashSet<>();
                 for (Move move : moves) {
-                    AiBoard b2 = (AiBoard) b.advance(move);
+                    StandardAiBoard b2 = (StandardAiBoard) b.advance(move);
                     newBoards.add(b2);
                 }
                 boards = newBoards;
@@ -42,28 +42,28 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
         return moveRemainingDetectives(boards);
     }
 
-    private List<Piece> getDetectivePieces(AiBoard board) {
+    private List<Piece> getDetectivePieces(StandardAiBoard board) {
         return board.getPlayers().stream()
                 .filter(Piece::isDetective)
                 .collect(Collectors.toList());
     }
 
-    private Set<Move> getDetectiveMoves(AiBoard board, Piece piece) {
+    private Set<Move> getDetectiveMoves(StandardAiBoard board, Piece piece) {
         return board.getAvailableMoves().stream()
                 .filter(move -> move.commencedBy() == piece)
                 .collect(Collectors.toSet());
     }
 
-    private Set<AiBoard> moveRemainingDetectives(Set<AiBoard> boards) {
+    private Set<StandardAiBoard> moveRemainingDetectives(Set<StandardAiBoard> boards) {
         boolean remaining = true;
         while (remaining) {
             remaining = false;
-            Set<AiBoard> newBoards = new HashSet<>();
-            for (AiBoard board : boards) {
+            Set<StandardAiBoard> newBoards = new HashSet<>();
+            for (StandardAiBoard board : boards) {
                 if (detectiveMoveRemaining(board)) {
                     remaining = true;
                     Move move = anyMove(board);
-                    AiBoard newBoard = (AiBoard) board.advance(move);
+                    StandardAiBoard newBoard = (StandardAiBoard) board.advance(move);
                     newBoards.add(newBoard);
                 } else
                     newBoards.add(board);
@@ -73,7 +73,7 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
         return boards;
     }
 
-    private boolean detectiveMoveRemaining(AiBoard board) {
+    private boolean detectiveMoveRemaining(StandardAiBoard board) {
         Set<Move> moves = board.getAvailableMoves();
         if (moves.size() == 0)
             return false;
@@ -83,7 +83,7 @@ public class SimpleDetectiveMoveGen implements DetectiveMoveGeneration {
         }
     }
 
-    private Move anyMove(AiBoard board) {
+    private Move anyMove(StandardAiBoard board) {
         return board.getAvailableMoves().stream().findAny().get();
     }
 }

@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.InnerNodeWithMrXMove;
 
@@ -14,11 +14,11 @@ public class GameTree {
     private final List<GameTreeNode> gameTreeNodes;
 
     public GameTree(Board board) {
-        AiBoard aiBoard = new AiBoard(board);
+        StandardAiBoard aiBoard = new StandardAiBoard(board);
         gameTreeNodes = createGameTreeNodes(aiBoard);
     }
 
-    private List<GameTreeNode> createGameTreeNodes(AiBoard board) {
+    private List<GameTreeNode> createGameTreeNodes(StandardAiBoard board) {
         List<GameTreeNode> gameTreeNodes = new ArrayList<>();
         for (Move move : board.getAvailableMoves()) {
             GameTreeNode gameTreeNode = createGameTreeNode(board, move);
@@ -27,8 +27,8 @@ public class GameTree {
         return gameTreeNodes;
     }
 
-    private GameTreeNode createGameTreeNode(AiBoard board, Move move) {
-        AiBoard newBoard = (AiBoard) board.advance(move);
+    private GameTreeNode createGameTreeNode(StandardAiBoard board, Move move) {
+        StandardAiBoard newBoard = (StandardAiBoard) board.advance(move);
         GameTreeNode node = new InnerNodeWithMrXMove(newBoard, 2, move);
         return node;
     }

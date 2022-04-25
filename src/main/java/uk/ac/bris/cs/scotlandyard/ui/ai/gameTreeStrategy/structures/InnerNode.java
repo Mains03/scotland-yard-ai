@@ -2,7 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.DetectiveMoveGeneration;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration.SimpleDetectiveMoveGen;
@@ -15,18 +15,18 @@ import java.util.*;
 public class InnerNode implements GameTreeNode {
     private final Set<GameTreeNode> children;
 
-    public InnerNode(AiBoard board, int depth) {
+    public InnerNode(StandardAiBoard board, int depth) {
         this.children = createChildren(board, depth);
     }
 
-    private Set<GameTreeNode> createChildren(AiBoard board, int depth) {
+    private Set<GameTreeNode> createChildren(StandardAiBoard board, int depth) {
         if (depth < 1)
             throw new IllegalArgumentException();
         Set<GameTreeNode> children = new HashSet<>();
         if (!isGameOver(board)) {
             children = new HashSet<>();
-            Set<AiBoard> newBoards = generateNewBoards(board);
-            for (AiBoard newBoard : newBoards) {
+            Set<StandardAiBoard> newBoards = generateNewBoards(board);
+            for (StandardAiBoard newBoard : newBoards) {
                 GameTreeNode child = createChild(newBoard, depth);
                 children.add(child);
             }
@@ -34,13 +34,13 @@ public class InnerNode implements GameTreeNode {
         return children;
     }
 
-    private boolean isGameOver(AiBoard board) {
+    private boolean isGameOver(StandardAiBoard board) {
         return board.getWinner().size() != 0;
     }
 
     // possible boards reached by either moving MrX or all the detectives
-    private Set<AiBoard> generateNewBoards(AiBoard board) {
-        Set<AiBoard> newBoards;
+    private Set<StandardAiBoard> generateNewBoards(StandardAiBoard board) {
+        Set<StandardAiBoard> newBoards;
         if (isMrXMove(board))
             newBoards = moveMrX(board);
         else
@@ -48,13 +48,13 @@ public class InnerNode implements GameTreeNode {
         return newBoards;
     }
 
-    private boolean isMrXMove(AiBoard board) {
+    private boolean isMrXMove(StandardAiBoard board) {
         Move move = getAnyMove(board);
         Piece piece = move.commencedBy();
         return piece.isMrX();
     }
 
-    private Move getAnyMove(AiBoard board) {
+    private Move getAnyMove(StandardAiBoard board) {
         Optional<Move> move = board.getAvailableMoves().stream()
                 .findAny();
         if (move.isEmpty())
@@ -63,17 +63,17 @@ public class InnerNode implements GameTreeNode {
     }
 
     // possible boards by moving MrX
-    private Set<AiBoard> moveMrX(AiBoard board) {
-        Set<AiBoard> boards = new HashSet<>();
+    private Set<StandardAiBoard> moveMrX(StandardAiBoard board) {
+        Set<StandardAiBoard> boards = new HashSet<>();
         for (Move move : board.getAvailableMoves()) {
-            AiBoard newBoard = (AiBoard) board.advance(move);
+            StandardAiBoard newBoard = (StandardAiBoard) board.advance(move);
             boards.add(newBoard);
         }
         return boards;
     }
 
     // possible boards by moving detectives
-    private Set<AiBoard> moveDetectives(AiBoard board) {
+    private Set<StandardAiBoard> moveDetectives(StandardAiBoard board) {
         DetectiveMoveGeneration moveGeneration = getDetectiveMoveGeneration();
         return moveGeneration.moveDetectives(board);
     }
@@ -83,7 +83,7 @@ public class InnerNode implements GameTreeNode {
         //return new CombinationDetectiveMoveGen();
     }
 
-    private GameTreeNode createChild(AiBoard board, int depth) {
+    private GameTreeNode createChild(StandardAiBoard board, int depth) {
         GameTreeNode child;
         if (depth == 1)
             child = new LeafNode(board);

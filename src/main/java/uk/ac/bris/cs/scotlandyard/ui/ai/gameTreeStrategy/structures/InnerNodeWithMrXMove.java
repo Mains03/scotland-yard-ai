@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class InnerNodeWithMrXMove extends InnerNode {
     private Move move;
 
-    public InnerNodeWithMrXMove(AiBoard board, int depth, Move mrXMove) {
+    public InnerNodeWithMrXMove(StandardAiBoard board, int depth, Move mrXMove) {
         super(board, depth);
         move = mrXMove;
     }

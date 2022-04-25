@@ -1,11 +1,11 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.minimax;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.InnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.LeafNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
-import uk.ac.bris.cs.scotlandyard.ui.ai.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import java.util.Objects;
 
@@ -58,7 +58,7 @@ public class MinimaxVisitor implements GameTreeVisitor {
 
     @Override
     public int visit(LeafNode node) {
-        AiBoard board = node.getBoard();
+        StandardAiBoard board = node.getBoard();
         return evalStrategy.evaluate(board);
     }
 }
