@@ -1,6 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.detectiveMoveGeneration;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 
 import java.util.Set;
 
@@ -19,9 +19,9 @@ public class TimedSimpleDetectiveMoveGen extends SimpleDetectiveMoveGen implemen
     private TimedSimpleDetectiveMoveGen() {}
 
     @Override
-    public Set<AiBoard> moveDetectives(AiBoard board) {
+    public Set<StandardAiBoard> moveDetectives(StandardAiBoard board) {
         final long startTime = System.currentTimeMillis();
-        Set<AiBoard> boards = super.moveDetectives(board);
+        Set<StandardAiBoard> boards = super.moveDetectives(board);
         final long endTime = System.currentTimeMillis();
         System.out.println(endTime - startTime);
         return boards;

@@ -2,43 +2,34 @@ package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy;
 
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.adapters.aiBoard.AiBoardAdapter;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.GameTreeNode;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.InnerNodeWithMrXMove;
-import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.gameTreeStructures.LeafNodeWithMrXMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
+import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.InnerNodeWithMrXMove;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameTree {
-    private static final int MAX_DEPTH = 2;
-
     // each GameTreeNode corresponds to a MrX move
     private final List<GameTreeNode> gameTreeNodes;
 
     public GameTree(Board board) {
-        gameTreeNodes = createGameTreeNodes(board, MAX_DEPTH);
+        StandardAiBoard aiBoard = new StandardAiBoard(board);
+        gameTreeNodes = createGameTreeNodes(aiBoard);
     }
 
-    private List<GameTreeNode> createGameTreeNodes(Board board, int depth) {
-        if (depth < 1)
-            throw new IllegalArgumentException();
+    private List<GameTreeNode> createGameTreeNodes(StandardAiBoard board) {
         List<GameTreeNode> gameTreeNodes = new ArrayList<>();
-        AiBoard aiBoard = new AiBoardAdapter(board);
-        for (Move move : aiBoard.getAvailableMoves()) {
-            GameTreeNode gameTreeNode = createGameTreeNode(aiBoard, depth-1, move);
+        for (Move move : board.getAvailableMoves()) {
+            GameTreeNode gameTreeNode = createGameTreeNode(board, move);
             gameTreeNodes.add(gameTreeNode);
         }
         return gameTreeNodes;
     }
 
-    private GameTreeNode createGameTreeNode(AiBoard board, int depth, Move move) {
-        GameTreeNode node;
-        if (depth == 0)
-            node = new LeafNodeWithMrXMove(board, move);
-        else
-            node = new InnerNodeWithMrXMove(board, depth, move);
+    private GameTreeNode createGameTreeNode(StandardAiBoard board, Move move) {
+        StandardAiBoard newBoard = (StandardAiBoard) board.advance(move);
+        GameTreeNode node = new InnerNodeWithMrXMove(newBoard, 2, move);
         return node;
     }
 
