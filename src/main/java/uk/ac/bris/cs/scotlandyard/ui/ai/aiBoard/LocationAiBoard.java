@@ -1,7 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard;
 
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -37,11 +36,6 @@ public class LocationAiBoard extends DefaultAiBoard implements AiBoard {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public int score(StaticPosEvalStrategy strategy) {
-        return strategy.evaluate(this);
-    }
-
     @Nonnull
     @Override
     public GameState advance(Move move) {
@@ -57,5 +51,10 @@ public class LocationAiBoard extends DefaultAiBoard implements AiBoard {
         else
             mrXLocation = this.mrXLocation;
         return mrXLocation;
+    }
+
+    @Override
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visit(this);
     }
 }

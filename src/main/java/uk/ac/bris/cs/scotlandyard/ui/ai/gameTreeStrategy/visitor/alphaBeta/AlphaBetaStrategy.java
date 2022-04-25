@@ -1,12 +1,13 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.alphaBeta;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.BestMoveStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -16,14 +17,14 @@ public class AlphaBetaStrategy implements BestMoveStrategy {
     private static final int POSITIVE_INFINITY =  10000000;
     private static final int NEGATIVE_INFINITY = -10000000;
 
-    private final StaticPosEvalStrategy strategy;
+    private final EvaluationStrategy strategy;
 
-    public AlphaBetaStrategy(StaticPosEvalStrategy strategy) {
+    public AlphaBetaStrategy(EvaluationStrategy strategy) {
         this.strategy = Objects.requireNonNull(strategy);
     }
 
     @Override
-    public Move determineBestMove(StandardAiBoard board) {
+    public Move bestMove(AiBoard board) {
         GameTree gameTree = new GameTree(board);
         Move bestMove = null;
         int bestMoveEval = NEGATIVE_INFINITY;

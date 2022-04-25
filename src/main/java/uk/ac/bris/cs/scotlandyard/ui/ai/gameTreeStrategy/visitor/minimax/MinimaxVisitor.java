@@ -5,7 +5,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.InnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.LeafNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
 
 import java.util.Objects;
 
@@ -15,9 +15,9 @@ public class MinimaxVisitor implements GameTreeVisitor {
 
     private final boolean maximise;
 
-    private final StaticPosEvalStrategy evalStrategy;
+    private final EvaluationStrategy evalStrategy;
 
-    public MinimaxVisitor(boolean maximise, StaticPosEvalStrategy evalStrategy) {
+    public MinimaxVisitor(boolean maximise, EvaluationStrategy evalStrategy) {
         this.maximise = maximise;
         this.evalStrategy = Objects.requireNonNull(evalStrategy);
     }
@@ -59,6 +59,6 @@ public class MinimaxVisitor implements GameTreeVisitor {
     @Override
     public int visit(LeafNode node) {
         StandardAiBoard board = node.getBoard();
-        return evalStrategy.evaluate(board);
+        return evalStrategy.visit(board);
     }
 }

@@ -5,7 +5,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.visitor.GameTreeVisitor
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.GameTreeNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.InnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.gameTreeStrategy.structures.LeafNode;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -19,9 +19,9 @@ public class AlphaBetaVisitor implements GameTreeVisitor {
     private final int alpha;
     private final int beta;
 
-    private final StaticPosEvalStrategy evalStrategy;
+    private final EvaluationStrategy evalStrategy;
 
-    public AlphaBetaVisitor(boolean maximise, int alpha, int beta, StaticPosEvalStrategy evalStrategy) {
+    public AlphaBetaVisitor(boolean maximise, int alpha, int beta, EvaluationStrategy evalStrategy) {
         this.maximise = maximise;
         this.alpha = alpha;
         this.beta = beta;
@@ -81,6 +81,6 @@ public class AlphaBetaVisitor implements GameTreeVisitor {
     @Override
     public int visit(LeafNode node) {
         StandardAiBoard board = node.getBoard();
-        return evalStrategy.evaluate(board);
+        return evalStrategy.visit(board);
     }
 }

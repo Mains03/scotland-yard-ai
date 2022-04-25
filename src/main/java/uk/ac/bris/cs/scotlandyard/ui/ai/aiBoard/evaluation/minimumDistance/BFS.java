@@ -1,29 +1,36 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.minimumDistance;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerFactory;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PlayerMoveAdvance;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.*;
 
 import java.util.*;
 
 /**
- * Breadth-first search {@link MinDistAlgorithm}.
+ * Breadth-first search algorithm to find the minimum distance between
+ * MrX and a detective.
  */
-public class BFS implements MinDistAlgorithm {
+public class BFS {
+    private static BFS instance;
+
+    public static BFS getInstance() {
+        if (instance == null)
+            instance = new BFS();
+        return instance;
+    }
+
+    private BFS() {}
+
     private static final int INITIAL_DISTANCE_VAL = -1;
     private static final int POSITIVE_INFINITY = 1000000;
 
     /**
      * Considers tickets.
      */
-    @Override
-    public int minimumDistance(StandardAiBoard board, Piece detective) {
+    public Integer minimumDistance(StandardAiBoard board, Piece detective) {
         if (detective.isMrX())
             throw new IllegalArgumentException("Expected detective");
         Queue<Pair<Player, Integer>> queue = new ArrayDeque<>();
@@ -53,7 +60,6 @@ public class BFS implements MinDistAlgorithm {
         return PlayerFactory.getInstance().createPlayer(board, detective);
     }
 
-    @Override
     public int minimumDistance(LocationAiBoard board, int detectiveLocation) {
         Queue<Integer> queue = new ArrayDeque<>();
         queue.add(detectiveLocation);
@@ -64,7 +70,7 @@ public class BFS implements MinDistAlgorithm {
                 // we know this is the minimum distance since each edge has weight 1
                 return distances[node];
             for (int adjacent : board.getSetup().graph.adjacentNodes(node)) {
-                if ((adjacent == board.mrXLocation) || (distances[adjacent] == INITIAL_DISTANCE_VAL)) {
+                if (distances[adjacent] == INITIAL_DISTANCE_VAL) {
                     queue.add(adjacent);
                     distances[adjacent] = distances[node] + 1;
                 }

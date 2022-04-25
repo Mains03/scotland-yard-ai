@@ -1,7 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard;
 
 import uk.ac.bris.cs.scotlandyard.model.*;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
 
 import javax.annotation.Nonnull;
 
@@ -40,7 +39,7 @@ public class StandardAiBoard extends DefaultAiBoard implements AiBoard {
     }
 
     @Override
-    public int score(StaticPosEvalStrategy strategy) {
-        return strategy.evaluate(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visit(this);
     }
 }

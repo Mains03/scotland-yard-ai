@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.minimumDistance;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.graph.ImmutableValueGraph;

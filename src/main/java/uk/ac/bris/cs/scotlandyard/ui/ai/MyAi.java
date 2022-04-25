@@ -6,12 +6,13 @@ import javax.annotation.Nonnull;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.BFS;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.algorithms.MinDistAlgorithm;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.StaticPosEvalStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.staticPositionEvaluationStrategy.minimumDistanceStrategy.MinDistStaticPosEval;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.SingleTurnLookAheadStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.minimumDistance.MinimumDistanceEvaluation;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -21,16 +22,12 @@ public class MyAi implements Ai {
 			Pair<Long, TimeUnit> timeoutPair
 	) {
 		BestMoveStrategy strategy = createBestMoveStrategy();
-		return strategy.determineBestMove(new StandardAiBoard(board));
+		AiBoard aiBoard = new LocationAiBoard(board);
+		return strategy.bestMove(aiBoard);
 	}
 
 	private BestMoveStrategy createBestMoveStrategy() {
-		StaticPosEvalStrategy strategy = createStaticPosEvalStrategy();
-		return new SingleTurnLookAheadStrategy(strategy, true);
-	}
-
-	private StaticPosEvalStrategy createStaticPosEvalStrategy() {
-		MinDistAlgorithm minDistStrategy = new BFS();
-		return new MinDistStaticPosEval(minDistStrategy);
+		EvaluationStrategy strategy = new MinimumDistanceEvaluation();
+		return new SingleTurnLookAheadStrategy(strategy);
 	}
 }
