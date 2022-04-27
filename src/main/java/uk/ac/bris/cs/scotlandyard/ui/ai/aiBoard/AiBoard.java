@@ -7,6 +7,8 @@ public interface AiBoard extends Board.GameState {
         T visit(StandardAiBoard board);
 
         T visit(LocationAiBoard board);
+
+        T visit(PotentialDetectiveLocationsAiBoard board);
     }
 
     <T> T accept(Visitor<T> visitor);

@@ -9,7 +9,7 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove.MinimaxBestMove;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTreeBestMove;
 
 public class MyAi implements Ai {
 	@Nonnull @Override public String name() { return "An Englishman, an Irishman and a Scotsman walk into a bar"; }
@@ -18,7 +18,7 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		BestMoveStrategy strategy = MinimaxBestMove.getInstance();
+		BestMoveStrategy strategy = GameTreeBestMove.getInstance();
 		AiBoard aiBoard = new LocationAiBoard(board);
 		return strategy.bestMove(aiBoard);
 	}

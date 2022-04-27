@@ -1,31 +1,27 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.GameTreeEvaluationStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.MinimaxEvaluation;
 
 /**
  * {@link BestMoveStrategy} using minimax algorithm.
  */
-public class MinimaxBestMove extends MinimaxEvaluation implements BestMoveStrategy {
-    private static MinimaxBestMove instance;
+public class GameTreeBestMove implements BestMoveStrategy {
+    private static GameTreeBestMove instance;
 
-    public static MinimaxBestMove getInstance() {
+    public static GameTreeBestMove getInstance() {
         if (instance == null)
-            instance = new MinimaxBestMove();
+            instance = new GameTreeBestMove();
         return instance;
-    }
-
-    private MinimaxBestMove() {
-        super();
     }
 
     @Override
     public Move bestMove(AiBoard board) {
+        GameTreeEvaluationStrategy strategy = MinimaxEvaluation.getInstance();
         GameTree tree = new GameTree(board);
-        evaluate(tree);
-        return bestMove;
+        return strategy.evaluate(tree);
     }
 }

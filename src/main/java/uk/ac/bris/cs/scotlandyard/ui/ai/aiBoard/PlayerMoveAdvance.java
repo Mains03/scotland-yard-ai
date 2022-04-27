@@ -23,12 +23,7 @@ public class PlayerMoveAdvance {
         Objects.requireNonNull(player);
         Objects.requireNonNull(move);
         player = player.use(move.tickets());
-        int destination = moveDestination(move);
-        return player.at(destination);
-    }
-
-    public int moveDestination(Move move) {
-        return move.accept(new Move.Visitor<>() {
+        int destination = move.accept(new Move.Visitor<>() {
             @Override
             public Integer visit(Move.SingleMove move) {
                 return move.destination;
@@ -39,5 +34,6 @@ public class PlayerMoveAdvance {
                 return move.destination2;
             }
         });
+        return player.at(destination);
     }
 }

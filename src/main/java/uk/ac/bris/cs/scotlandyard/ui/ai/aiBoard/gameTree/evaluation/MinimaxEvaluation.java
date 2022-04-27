@@ -28,8 +28,6 @@ public class MinimaxEvaluation implements GameTreeEvaluationStrategy, Node.Visit
 
     private final boolean maximise;
 
-    public Move bestMove;
-
     protected MinimaxEvaluation() {
         maximise = true;
     }
@@ -39,7 +37,7 @@ public class MinimaxEvaluation implements GameTreeEvaluationStrategy, Node.Visit
     }
 
     @Override
-    public int evaluate(GameTree tree) {
+    public Move evaluate(GameTree tree) {
         Pair<Optional<Move>, Integer> evaluation = initialEvaluation();
         Node.Visitor<Pair<Optional<Move>, Integer>> visitor = new MinimaxEvaluation(!maximise);
         for (Node node : tree.children) {
@@ -48,8 +46,7 @@ public class MinimaxEvaluation implements GameTreeEvaluationStrategy, Node.Visit
         }
         if (evaluation.left().isEmpty())
             throw new NoSuchElementException("No move");
-        bestMove = evaluation.left().get();
-        return evaluation.right();
+        return evaluation.left().get();
     }
 
     @Override

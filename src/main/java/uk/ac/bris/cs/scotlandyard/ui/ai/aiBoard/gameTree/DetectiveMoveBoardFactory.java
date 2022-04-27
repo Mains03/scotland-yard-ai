@@ -1,13 +1,15 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.model.Piece;
+import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.PotentialDetectiveLocationsAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
 
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 
 public class DetectiveMoveBoardFactory implements AiBoard.Visitor<Set<AiBoard>> {
@@ -29,6 +31,13 @@ public class DetectiveMoveBoardFactory implements AiBoard.Visitor<Set<AiBoard>> 
     @Override
     public Set<AiBoard> visit(LocationAiBoard board) {
         return visit((AiBoard) board);
+    }
+
+    @Override
+    public Set<AiBoard> visit(PotentialDetectiveLocationsAiBoard board) {
+        // random values since detectives can't move
+        Move move = new Move.SingleMove(Piece.Detective.BLUE, 1, ScotlandYard.Ticket.TAXI, 2);
+        return Set.of((PotentialDetectiveLocationsAiBoard) board.advance(move));
     }
 
     private Set<AiBoard> visit(AiBoard board) {
