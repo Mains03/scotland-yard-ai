@@ -1,16 +1,17 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.AbstractInnerNode;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.DetectiveMoveBoardFactory;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.Node;
 
 import java.util.*;
 
 /**
  * Node with children.
  */
-public class InnerNode implements Node {
+public class InnerNode extends AbstractInnerNode {
     private final Set<Node> children;
 
     public InnerNode(AiBoard board, int depth) {
@@ -33,42 +34,18 @@ public class InnerNode implements Node {
 
     // possible boards reached by either moving MrX or all the detectives
     private Set<AiBoard> generateNewBoards(AiBoard board) {
-        Set<AiBoard> newBoards;
-        if (isMrXMove(board))
-            newBoards = moveMrX(board);
-        else
-            newBoards = moveDetectives(board);
-        return newBoards;
-    }
-
-    private boolean isMrXMove(AiBoard board) {
-        Move move = getAnyMove(board);
-        Piece piece = move.commencedBy();
-        return piece.isMrX();
-    }
-
-    private Move getAnyMove(AiBoard board) {
-        Optional<Move> move = board.getAvailableMoves().stream()
-                .findAny();
-        if (move.isEmpty())
-            throw new NoSuchElementException("No moves");
-        return move.get();
-    }
-
-    // possible boards by moving MrX
-    private Set<AiBoard> moveMrX(AiBoard board) {
-        Set<AiBoard> boards = new HashSet<>();
-        for (Move move : board.getAvailableMoves()) {
-            AiBoard newBoard = (AiBoard) board.advance(move);
-            boards.add(newBoard);
+        Set<AiBoard> newBoards = new HashSet<>();
+        if (board.getAvailableMoves().size() > 0) {
+            boolean mrXMove = board.getAvailableMoves().stream().findAny().get().commencedBy().isMrX();
+            if (mrXMove) {
+                for (Move move : board.getAvailableMoves()) {
+                    AiBoard newBoard = (AiBoard) board.advance(move);
+                    newBoards.add(newBoard);
+                }
+            } else
+                newBoards = DetectiveMoveBoardFactory.getInstance().generate(board);
         }
-        return boards;
-    }
-
-    // possible boards by moving detectives
-    private Set<AiBoard> moveDetectives(AiBoard board) {
-        DetectiveMoveBoardFactory factory = DetectiveMoveBoardFactory.getInstance();
-        return board.accept(factory);
+        return newBoards;
     }
 
     private Node createChild(AiBoard board, int depth) {
@@ -78,11 +55,6 @@ public class InnerNode implements Node {
         else
             child = new InnerNode(board, depth-1);
         return child;
-    }
-
-    @Override
-    public <T> T accept(Node.Visitor<T> visitor) {
-        return visitor.visit(this);
     }
 
     public Set<Node> getChildren() {

@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.winnerLimited;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
@@ -8,15 +8,15 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.Node;
 import java.util.Set;
 
 /**
- * Stores the move made
+ * {@link InnerNode} which stores the move made.
  */
 public class InnerNodeWithMove extends AbstractInnerNodeWithMove {
     private final InnerNode node;
 
     private final Move move;
 
-    public InnerNodeWithMove(AiBoard board, int depth, Move move) {
-        node = new InnerNode(board, depth);
+    public InnerNodeWithMove(AiBoard board, Move move) {
+        node = new InnerNode(board);
         this.move = move;
     }
 

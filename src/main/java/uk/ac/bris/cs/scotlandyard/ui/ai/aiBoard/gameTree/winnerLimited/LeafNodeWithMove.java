@@ -1,12 +1,11 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.winnerLimited;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.AbstractLeafNodeWithMove;
 
-/**
- * Stores the move made.
- */
+import java.util.Objects;
+
 public class LeafNodeWithMove extends AbstractLeafNodeWithMove {
     private final LeafNode node;
 
@@ -14,7 +13,7 @@ public class LeafNodeWithMove extends AbstractLeafNodeWithMove {
 
     public LeafNodeWithMove(AiBoard board, Move move) {
         node = new LeafNode(board);
-        this.move = move;
+        this.move = Objects.requireNonNull(move);
     }
 
     @Override

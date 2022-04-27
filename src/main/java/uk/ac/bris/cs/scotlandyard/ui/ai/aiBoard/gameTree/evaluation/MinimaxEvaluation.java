@@ -1,8 +1,8 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.*;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited.DepthLimitedGameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.winnerLimited.WinnerLimitedGameTree;
 
 /**
@@ -17,7 +17,7 @@ public class MinimaxEvaluation extends GameTreeEvaluationStrategy implements Gam
         return instance;
     }
 
-    protected MinimaxEvaluation() {
+    private MinimaxEvaluation() {
     }
 
     @Override
@@ -27,11 +27,11 @@ public class MinimaxEvaluation extends GameTreeEvaluationStrategy implements Gam
 
     @Override
     public Move visit(DepthLimitedGameTree tree) {
-        return MinimaxDepthLimitedEvaluation.getInstance().evaluate(tree);
+        return DepthLimitedMinimaxEvaluation.getInstance().evaluate(tree);
     }
 
     @Override
     public Move visit(WinnerLimitedGameTree tree) {
-        return null;
+        return WinnerLimitedMinimaxEvaluation.getInstance().evaluate(tree);
     }
 }

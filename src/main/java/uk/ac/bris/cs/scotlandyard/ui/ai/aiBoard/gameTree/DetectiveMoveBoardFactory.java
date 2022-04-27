@@ -21,6 +21,10 @@ public class DetectiveMoveBoardFactory implements AiBoard.Visitor<Set<AiBoard>> 
 
     protected DetectiveMoveBoardFactory() {}
 
+    public Set<AiBoard> generate(AiBoard board) {
+        return board.accept(this);
+    }
+
     @Override
     public Set<AiBoard> visit(StandardAiBoard board) {
         return StandardDetectiveMoveBoardFactory.getInstance().generate(board);

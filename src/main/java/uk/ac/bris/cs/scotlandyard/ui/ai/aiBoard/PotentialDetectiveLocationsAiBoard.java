@@ -39,7 +39,7 @@ public class PotentialDetectiveLocationsAiBoard extends DefaultGameState impleme
     public GameState advance(Move move) {
         if (move.commencedBy().isMrX()) {
             Player mrX = PlayerMoveAdvance.getInstance().applyMove(this.mrX, move);
-            return new PotentialDetectiveLocationsAiBoard(super.advance(move), mrX, potentialDetectiveLocations, false);
+            return new PotentialDetectiveLocationsAiBoard(gameState, mrX, potentialDetectiveLocations, false);
         } else {
             // update set of potential detective locations
             Set<Integer> potentialDetectiveLocations = new HashSet<>();
