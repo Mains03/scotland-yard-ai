@@ -1,6 +1,7 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation;
 
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.Node;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
 
-public interface GameTreeEvaluationStrategy extends Node.Visitor<Integer> {
+public interface GameTreeEvaluationStrategy {
+    int evaluate(GameTree tree);
 }

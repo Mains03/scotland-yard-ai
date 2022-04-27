@@ -9,9 +9,6 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.MinimumDistanceEvaluation;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove.GameTreeBestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.bestMove.MinimaxBestMove;
 
 public class MyAi implements Ai {
@@ -21,14 +18,8 @@ public class MyAi implements Ai {
 			@Nonnull Board board,
 			Pair<Long, TimeUnit> timeoutPair
 	) {
-		BestMoveStrategy strategy = createBestMoveStrategy();
+		BestMoveStrategy strategy = MinimaxBestMove.getInstance();
 		AiBoard aiBoard = new LocationAiBoard(board);
 		return strategy.bestMove(aiBoard);
-	}
-
-	private BestMoveStrategy createBestMoveStrategy() {
-		MinimumDistanceEvaluation evaluation = MinimumDistanceEvaluation.getInstance();
-		GameTreeBestMoveStrategy strategy = new MinimaxBestMove(evaluation, true);
-		return new GameTree(strategy);
 	}
 }

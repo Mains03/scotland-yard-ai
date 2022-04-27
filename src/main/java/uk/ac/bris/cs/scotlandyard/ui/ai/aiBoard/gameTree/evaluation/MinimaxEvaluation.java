@@ -1,65 +1,110 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation;
 
+import io.atlassian.fugue.Pair;
+import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.EvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.MinimumDistanceEvaluation;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.*;
 
-import java.util.Objects;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
-public class MinimaxEvaluation implements GameTreeEvaluationStrategy {
-    public static final int POSITIVE_INFINITY =  10000000;
-    public static final int NEGATIVE_INFINITY = -10000000;
+/**
+ * {@link GameTreeEvaluationStrategy} using minimax algorithm.
+ */
+public class MinimaxEvaluation implements GameTreeEvaluationStrategy, Node.Visitor<Pair<Optional<Move>,Integer>> {
+    private static MinimaxEvaluation instance;
 
-    private final EvaluationStrategy strategy;
+    public static MinimaxEvaluation getInstance() {
+        if (instance == null)
+            instance = new MinimaxEvaluation();
+        return instance;
+    }
+
+    private static final int POSITIVE_INFINITY = Integer.MAX_VALUE;
+    private static final int NEGATIVE_INFINITY = Integer.MIN_VALUE;
+
+    private final EvaluationStrategy strategy = MinimumDistanceEvaluation.getInstance();
 
     private final boolean maximise;
 
-    public MinimaxEvaluation(EvaluationStrategy strategy, boolean maximise) {
-        this.strategy = Objects.requireNonNull(strategy);
+    public Move bestMove;
+
+    protected MinimaxEvaluation() {
+        maximise = true;
+    }
+
+    private MinimaxEvaluation(boolean maximise) {
         this.maximise = maximise;
     }
 
     @Override
-    public Integer visit(GameTree tree) {
-        throw new UnsupportedOperationException();
+    public int evaluate(GameTree tree) {
+        Pair<Optional<Move>, Integer> evaluation = initialEvaluation();
+        Node.Visitor<Pair<Optional<Move>, Integer>> visitor = new MinimaxEvaluation(!maximise);
+        for (Node node : tree.children) {
+            Pair<Optional<Move>, Integer> nodeEvaluation = node.accept(visitor);
+            evaluation = updateEvaluation(evaluation, nodeEvaluation);
+        }
+        if (evaluation.left().isEmpty())
+            throw new NoSuchElementException("No move");
+        bestMove = evaluation.left().get();
+        return evaluation.right();
     }
 
     @Override
-    public Integer visit(InnerNodeWithMove node) {
-        return visit((InnerNode) node);
+    public Pair<Optional<Move>, Integer> visit(InnerNodeWithMove node) {
+        int moveEvaluation = visit((InnerNode) node).right();
+        return new Pair<>(Optional.of(node.move), moveEvaluation);
     }
 
     @Override
-    public Integer visit(InnerNode node) {
-        int evaluation = initialEvaluation();
-        Node.Visitor<Integer> visitor = new MinimaxEvaluation(strategy, !maximise);
+    public Pair<Optional<Move>, Integer> visit(InnerNode node) {
+        Pair<Optional<Move>, Integer> evaluation = initialEvaluation();
+        Node.Visitor<Pair<Optional<Move>, Integer>> visitor = new MinimaxEvaluation(!maximise);
         for (Node childNode : node.getChildren()) {
-            int childNodeEvaluation = childNode.accept(visitor);
+            Pair<Optional<Move>, Integer> childNodeEvaluation = childNode.accept(visitor);
             evaluation = updateEvaluation(evaluation, childNodeEvaluation);
         }
         return evaluation;
     }
 
     @Override
-    public Integer visit(LeafNodeWithMove node) {
-        return visit((LeafNode) node);
+    public Pair<Optional<Move>, Integer> visit(LeafNodeWithMove node) {
+        int evaluation = visit((LeafNode) node).right();
+        return new Pair<>(Optional.of(node.move), evaluation);
     }
 
     @Override
-    public Integer visit(LeafNode node) {
-        return node.board.accept(strategy);
+    public Pair<Optional<Move>, Integer> visit(LeafNode node) {
+        int evaluation = strategy.evaluate(node.board);
+        return new Pair<>(Optional.empty(), evaluation);
     }
 
-    private int initialEvaluation() {
+    private Pair<Optional<Move>, Integer> initialEvaluation() {
+        Optional<Move> mMove = Optional.empty();
+        int evaluation;
         if (maximise)
-            return NEGATIVE_INFINITY;
+            evaluation = NEGATIVE_INFINITY;
         else
-            return POSITIVE_INFINITY;
+            evaluation = POSITIVE_INFINITY;
+        return new Pair<>(mMove, evaluation);
     }
 
-    private int updateEvaluation(int evaluation, int newEvaluation) {
-        if (maximise)
-            return Math.max(evaluation, newEvaluation);
-        else
-            return Math.min(evaluation, newEvaluation);
+    private Pair<Optional<Move>, Integer> updateEvaluation(Pair<Optional<Move>, Integer> evaluation, Pair<Optional<Move>, Integer> newEvaluation) {
+        Optional<Move> mMove = evaluation.left();
+        int moveEvaluation = evaluation.right();
+        if (maximise) {
+            if (newEvaluation.right() > moveEvaluation) {
+                mMove = newEvaluation.left();
+                moveEvaluation = newEvaluation.right();
+            }
+        } else {
+            if (newEvaluation.right() < moveEvaluation) {
+                mMove = newEvaluation.left();
+                moveEvaluation = newEvaluation.right();
+            }
+        }
+        return new Pair<>(mMove, moveEvaluation);
     }
 }

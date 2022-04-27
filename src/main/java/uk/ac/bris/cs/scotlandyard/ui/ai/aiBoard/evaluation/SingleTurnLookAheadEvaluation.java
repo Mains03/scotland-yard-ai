@@ -1,8 +1,10 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.LocationAiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.StandardAiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
 
 import java.util.Objects;
 
@@ -11,57 +13,20 @@ import java.util.Objects;
  * ahead and then evaluating.
  */
 public class SingleTurnLookAheadEvaluation implements EvaluationStrategy {
-    private static final int POSITIVE_INFINITY =  10000000;
-    private static final int NEGATIVE_INFINITY = -10000000;
+    private final EvaluationStrategy strategy = MinimumDistanceEvaluation.getInstance();
 
-    private final EvaluationStrategy strategy;
+    protected Move bestMove;
 
-    private final boolean maximise;
-
-    private Move bestMove;
-
-    public SingleTurnLookAheadEvaluation(EvaluationStrategy strategy, boolean maximise) {
-        this.strategy = Objects.requireNonNull(strategy);
-        this.maximise = maximise;
+    public SingleTurnLookAheadEvaluation() {
     }
 
     @Override
-    public Integer visit(StandardAiBoard board) {
-        int evaluation = initialEvaluation();
+    public int evaluate(AiBoard board) {
+        int evaluation = Integer.MIN_VALUE;
         for (Move move : board.getAvailableMoves()) {
-            StandardAiBoard board2 = (StandardAiBoard) board.advance(move);
-            int moveEvaluation = board2.accept(strategy);
-            evaluation = updateEvaluation(evaluation, move, moveEvaluation);
-        }
-        return evaluation;
-    }
-
-    @Override
-    public Integer visit(LocationAiBoard board) {
-        int evaluation = initialEvaluation();
-        for (Move move : board.getAvailableMoves()) {
-            LocationAiBoard board2 = (LocationAiBoard) board.advance(move);
-            int moveEvaluation = board2.accept(strategy);
-            evaluation = updateEvaluation(evaluation, move, moveEvaluation);
-        }
-        return evaluation;
-    }
-
-    private int initialEvaluation() {
-        if (maximise)
-            return NEGATIVE_INFINITY;
-        else
-            return POSITIVE_INFINITY;
-    }
-
-    private int updateEvaluation(int evaluation, Move move, int moveEvaluation) {
-        if (maximise) {
+            AiBoard newBoard = (AiBoard) board.advance(move);
+            int moveEvaluation = strategy.evaluate(newBoard);
             if (moveEvaluation > evaluation) {
-                bestMove = move;
-                evaluation = moveEvaluation;
-            }
-        } else {
-            if (moveEvaluation < evaluation) {
                 bestMove = move;
                 evaluation = moveEvaluation;
             }
