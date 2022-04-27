@@ -35,6 +35,11 @@ public class BFS implements MinimumDistanceAlgorithm {
             public Integer visit(LocationAiBoard board) {
                 return LocationAiBoardBFS.getInstance().minimumDistance(board, piece);
             }
+
+            @Override
+            public Integer visit(PotentialDetectiveLocationsAiBoard board) {
+                return null;
+            }
         });
     }
 

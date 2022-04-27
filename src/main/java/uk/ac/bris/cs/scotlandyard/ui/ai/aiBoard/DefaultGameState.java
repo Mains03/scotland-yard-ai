@@ -8,12 +8,7 @@ import javax.annotation.Nonnull;
 public class DefaultGameState extends DefaultBoard implements Board.GameState {
     protected final GameState gameState;
 
-    public DefaultGameState(Board board) {
-        super(board);
-        gameState = GameStateFactory.getInstance().build(board);
-    }
-
-    private DefaultGameState(GameState gameState) {
+    protected DefaultGameState(GameState gameState) {
         super(gameState);
         this.gameState = gameState;
     }

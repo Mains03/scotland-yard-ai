@@ -18,10 +18,11 @@ public class GameTreeBestMove implements BestMoveStrategy {
         return instance;
     }
 
+    private GameTreeEvaluationStrategy strategy = MinimaxEvaluation.getInstance();
+
     @Override
     public Move bestMove(AiBoard board) {
-        GameTreeEvaluationStrategy strategy = MinimaxEvaluation.getInstance();
-        GameTree tree = new GameTree(board);
+        GameTree tree = GameTreeFactory.getInstance().build(board);
         return strategy.evaluate(tree);
     }
 }

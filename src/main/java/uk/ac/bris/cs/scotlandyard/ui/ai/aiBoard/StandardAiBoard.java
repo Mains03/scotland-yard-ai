@@ -11,7 +11,7 @@ public class StandardAiBoard extends DefaultGameState implements AiBoard {
     public final Player mrX;
 
     public StandardAiBoard(Board board) {
-        super(board);
+        super(GameStateFactory.getInstance().build(board));
         this.mrX = PlayerFactory.getInstance().createMrX(board);
     }
 

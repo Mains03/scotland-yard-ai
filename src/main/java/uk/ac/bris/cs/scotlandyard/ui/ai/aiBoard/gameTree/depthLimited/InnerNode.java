@@ -1,8 +1,9 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.depthLimited;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.DetectiveMoveBoardFactory;
 
 import java.util.*;
 

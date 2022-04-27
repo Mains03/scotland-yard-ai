@@ -15,7 +15,7 @@ public class LocationAiBoard extends DefaultGameState implements AiBoard {
     public final List<Integer> detectiveLocations;
 
     public LocationAiBoard(Board board) {
-        super(board);
+        super(GameStateFactory.getInstance().build(board));
         mrXLocation = PlayerFactory.getInstance().createMrX(board).location();
         detectiveLocations = createDetectiveLocations(board);
     }
