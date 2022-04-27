@@ -5,5 +5,6 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 /**
  * {@link AiBoard} visitor returning an integer evaluation.
  */
-public interface EvaluationStrategy extends AiBoard.Visitor<Integer> {
+public interface EvaluationStrategy {
+    int evaluate(AiBoard board);
 }

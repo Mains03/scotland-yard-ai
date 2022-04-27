@@ -49,10 +49,8 @@ public class DetectiveMoveBoardFactory implements AiBoard.Visitor<Set<AiBoard>> 
                     AiBoard newBoard = (AiBoard) board.advance(move);
                     newCurrentBoards.add(newBoard);
                 }
-            } else {
-                System.out.println("here " + Math.random());
+            } else
                 newCurrentBoards.add(board);
-            }
         }
         if (finished)
             result.addAll(newCurrentBoards);
