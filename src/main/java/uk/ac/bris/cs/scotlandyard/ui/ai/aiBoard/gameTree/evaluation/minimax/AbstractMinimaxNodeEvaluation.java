@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.minimax;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Move;
@@ -32,8 +32,8 @@ public abstract class AbstractMinimaxNodeEvaluation implements Node.Visitor<Pair
 
     @Override
     public Pair<Optional<Move>, Integer> visit(AbstractInnerNodeWithMove node) {
-        int moveEvaluation = evaluateChildren(node.getChildren()).right();
-        return new Pair<>(Optional.of(node.getMove()), moveEvaluation);
+        int evaluation = evaluateChildren(node.getChildren()).right();
+        return new Pair<>(Optional.of(node.getMove()), evaluation);
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class AbstractMinimaxNodeEvaluation implements Node.Visitor<Pair
 
     public abstract int evaluate(AiBoard board);
 
-    protected Pair<Optional<Move>, Integer> initialEvaluation() {
+    private Pair<Optional<Move>, Integer> initialEvaluation() {
         if (maximise)
             return new Pair<>(Optional.empty(), NEGATIVE_INFINITY);
         else

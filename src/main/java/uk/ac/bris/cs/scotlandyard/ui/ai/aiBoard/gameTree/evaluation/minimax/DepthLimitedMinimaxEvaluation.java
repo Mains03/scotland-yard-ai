@@ -1,4 +1,4 @@
-package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation;
+package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.minimax;
 
 import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Move;

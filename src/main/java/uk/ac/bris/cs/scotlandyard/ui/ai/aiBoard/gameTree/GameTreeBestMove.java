@@ -4,7 +4,7 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.GameTreeEvaluationStrategy;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.MinimaxEvaluation;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.minimax.MinimaxEvaluation;
 
 /**
  * {@link BestMoveStrategy} using minimax algorithm.
