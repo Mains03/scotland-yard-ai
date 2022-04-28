@@ -9,6 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * {@link AiBoard} which doesn't know where the detectives are, only stores where they could be.
+ */
 public class PotentialDetectiveLocationsAiBoard extends DefaultGameState implements AiBoard {
     private final Player mrX;
 
@@ -86,6 +89,7 @@ public class PotentialDetectiveLocationsAiBoard extends DefaultGameState impleme
     @Override
     public ImmutableSet<Move> getAvailableMoves() {
         if (mrXTurn)
+            // since detective locations are unknown, consider every MrX move
             return MrXMoveFactory.getInstance().getAvailableMoves(board.getSetup().graph, mrX);
         else
             // random values since doesn't matter

@@ -7,7 +7,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.GameTreeEval
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.winnerLimited.WinnerLimitedGameTree;
 
 /**
- * Not finished.
+ * {@link GameTreeEvaluationStrategy} using alpha-beta pruning.
  */
 public class AlphaBetaEvaluation extends GameTreeEvaluationStrategy implements GameTree.Visitor<Move> {
     private static AlphaBetaEvaluation instance;
@@ -27,11 +27,11 @@ public class AlphaBetaEvaluation extends GameTreeEvaluationStrategy implements G
 
     @Override
     public Move visit(DepthLimitedGameTree tree) {
-        return null;
+        return DepthLimitedAlphaBetaEvaluation.getInstance().evaluate(tree);
     }
 
     @Override
     public Move visit(WinnerLimitedGameTree tree) {
-        return null;
+        return WinnerLimitedAlphaBetaEvaluation.getInstance().evaluate(tree);
     }
 }

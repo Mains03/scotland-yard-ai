@@ -1,67 +1,66 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.alphaBeta;
 
+import io.atlassian.fugue.Pair;
 import uk.ac.bris.cs.scotlandyard.model.Move;
-import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.AbstractInnerNodeWithMove;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.GameTree;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.Node;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.AbstractNodeEvaluation;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-/**
- * Not finished.
- */
-public abstract class AbstractAlphaBetaNodeEvaluation implements Node.Visitor<AlphaBetaData> {
+public abstract class AbstractAlphaBetaNodeEvaluation extends AbstractNodeEvaluation {
     private final static int POSITIVE_INFINITY = Integer.MAX_VALUE;
     private final static int NEGATIVE_INFINITY = Integer.MIN_VALUE;
 
-    private final boolean maximise;
+    private int alpha;
+    private int beta;
 
-    protected int alpha;
-    protected int beta;
-
-    public AbstractAlphaBetaNodeEvaluation(boolean maximise) {
-        this.maximise = maximise;
+    protected AbstractAlphaBetaNodeEvaluation(boolean maximise) {
+        super(maximise);
         alpha = NEGATIVE_INFINITY;
         beta = POSITIVE_INFINITY;
     }
 
+    protected AbstractAlphaBetaNodeEvaluation(boolean maximise, int alpha, int beta) {
+        super(maximise);
+        this.alpha = alpha;
+        this.beta = beta;
+    }
+
     public Move evaluate(GameTree tree) {
-        AlphaBetaData evaluation = initialEvaluation();
-        for (Node node : tree.getChildren()) {
-            AlphaBetaData nodeEvaluation = node.accept(this);
+        Pair<Optional<Move>, Integer> evaluation = initialEvaluation();
+        Iterator<Node> iterator = tree.getChildren().iterator();
+        boolean prune = false;
+        while (iterator.hasNext() && (!prune)) {
+            Node node = iterator.next();
+            Pair<Optional<Move>, Integer> nodeEvaluation = node.accept(this);
             evaluation = updateEvaluation(evaluation, nodeEvaluation);
+            updateAlphaBeta(evaluation);
+            prune = shouldPrune();
         }
-        if (evaluation.getMove().isEmpty())
-            throw new NoSuchElementException("No moves");
-        return evaluation.getMove().get();
+        if (evaluation.left().isEmpty())
+            throw new NoSuchElementException("Expected move");
+        return evaluation.left().get();
     }
 
-    @Override
-    public AlphaBetaData visit(AbstractInnerNodeWithMove node) {
-        return null;
-    }
-
-    private AlphaBetaData initialEvaluation() {
+    protected void updateAlphaBeta(Pair<Optional<Move>, Integer> evaluation) {
         if (maximise)
-            return new AlphaBetaData(Optional.empty(), NEGATIVE_INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+            alpha = Math.max(alpha, evaluation.right());
         else
-            return new AlphaBetaData(Optional.empty(), POSITIVE_INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+            beta = Math.min(beta, evaluation.right());
     }
 
-    private AlphaBetaData updateEvaluation(AlphaBetaData data, AlphaBetaData newData) {
-        AlphaBetaData updated;
-        if (maximise) {
-            if (newData.getEvaluation() > data.getEvaluation())
-                updated = new AlphaBetaData(newData);
-            else
-                updated = new AlphaBetaData(data);
-        } else {
-            if (newData.getEvaluation() < data.getEvaluation())
-                updated = new AlphaBetaData(newData);
-            else
-                updated = new AlphaBetaData(data);
-        }
-        return updated;
+    protected boolean shouldPrune() {
+        return beta <= alpha;
+    }
+
+    protected int getAlpha() {
+        return alpha;
+    }
+
+    protected int getBeta() {
+        return beta;
     }
 }

@@ -8,7 +8,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.*;
 import java.util.Optional;
 import java.util.Set;
 
-public class WinnerLimitedMinimaxEvaluation extends AbstractMinimaxNodeEvaluation implements Node.Visitor<Pair<Optional<Move>, Integer>> {
+public class WinnerLimitedMinimaxEvaluation extends AbstractMinimaxNodeEvaluation {
     private static WinnerLimitedMinimaxEvaluation instance;
 
     public static WinnerLimitedMinimaxEvaluation getInstance() {

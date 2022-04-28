@@ -4,6 +4,7 @@ import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.AiBoard;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.bestMove.BestMoveStrategy;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.GameTreeEvaluationStrategy;
+import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.alphaBeta.AlphaBetaEvaluation;
 import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.gameTree.evaluation.minimax.MinimaxEvaluation;
 
 /**
@@ -18,7 +19,7 @@ public class GameTreeBestMove implements BestMoveStrategy {
         return instance;
     }
 
-    private GameTreeEvaluationStrategy strategy = MinimaxEvaluation.getInstance();
+    private GameTreeEvaluationStrategy strategy = AlphaBetaEvaluation.getInstance();
 
     @Override
     public Move bestMove(AiBoard board) {

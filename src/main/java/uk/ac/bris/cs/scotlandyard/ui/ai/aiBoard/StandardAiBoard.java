@@ -5,7 +5,7 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 import javax.annotation.Nonnull;
 
 /**
- * {@link Board} adapter.
+ * {@link Board} adapter, behaves exactly as you'd expect.
  */
 public class StandardAiBoard extends DefaultGameState implements AiBoard {
     public final Player mrX;

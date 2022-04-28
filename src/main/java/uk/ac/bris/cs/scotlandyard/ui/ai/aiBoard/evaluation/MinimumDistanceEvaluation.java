@@ -10,7 +10,7 @@ import uk.ac.bris.cs.scotlandyard.ui.ai.aiBoard.evaluation.minimumDistance.BFS;
  * {@link EvaluationStrategy} where the minimum distance between MrX
  * and the detectives is the evaluation of a board.
  */
-public class MinimumDistanceEvaluation implements EvaluationStrategy {
+public class MinimumDistanceEvaluation extends EvaluationStrategy {
     private static MinimumDistanceEvaluation instance;
 
     public static MinimumDistanceEvaluation getInstance() {

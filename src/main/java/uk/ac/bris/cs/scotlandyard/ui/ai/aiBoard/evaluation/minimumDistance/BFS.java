@@ -38,7 +38,8 @@ public class BFS implements MinimumDistanceAlgorithm {
 
             @Override
             public Integer visit(PotentialDetectiveLocationsAiBoard board) {
-                return null;
+                // detective locations are unknown
+                throw new IllegalArgumentException("Can't determine distance");
             }
         });
     }
